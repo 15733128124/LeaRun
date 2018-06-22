@@ -1,0 +1,145 @@
+﻿@{
+    ViewBag.Title = "导入学生体测成绩";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<script src="~/Content/layer/layer.js"></script>
+<link href="~/Content/Styles/fileinput.css" rel="stylesheet" />
+<script src="~/Content/Scripts/fileinput.js"></script>
+<script src="~/Content/Scripts/jquery.form.js"></script>
+<script type="text/javascript">
+    //导入学生成绩最优型导入
+    function AddStudentTestBest() {
+
+        Loading(true,"正在导入数据...");
+        var file = $("#filePath").val();
+        if (file == '' || file == null) {
+            layer.alert("请选择所要上传的文件！");
+        } else {
+            var index = file.lastIndexOf(".");
+            if (index < 0) {
+                layer.alert("上传的文件格式不正确，请选择Excel文件(*.xls或*.xlsx)！");
+            } else {
+                var ext = file.substring(index + 1, file.length);
+                if (ext != "xls" & ext != "xlsx") {
+                    layer.alert("上传的文件格式不正确，请选择Excel文件(*.xls或*.xlsx)！");
+                } else {
+                    $('#form1').ajaxSubmit({
+                        type: 'POST', // HTTP请求方式
+                        url: '/ZhangCeModule/DStudentTestScore/ImportExcelStudentTestBest', // 请求的URL地址
+                        dataType: 'json', // 服务器返回数据转换成的类型
+                        // data: postData,
+                        success: function (data, responseStatus) {
+                            Loading(false);
+                            $("#errorMsg").html(data.Msg);
+                        }
+                    });
+
+                }
+            }
+        }
+
+    }
+
+
+    //导入学生成绩覆盖型导入
+    function AddStudentTestRep() {
+
+        Loading(true, "正在导入数据...");
+        var file = $("#filePath").val();
+        if (file == '' || file == null) {
+            layer.alert("请选择所要上传的文件！");
+        } else {
+            var index = file.lastIndexOf(".");
+            if (index < 0) {
+                layer.alert("上传的文件格式不正确，请选择Excel文件(*.xls或*.xlsx)！");
+            } else {
+                var ext = file.substring(index + 1, file.length);
+                if (ext != "xls" & ext != "xlsx") {
+                    layer.alert("上传的文件格式不正确，请选择Excel文件(*.xls或*.xlsx)！");
+                } else {
+                    $('#form1').ajaxSubmit({
+                        type: 'POST', // HTTP请求方式
+                        url: '/ZhangCeModule/DStudentTestScore/ImportExcelStudentTestRep', // 请求的URL地址
+                        dataType: 'json', // 服务器返回数据转换成的类型
+                        // data: postData,
+                        success: function (data, responseStatus) {
+                            Loading(false);
+                            $("#errorMsg").html(data.Msg);
+                        }
+                    });
+
+                }
+            }
+        }
+
+    }
+
+    ////导入学生成绩
+    //function AddStudentTest() {
+    //    layer.confirm('请选择导入方式，选择后将按照此导入方式进行！', {
+    //        title: "提示",
+    //        closeBtn: 0,
+    //        btn: ['覆盖型导入', '最优型导入'] //按钮
+    //    }, function () {
+    //        AddStudentTestRep();
+    //    }, function () {
+    //        AddStudentInfoBest();
+    //    });
+    //}   
+</script>
+<form id="form1" style="margin: 1px">
+    <div id="message" style="display: none"></div>
+    <div class="note-prompt" style="margin: 1px;height:220px">
+        <span style="color:green">导入需知：</span>
+        <span style="color:red">
+            <br />1、下载Excel模版，另存为模版为自己想要的名字（注意后缀必须是.xlsx），把要导入的信息复制到模版中按要求导入，模版第一行不能删除！
+            2、导入学生信体测成绩，会自动计算学生得分级别，总分
+            <br />
+            3、导入方式有两种为：<span style="color:blue">最优型导入</span>（如果多次导入同一学生信息，取最好成绩）<span style="color:blue">覆盖型导入</span>（如果多次导入同一学生信息，以本次导入为准）
+
+           <br />
+        </span>
+        <span style="color:green">
+            失败说明：
+        </span>
+        <br />
+        <span style="color:red">
+            1、添加失败请仔细阅读所给出的错误提示。
+            2、所给的错误信息和Excel表中的字段一一对应，请按要求修改。
+            3、请严格按照模版说明导入。
+        </span>
+    </div>
+
+
+    <table border="0" class="frm" style="height: 35px; width: auto; padding-top: 15px;">
+        <tr>
+            <th style="width: 130px; color: #808080;">
+                导入文件：
+            </th>
+            <td>
+                <input type="file" id="filePath" class="keyword" style="width: 300px; border-radius: 0px;" name="filePath" />
+            </td>
+            <td>
+                <p onclick="AddStudentTestBest()" id="btnImport" style="width: 80px; float: right; cursor: pointer; border: 1px solid #ccc; border-radius: 3px; line-height: 25px; cursor: pointer; text-align: center;margin-left:10px;
+ background-color: #4a5b79;color:white ">最优型导入</p>
+                @*<input type="submit" class="btnSearch" value="导入" onclick="Loading(true, '正在导入数据...')" />*@
+            </td>
+            <td>
+                <p onclick="AddStudentTestRep()" id="btnImport" style="width: 80px; float: right; cursor: pointer; border: 1px solid #ccc; border-radius: 3px; line-height: 25px; cursor: pointer; text-align: center;margin-left:10px;
+ background-color: #4a5b79;color:white ">覆盖型导入</p>
+                @*<input type="submit" class="btnSearch" value="导入" onclick="Loading(true, '正在导入数据...')" />*@
+            </td>
+            <th style="width: 100px; color: #808080;text-align:right">
+                Excel模板：
+            </th>
+            <td>
+                @Html.ActionLink("Excel模板下载", "GetExcelFile", "DStudentInfos")
+            </td>
+            <td>
+               <b style="margin-left:20px;color:red;line-height:25px">当前库年份--@ViewBag.NK--年</b>
+</td>
+</tr>
+</table>
+
+<div id="errorMsg" style="margin-left:30px;margin-top:15px;color:blue;height:300px;overflow:auto"></div>
+</form>

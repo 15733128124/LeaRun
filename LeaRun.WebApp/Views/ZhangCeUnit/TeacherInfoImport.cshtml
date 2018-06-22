@@ -1,0 +1,98 @@
+﻿@{
+    ViewBag.Title = "老师信息导入";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<script src="~/Content/layer/layer.js"></script>
+<link href="~/Content/Styles/fileinput.css" rel="stylesheet" />
+<script src="~/Content/Scripts/fileinput.js"></script>
+<script src="~/Content/Scripts/jquery.form.js"></script>
+<script type="text/javascript">
+
+    //导入老师信息
+    function AddStudentInfo() {
+
+        Loading(true,"数据正在导入...");
+        var file = $("#filePath").val();
+        if (file == '' || file == null) {
+            layer.alert("请选择所要上传的文件！");
+        } else {
+            var index = file.lastIndexOf(".");
+            if (index < 0) {
+                layer.alert("上传的文件格式不正确，请选择Excel文件(*.xls或*.xlsx)！");
+            } else {
+                var ext = file.substring(index + 1, file.length);
+                if (ext != "xls" & ext != "xlsx") {
+                    layer.alert("上传的文件格式不正确，请选择Excel文件(*.xls或*.xlsx)！");
+                } else {
+                    $('#form1').ajaxSubmit({
+                        type: 'POST', // HTTP请求方式
+                        url: '/ZhangCeUnit/TeacherInfoImportData', // 请求的URL地址
+                        dataType: 'json', // 服务器返回数据转换成的类型
+                        // data: postData,
+                        success: function (data, responseStatus) {
+                            Loading(false);
+                            $("#errorMsg").html(data.Msg);
+                        }
+                    });
+
+                }
+            }
+        }
+    }
+
+    function GotoShouYe()
+    {
+        window.location.href = '@Url.Content("~/Home/AccordionPage")';
+    }
+
+</script>
+<form id="form1" style="margin: 1px">
+    <div id="message" style="display: none"></div>
+    <div class="note-prompt" style="margin: 1px;height:220px">
+        <span style="color:green">导入需知：</span>
+        <span style="color:red">
+            <br />1、下载Excel模版，另存为想要名字（注意后缀必须是.xlsx），按照模版提示添加相应数据！（账号：老师代号，默认密码：老师代号）
+            <br />2、如果老师代号已存在则会提示已存在导入失败，如修改姓名请到-->老师端操作处修改老师姓名！
+            <br />
+        </span>
+        <span style="color:green">
+            失败说明：
+        </span>
+        <br />
+        <span style="color:red">
+            1、添加失败请仔细阅读所给出的错误提示。
+            2、所给的错误信息和Excel表中的字段一一对应，请按要求修改。
+            3、请严格按照模版说明导入。
+        </span>
+    </div>
+
+
+    <table border="0" class="frm" style="height: 35px; width: auto; padding-top: 15px;">
+        <tr>
+            <th style="width: 130px; color: #808080;">
+                导入文件：
+            </th>
+            <td>
+                <input type="file" id="filePath" class="keyword" style="width: 300px; border-radius: 0px;" name="filePath" />
+            </td>
+            <td>
+                <p onclick="AddStudentInfo()" id="btnImport" style="width: 80px; float: right; cursor: pointer; border: 1px solid #ccc; border-radius: 3px; line-height: 25px; cursor: pointer; text-align: center;margin-left:10px;
+ background-color: #4a5b79;color:white ">导入</p>
+                @*<input type="submit" class="btnSearch" value="导入" onclick="Loading(true, '正在导入数据...')" />*@
+            </td>
+            <th style="width: 100px; color: #808080;text-align:right">
+                Excel模板：
+            </th>
+            <td>
+                @Html.ActionLink("Excel模板下载", "GetExcelFile", "ZhangCeUnit")
+            </td>
+            <th>
+                <p onclick="GotoShouYe()" id="backto" style="width:100px; float: right; cursor: pointer; border: 1px solid #ccc; border-radius: 3px; line-height: 25px; cursor: pointer; text-align: center;margin-left:10px;
+ background-color: red;color:white ">返回上一级</p>
+            </th>
+
+        </tr>
+    </table>
+
+    <div id="errorMsg" style="margin-left:30px;margin-top:15px;color:blue;height:500px;overflow:auto"></div>
+</form>

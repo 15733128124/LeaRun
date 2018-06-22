@@ -1,0 +1,289 @@
+﻿@{
+    ViewBag.Title = "表单设计";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<link href="~/Content/Scripts/formdesign/formdesign.css" rel="stylesheet" />
+<script>
+    //拖拽+改变宽度  
+    $(function () {
+        document.onselectstart = function () { return false; };
+        propertygrid()
+        $("#CenterAndRight").splitter({
+            type: "v",
+            outline: true,
+            minRight: 200, sizeRight: 200, maxRight: 350,
+            accessKey: "R"
+        });
+        formdesigner_addControl();
+    });
+    //表单设计器 拖动、拉长、拖大效果
+    function formdesigner_move() {
+        var $item_text = "";
+        var _item_focus = false;//是否选中
+        var _move = false;//移动标记  
+        var _move_width = false;//移动宽度标记 
+        var _move_height = false;//移动高度标记 
+        var _x, _y;//鼠标离控件左上角的相对位置
+        $(".item_text").click(function () {
+            $item_text = $(this);
+            _item_focus = true;
+            $(this).parent().addClass('item_focus');
+        }).mousedown(function (e) {
+            $('.item_text').parent().removeClass('item_focus');
+            $item_text = $(this);
+            _item_focus = true;
+            $(this).parent().addClass('item_focus');
+            _move = true;
+            _x = e.pageX - parseInt($item_text.parent().css("left"));
+            _y = e.pageY - parseInt($item_text.parent().css("top"));
+        });
+        $(".rs_right").mousedown(function (e) {
+            _move_width = true;
+        });
+        $(".rs_rb").mousedown(function (e) {
+            if (!_item_focus) {
+                return false;
+            }
+            _move_width = true;
+            _move_height = true;
+        });
+        $(document).mousemove(function (e) {
+            if (!_item_focus) {
+                return false;
+            }
+            if (_move) {
+                var x = e.pageX - _x;
+                var y = e.pageY - _y;
+                $item_text.parent().css({ top: y, left: x });
+            }
+            if (_move_width) {
+                var width = (e.pageX - $item_text.parent().offset().left)
+                $item_text.parent().css({ width: width });
+                $item_text.css({ width: (width) });
+            }
+            if (_move_height) {
+                var height = (e.pageY - $item_text.parent().offset().top)
+                $item_text.parent().css({ height: height });
+                $item_text.css({ height: (height) });
+            }
+        }).mouseup(function () {
+            _move = false;
+            _move_width = false;
+            _move_height = false;
+            _item_focus = false;
+            $('.item_text').parent().removeClass('item_focus');
+            $(".formlayout #_span").html('离开')
+        });
+    }
+    //表单设计器 创建控件
+    function formdesigner_addControl() {
+        var _controltype = ""//控件类型
+        var _move = false;//移动标记  
+        var _x, _y;//鼠标离控件左上角的相对位置
+        $(".items-list li").mousedown(function (e) {
+            _controltype = $(this).attr('id');
+            $('.items_move_img img').attr('src', $(this).find('img').attr('src'))
+            _move = true;
+        });
+        $(document).mousemove(function (e) {
+            if (_move) {
+                var x = e.pageX - 20;
+                var y = e.pageY - 20;
+                _x = e.pageX;
+                _y = e.pageY;
+                $('.items_move_img').css({ top: y, left: x }).show();
+                $(".formlayout #_span").html('x' + x + "y" + y);
+            }
+        }).mouseup(function (e) {
+            if (_move) {
+                $(".formlayout #_span").html('离开 x' + e.pageX + "y" + e.pageY);
+                $('.items_move_img').css({ top: 0, left: 0 }).hide();
+                var Buildcontrolt = "";
+                var item_control = "";
+                switch (_controltype) {
+                    case "td_Label":
+                        item_control = $("<div class=\"item_control item_lable\"><div class=\"item_text\">标签...</div></div>");
+                        break;
+                    case "td_Hyperlink":
+                        item_control = $("<div class=\"item_control item_hyperlink\"><div class=\"item_text\">超连接...</div></div>");
+                        break;
+                    case "td_Textbox":
+                        item_control = $("<div class=\"item_control item_input\"><div class=\"item_text\">单行输入框</div><div class=\"rs_right\"></div></div>");
+                        break;
+                    case "td_Textarea":
+                        item_control = $("<div class=\"item_control item_textarea\"><div class=\"item_text\">多行输入框</div><div class=\"rs_rb\"></div></div>");
+                        break;
+                    case "td_SelectEnum":
+                        item_control = $("<div class=\"item_control item_selectenum\"><div class=\"item_text\">下拉框</div><span class=\"select_arrow\"></span><div class=\"rs_right\"></div></div>");
+                        break;
+                    case "td_SelectTable":
+                        item_control = $("<div class=\"item_control item_selecttable\"><div class=\"item_text\">下拉框</div><span class=\"select_arrow\"></span><div class=\"rs_right\"></div></div>");
+                        break;
+                    case "td_DateTimebox":
+                        item_control = $("<div class=\"item_control item_datatime\"><div class=\"item_text\">日期控</div><span class=\"datatime_arrow\"></span><div class=\"rs_right\"></div></div>");
+                        break;
+                    case "td_Radio":
+                        item_control = $("<div class=\"item_control item_radio\"><div class=\"item_text\"><span class=\"radio_arrow\"></span>单选框</div></div>");
+                        break;
+                    case "td_Checkbox":
+                        item_control = $("<div class=\"item_control item_checkbox\"><div class=\"item_text\"><span class=\"checkbox_arrow\"></span>多选框</div></div>");
+                        break;
+                    case "td_FileUpload":
+                        item_control = $("<div class=\"item_control item_upload\"><div class=\"item_text\">上传附件</div><div class=\"upload_arrow\">浏览...</div><div class=\"rs_right\"></div></div>");
+                        break;
+                    case "td_Table":
+                        item_control = $("<div class=\"item_control item_table\"><div class=\"item_text\"><table id=\"grid\" class=\"item_grid\"><thead><tr><td style=\"width: 50px; text-align: center;\">序号</td><td style=\"border-right: none;\"></td></tr></thead></table></div><div class=\"rs_rb\"></div></div>");
+                        break;
+                    case "td_Image":
+                        item_control = $("<div class=\"item_control item_img\"><div class=\"item_text\">图片</div><div class=\"rs_rb\"></div></div>");
+                        break;
+                    default:
+                }
+                $('.formlayout').append(item_control)
+                item_control.css({ top: (e.pageY - 50), left: (e.pageX - 204) })
+                formdesigner_move();
+            }
+            _move = false;
+        });
+    }
+    //右边属性表格效果（隐藏/显示）
+    function propertygrid() {
+        var $grid = $(".propertygrid")
+        $grid.find('.grid-group span').click(function () {
+            if ($(this).hasClass("grid-collapse")) {
+                $(this).parent().next().hide();
+                $(this).addClass('grid-expand');
+                $(this).removeClass('grid-collapse');
+            } else {
+                $(this).parent().next().show();
+                $(this).addClass('grid-collapse');
+                $(this).removeClass('grid-expand');
+            }
+        })
+    }
+</script>
+
+<div class="nui-toolbar leftline rightline" style="margin: 1px;">
+    <div class="nui-toolbar-item" onclick="Replace()">
+        <span class="nui-btn-text">刷新</span>
+    </div>
+    <div id="save" class="nui-toolbar-item">
+        <span class="nui-btn-text">保存</span>
+    </div>
+    <div class="nui-toolbar-item">
+        <span class="nui-btn-text">预览</span>
+    </div>
+    <div class="nui-toolbar-item">
+        <span class="nui-btn-text">生成版本</span>
+    </div>
+    <div style="position: absolute; float: right; top: 5px; right: 5px;">
+        <ul class="switch-btns">
+            <li id="li-switch-list" style="border: 1px solid #ccc;" title="切换到列表视图">
+                <div class="icon icon-btn-switch-list-select"></div>
+            </li>
+            <li id="li-switch-view" class="selected" style="border: 1px solid #ccc; border-left: none;" title="切换到图形视图">
+                <div class="icon icon-btn-switch-view"></div>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="items_move_img">
+    <img src="~/Content/Images/Icon16/font.png" />
+</div>
+<div id="layout" class="layout">
+    <!--左边-->
+    <div class="layoutPanel layout-west">
+        <div class="btnbartitle">
+            <div>
+                表单控件
+            </div>
+        </div>
+        <div class="ScrollBar">
+            <ul class="items-list">
+                <li id="td_Label">
+                    <img src="~/Content/Images/Icon16/font.png" />标签</li>
+                <li id="td_Hyperlink">
+                    <img src="~/Content/Images/Icon16/link_edit.png" />超连接</li>
+                <li id="td_Textbox">
+                    <img src="~/Content/Images/Icon16/textfield.png" />单行输入框</li>
+                <li id="td_Textarea">
+                    <img src="~/Content/Images/Icon16/text_list_numbers.png" />多行输入框</li>
+                <li id="td_SelectEnum">
+                    <img src="~/Content/Images/Icon16/combo_box_light_blue.png" />下拉框(枚举)</li>
+                <li id="td_SelectTable">
+                    <img src="~/Content/Images/Icon16/combo_box.png" />下拉框(表/视图)</li>
+                <li id="td_DateTimebox">
+                    <img src="~/Content/Images/Icon16/date.png" />日期框</li>
+                <li id="td_Radio">
+                    <img src="~/Content/Images/Icon16/radio_button.png" />单选框</li>
+                <li id="td_Checkbox">
+                    <img src="~/Content/Images/Icon16/check_box_uncheck.png" />多选框</li>
+                <li id="td_FileUpload">
+                    <img src="~/Content/Images/Icon16/inbox_upload.png" />上传附件</li>
+                <li id="td_Table">
+                    <img src="~/Content/Images/Icon16/table.png" />明细表(从表)</li>
+                <li id="td_Image">
+                    <img src="~/Content/Images/Icon16/images.png" />装饰图片</li>
+                <li>
+                    <img src="~/Content/Images/Icon16/barcode_2d.png" />二维码控件</li>
+                <li>
+                    <img src="~/Content/Images/Icon16/medal_award_gold.png" />盖章控件</li>
+            </ul>
+        </div>
+    </div>
+    <!--中间-->
+    <div id="CenterAndRight" class="layoutPanel layout-center">
+        <div class="layoutPanel">
+            <div class="btnbartitle">
+                <div>
+                    表单设计主窗体
+                </div>
+            </div>
+            <div class="ScrollBar formlayout" style="height: 100%; width: 100%; position: relative;">
+                <span id="_span" style="margin: 10px;"></span>
+            </div>
+        </div>
+
+        <div class="layoutPanel">
+            <div class="btnbartitle">
+                <div>
+                    属性
+                </div>
+            </div>
+            <div class="ScrollBar">
+                <div id="propertyLabel" class="propertygrid">
+                    <div class="grid-group"><span class="grid-collapse"></span>布局</div>
+                    <table class="grid-sub">
+                        <tr>
+                            <td class="cell-title">名称</td>
+                            <td class="cell-value"></td>
+                        </tr>
+                        <tr>
+                            <td class="cell-title">X</td>
+                            <td class="cell-value"></td>
+                        </tr>
+                        <tr>
+                            <td class="cell-title">Y</td>
+                            <td class="cell-value"></td>
+                        </tr>
+                    </table>
+                    <div class="grid-group"><span class="grid-collapse"></span>外观</div>
+                    <table class="grid-sub">
+                        <tr>
+                            <td class="cell-title">字体大小</td>
+                            <td class="cell-value"></td>
+                        </tr>
+                        <tr>
+                            <td class="cell-title">字体颜色</td>
+                            <td class="cell-value"></td>
+                        </tr>
+                        <tr>
+                            <td class="cell-title">字体类型</td>
+                            <td class="cell-value"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

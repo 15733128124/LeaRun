@@ -1,0 +1,67 @@
+@{
+    ViewBag.Title = "学生用户表》明细页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        InitControl();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/CommonModule/DBase_Users/SetForm", { KeyValue: GetQuery('KeyValue') }, function (data) {
+                SetWebControls(data);
+            });
+        }
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <table class="form">
+        <tr>
+            <th class='formTitle'>编号,自增列：</th>
+            <td class='formValue'>
+                <label id="ID" />
+            </td>
+            <th class='formTitle'>用户姓名：</th>
+            <td class='formValue'>
+                <label id="UserName" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>用户编号（默认学号）：</th>
+            <td class='formValue'>
+                <label id="UserCode" />
+            </td>
+            <th class='formTitle'>密码:首次123456：</th>
+            <td class='formValue'>
+                <label id="UserPassword" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>用户级别 1:老师,2:学生,：</th>
+            <td class='formValue'>
+                <label id="UserLeavel" />
+            </td>
+            <th class='formTitle'>创建时间：</th>
+            <td class='formValue'>
+                <label id="CreateTime" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>更新时间：</th>
+            <td class='formValue'>
+                <label id="UpdateTime" />
+            </td>
+            <th class='formTitle'>备注：</th>
+            <td class='formValue'>
+                <label id="Remark" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>1:已登录,0:未登录  （只是老师实现单点登录）：</th>
+            <td class='formValue'>
+                <label id="UserState" />
+            </td>
+        </tr>
+    </table>
+</form>

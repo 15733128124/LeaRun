@@ -1,0 +1,10 @@
+2018-05-11 18:07:04,671 [10] ERROR LeaRun.DataAccess.DbHelper - 参数化查询 '(@GradeCode nvarchar(4000))SELECT DISTINCT SchoolName,SchoolCode' 需要参数 '@GradeCode'，但未提供该参数。
+2018-05-11 18:07:48,550 [300] ERROR LeaRun.DataAccess.DbHelper - 参数化查询 '(@GradeCode nvarchar(4000))SELECT DISTINCT SchoolName,SchoolCode' 需要参数 '@GradeCode'，但未提供该参数。
+2018-05-11 18:08:01,088 [300] ERROR LeaRun.DataAccess.DbHelper - 参数化查询 '(@GradeCode nvarchar(4000))SELECT DISTINCT SchoolName,SchoolCode' 需要参数 '@GradeCode'，但未提供该参数。
+2018-05-11 18:11:44,280 [10] ERROR LeaRun.DataAccess.DbHelper - 参数化查询 '(@GradeCode nvarchar(4000))SELECT DISTINCT SchoolName,SchoolCode' 需要参数 '@GradeCode'，但未提供该参数。
+2018-05-11 18:12:02,773 [297] ERROR LeaRun.DataAccess.DbHelper - 参数化查询 '(@GradeCode nvarchar(4000))SELECT DISTINCT SchoolName,SchoolCode' 需要参数 '@GradeCode'，但未提供该参数。
+2018-05-11 18:12:09,142 [300] ERROR LeaRun.DataAccess.DbHelper - 参数化查询 '(@GradeCode nvarchar(4000))SELECT DISTINCT SchoolName,SchoolCode' 需要参数 '@GradeCode'，但未提供该参数。
+2018-05-11 18:12:13,988 [297] ERROR LeaRun.DataAccess.DbHelper - 参数化查询 '(@GradeCode nvarchar(4000))SELECT DISTINCT SchoolName,SchoolCode' 需要参数 '@GradeCode'，但未提供该参数。
+2018-05-11 18:12:15,875 [303] ERROR LeaRun.DataAccess.DbHelper - 参数化查询 '(@GradeCode nvarchar(4000))SELECT DISTINCT SchoolName,SchoolCode' 需要参数 '@GradeCode'，但未提供该参数。
+2018-05-11 18:23:09,459 [303] ERROR LeaRun.DataAccess.DbHelper - 参数化查询 '(@GradeCode nvarchar(4000))SELECT DISTINCT SchoolName,SchoolCode' 需要参数 '@GradeCode'，但未提供该参数。
+2018-05-11 18:24:53,778 [297] ERROR LeaRun.DataAccess.DbHelper - 参数化查询 '(@GradeCode nvarchar(4000))SELECT DISTINCT SchoolName,SchoolCode' 需要参数 '@GradeCode'，但未提供该参数。

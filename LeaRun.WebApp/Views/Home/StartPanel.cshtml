@@ -1,0 +1,1908 @@
+﻿@*<!DOCTYPE html>
+
+    <html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>欢迎使用</title>
+        <!--框架必需start-->
+        <link href="~/Content/Styles/learunui-framework.css" rel="stylesheet" />
+        <script src="~/Content/Scripts/jquery/jquery-1.8.2.min.js"></script>
+        <script src="~/Content/Scripts/learunui-framework.js"></script>
+        <!--框架必需end-->
+        <!--第三方统计图start-->
+        <script src="~/Content/Scripts/highcharts/highcharts.js"></script>
+        <script src="~/Content/Scripts/highcharts/highcharts-more.js"></script>
+        <script src="~/Content/Scripts/highcharts/modules/exporting.js"></script>
+        <!--第三方统计图end-->
+        <script type="text/javascript">
+            $(function () {
+                LodaChartData();
+                Loadpie();
+            });
+            function LodaChartData() {
+                $('#container').highcharts({
+                    chart: {
+                        type: 'line'//图表类型line, spline, area, areaspline, column, bar, pie , scatter
+                    },
+                    title: {
+                        text: '月平均气温',
+                        x: -20 //center
+                    },
+                    xAxis: {
+                        categories: ['一月份', '二月份', '三月份', '四月份', '五月份', '六月份', '七月份', '八月份', '九月份', '十月份', '十一月份', '十二月份']
+
+                    },
+                    yAxis: {
+                        title: {
+                            text: '温度(°C)'
+                        },
+                        plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: '#808080'
+                        }]
+                    },
+                    tooltip: {
+                        valueSuffix: '°C'
+                    },
+                    legend: {
+                        layout: 'vertical',
+                        align: 'right',
+                        verticalAlign: 'middle',
+                        borderWidth: 0
+                    },
+                    series: [{
+                        name: '杭州',
+                        data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+                    }, {
+                        name: '上海',
+                        data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
+                    }, {
+                        name: '北京',
+                        data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
+                    }, {
+                        name: '福建',
+                        data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+                    }]
+                });
+            }
+            //JQuery饼图演示
+            function Loadpie() {
+                $('#piecontainer').highcharts({
+                    chart: {
+                        type: 'bubble',
+                        zoomType: 'xy'
+                    },
+
+                    title: {
+                        text: '泡沫'
+                    },
+
+                    series: [{
+                        data: [[97, 36, 79], [94, 74, 60], [68, 76, 58], [64, 87, 56], [68, 27, 73], [74, 99, 42], [7, 93, 87], [51, 69, 40], [38, 23, 33], [57, 86, 31]]
+                    }, {
+                        data: [[25, 10, 87], [2, 75, 59], [11, 54, 8], [86, 55, 93], [5, 3, 58], [90, 63, 44], [91, 33, 17], [97, 3, 56], [15, 67, 48], [54, 25, 81]]
+                    }, {
+                        data: [[47, 47, 21], [20, 12, 4], [6, 76, 91], [38, 30, 60], [57, 98, 64], [61, 17, 80], [83, 60, 13], [67, 78, 75], [64, 12, 10], [30, 77, 82]]
+                    }]
+
+                });
+            }
+        </script>
+    </head>
+    <body>
+        <div>
+            <table style="width: 100%;">
+                <tr>
+                    <td colspan="2" style="width: 80%">
+                        <div class="box">
+                            <div class="box-title">
+                                <div style="float: left">
+                                    <img src="~/Content/Images/Icon32/chart_bar.png" alt="" width="20" height="20" />
+                                    数据统计
+                                </div>
+                                <div id="SeriesType" title="点击切换图表" style="float: right; padding-right: 10px; cursor: pointer;">更多图表</div>
+                            </div>
+                            <div class="box-content" style="height: 300px;">
+                                <div id="container" style="height: 300px;">
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="box">
+                            <div class="box-title">
+                                <div style="float: left">
+                                    <img src="~/Content/Images/Icon32/sound.png" alt="" width="20" height="20" />
+                                    通知公告
+                                </div>
+                                <div style="float: right; padding-right: 10px;">更多</div>
+                            </div>
+                            <div class="box-content" style="height: 300px;">
+                                <a href="#" target="_blank">1、热烈庆祝通用权限管理系统框架上线 （2013-11-06） </a>
+                                <br />
+                                <a href="#" target="_blank">2、力软信息签约武钢旗下武新建材（2014-03-25） </a>
+                                <br />
+                                <a href="#" target="_blank">3、力软信息签约春风物流（2014-05-28） </a>
+                                <br />
+                                <a href="#" target="_blank">4、韵达渝北分公司转单项目顺利上线（2014-07-01） </a>
+                                <br />
+                                <a href="#" target="_blank">5、力软信息签约重庆誉威（2014-07-15） </a>
+                                <br />
+                                <a href="#" target="_blank">6、力软誉威物联网项目二期正式启动（2014-08-28） </a>
+                                <br />
+                                <a href="#" target="_blank">7、微软宣布.NET开发环境开源 支持三大操作系统（2014-11-13） </a>
+                                <br />
+                                <a href="#" target="_blank">8、力软信息化快速开发框架正式上线（2014-11-16） </a>
+                                <br />
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="box">
+                            <div class="box-title">
+                                <div style="float: left">
+                                    <img src="~/Content/Images/Icon32/hourglass_go.png" alt="" width="20" height="20" />
+                                    待办任务
+                                </div>
+                                <div style="float: right; padding-right: 10px;">更多</div>
+                            </div>
+                            <div class="box-content" style="height: 250px; width: 550px">
+                                <div id="piecontainer" style="height: 250px;"></div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="box">
+                            <div class="box-title">
+                                <div style="float: left">
+                                    <img src="~/Content/Images/Icon32/tag_blue.png" alt="" width="20" height="20" />
+                                    知识库最新文章
+                                </div>
+                                <div style="float: right; padding-right: 10px;">更多</div>
+                            </div>
+                            <div class="box-content" style="height: 250px; width: 550px">
+                                <a href="#" target="_blank">1、Javascript中的domReady引入机制</a><br />
+                                <a href="#" target="_blank">2、过早的优化是万恶之源</a><br />
+                                <a href="#" target="_blank">3、IIS 内部运行机制</a><br />
+                                <a href="#" target="_blank">4、Windows异步I/O和完成端口</a><br />
+                                <a href="#" target="_blank">5、NET中常见的内存泄露问题——GC、委托</a><br />
+                                <a href="#" target="_blank">6、项目代码风格要求</a><br />
+                                <a href="#" target="_blank">7、IIS是如何处理ASP.NET请求的</a><br />
+                                <a href="#" target="_blank">8、使用Phalanger整合PHP和.Net</a><br />
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="box">
+                            <div class="box-title">
+                                <div style="float: left">
+                                    <img src="~/Content/Images/Icon32/lightbulb_off.png" alt="" width="20" height="20" />
+                                    讨论话题
+                                </div>
+                                <div style="float: right; padding-right: 10px;">更多</div>
+                            </div>
+                            <div class="box-content" style="height: 250px;">
+                                <a href="#" target="_blank">1、人才后备计划意见征集</a><br />
+                                <a href="#" target="_blank">2、力软移动物联网产品意见征集</a><br />
+                                <a href="#" target="_blank">3、广州分公司选址意见征集</a><br />
+                                <a href="#" target="_blank">4、如何应对信息化产业巨头垄断</a><br />
+                                <a href="#" target="_blank">5、现代化人力资源管理的重要意义</a><br />
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </body>
+    </html>*@
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>欢迎使用</title>
+    <!--框架必需start-->
+    <link href="~/Content/Styles/learunui-framework.css" rel="stylesheet" />
+    <link href="~/Content/Styles/learunui-accordion.css" rel="stylesheet" />
+    <script src="~/Content/Scripts/jquery/jquery-1.8.2.min.js"></script>
+    <script src="~/Content/Scripts/highcharts/themes/highchars.3d.themes.js"></script>
+    <script src="~/Content/Scripts/learunui-framework.js"></script>
+    <!--框架必需end-->
+    <!--第三方统计图start-->
+    <script src="~/Content/Scripts/highcharts/highcharts.6.0.3.js"></script>
+    <script src="~/Content/Scripts/highcharts/highcharts-3d-6.0.3.js"></script>
+    <script src="~/Content/Scripts/highcharts/exporting-6.0.3.js"></script>
+    <script src="~/Content/Scripts/highcharts/themes/highchars.3d.themes.js"></script>
+    <!--第三方统计图end-->
+    <script>
+        $(function () {
+            //Browser();
+
+        });
+        function LodaChartData() {
+            $('#container').highcharts({
+                chart: {
+                    enabled: true,
+                    type: 'spline',
+                    alpha: 15,
+                    beta: 15,
+                    viewDistance: 25,
+                    depth: 50
+                },
+                title: {
+                    text: 'top5 销售产品统计表'
+                },
+                xAxis: {
+                    categories: ['1月份', '2月份', '3月份', '4月份', '5月份', '6月份',
+                        '7月份', '8月份', '9月份', '10月份', '11月份', '12月份']
+                },
+                yAxis: {
+                    title: {
+                        text: '销售产品'
+                    },
+                    labels: {
+                        formatter: function () {
+                            return this.value + '°'
+                        }
+                    }
+                },
+                tooltip: {
+                    crosshairs: true,
+                    shared: true
+                },
+                plotOptions: {
+                    spline: {
+                        marker: {
+                            radius: 4,
+                            lineColor: '#666666',
+                            lineWidth: 1
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Tokyo',
+                    marker: {
+                        symbol: 'square'
+                    },
+                    data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, {
+                        y: 26.5,
+                        marker: {
+                            symbol: 'url()'
+                        }
+                    }, 23.3, 18.3, 13.9, 9.6]
+
+                }, {
+                    name: 'London',
+                    marker: {
+                        symbol: 'diamond'
+                    },
+                    data: [{
+                        y: 3.9,
+                        marker: {
+                            symbol: 'url()'
+                        }
+                    }, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+                }]
+            });
+        };
+        function Browser() {
+            var colors = Highcharts.getOptions().colors,
+            categories = ['MSIE', 'Firefox', 'Chrome', 'Safari', 'Opera'],
+            name = 'Browser brands',
+            data = [{
+                y: 55.11,
+                color: colors[0],
+                drilldown: {
+                    name: 'MSIE versions',
+                    categories: ['MSIE 6.0', 'MSIE 7.0', 'MSIE 8.0', 'MSIE 9.0'],
+                    data: [10.85, 7.35, 33.06, 2.81],
+                    color: colors[0]
+                }
+            }, {
+                y: 21.63,
+                color: colors[1],
+                drilldown: {
+                    name: 'Firefox versions',
+                    categories: ['Firefox 2.0', 'Firefox 3.0', 'Firefox 3.5', 'Firefox 3.6', 'Firefox 4.0'],
+                    data: [0.20, 0.83, 1.58, 13.12, 5.43],
+                    color: colors[1]
+                }
+            }, {
+                y: 11.94,
+                color: colors[2],
+                drilldown: {
+                    name: 'Chrome versions',
+                    categories: ['Chrome 5.0', 'Chrome 6.0', 'Chrome 7.0', 'Chrome 8.0', 'Chrome 9.0',
+                        'Chrome 10.0', 'Chrome 11.0', 'Chrome 12.0'],
+                    data: [0.12, 0.19, 0.12, 0.36, 0.32, 9.91, 0.50, 0.22],
+                    color: colors[2]
+                }
+            }, {
+                y: 7.15,
+                color: colors[3],
+                drilldown: {
+                    name: 'Safari versions',
+                    categories: ['Safari 5.0', 'Safari 4.0', 'Safari Win 5.0', 'Safari 4.1', 'Safari/Maxthon',
+                        'Safari 3.1', 'Safari 4.1'],
+                    data: [4.55, 1.42, 0.23, 0.21, 0.20, 0.19, 0.14],
+                    color: colors[3]
+                }
+            }, {
+                y: 2.14,
+                color: colors[4],
+                drilldown: {
+                    name: 'Opera versions',
+                    categories: ['Opera 9.x', 'Opera 10.x', 'Opera 11.x'],
+                    data: [0.12, 0.37, 1.65],
+                    color: colors[4]
+                }
+            }];
+
+            function setChart(name, categories, data, color) {
+                chart.xAxis[0].setCategories(categories, false);
+                chart.series[0].remove(false);
+                chart.addSeries({
+                    name: name,
+                    data: data,
+                    color: color || 'white'
+                }, false);
+                chart.redraw();
+            }
+
+            var chart = $('#containerC').highcharts({
+                chart: {
+                    enabled: true,
+                    type: 'column',
+                    alpha: 15,
+                    beta: 15,
+                    viewDistance: 25,
+                    depth: 50,
+                    backgroundColor: 'rgba(0,0,0,0)'
+                },
+                title: {
+                    text: '浏览器的市场份额,2011年4月'
+                },
+                xAxis: {
+                    categories: categories
+                },
+                yAxis: {
+                    title: {
+                        text: '总市场份额百分比'
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        cursor: 'pointer',
+                        point: {
+                            events: {
+                                click: function () {
+                                    var drilldown = this.drilldown;
+                                    if (drilldown) { // drill down
+                                        setChart(drilldown.name, drilldown.categories, drilldown.data, drilldown.color);
+                                    } else { // restore
+                                        setChart(name, categories, data);
+                                    }
+                                }
+                            }
+                        },
+                        dataLabels: {
+                            enabled: true,
+                            color: colors[0],
+                            style: {
+                                fontWeight: 'bold'
+                            },
+                            formatter: function () {
+                                return this.y + '%';
+                            }
+                        }
+                    }
+                },
+                tooltip: {
+                    formatter: function () {
+                        var point = this.point,
+                            s = this.x + ':<b>' + this.y + '% market share</b><br/>';
+                        if (point.drilldown) {
+                            s += 'Click to view ' + point.category + ' versions';
+                        } else {
+                            s += 'Click to return to browser brands';
+                        }
+                        return s;
+                    }
+                },
+                series: [{
+                    name: name,
+                    data: data,
+                    color: 'white'
+                }],
+                exporting: {
+                    enabled: false
+                }
+            })
+            .highcharts(); // return chart
+        }
+        function Speedometer() {
+            $('#containerB').highcharts({
+                chart: {
+                    type: 'gauge',
+                    plotBackgroundColor: null,
+                    plotBackgroundImage: null,
+                    plotBorderWidth: 0,
+                    plotShadow: false
+                },
+
+                title: {
+                    text: '仪表盘'
+                },
+
+                pane: {
+                    startAngle: -150,
+                    endAngle: 150,
+                    background: [{
+                        backgroundColor: {
+                            linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                            stops: [
+                                [0, '#FFF'],
+                                [1, '#333']
+                            ]
+                        },
+                        borderWidth: 0,
+                        outerRadius: '109%'
+                    }, {
+                        backgroundColor: {
+                            linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                            stops: [
+                                [0, '#333'],
+                                [1, '#FFF']
+                            ]
+                        },
+                        borderWidth: 1,
+                        outerRadius: '107%'
+                    }, {
+                        // default background
+                    }, {
+                        backgroundColor: '#DDD',
+                        borderWidth: 0,
+                        outerRadius: '105%',
+                        innerRadius: '103%'
+                    }]
+                },
+
+                // the value axis
+                yAxis: {
+                    min: 0,
+                    max: 200,
+
+                    minorTickInterval: 'auto',
+                    minorTickWidth: 1,
+                    minorTickLength: 10,
+                    minorTickPosition: 'inside',
+                    minorTickColor: '#666',
+
+                    tickPixelInterval: 30,
+                    tickWidth: 2,
+                    tickPosition: 'inside',
+                    tickLength: 10,
+                    tickColor: '#666',
+                    labels: {
+                        step: 2,
+                        rotation: 'auto'
+                    },
+                    title: {
+                        text: 'km/h'
+                    },
+                    plotBands: [{
+                        from: 0,
+                        to: 120,
+                        color: '#55BF3B' // green
+                    }, {
+                        from: 120,
+                        to: 160,
+                        color: '#DDDF0D' // yellow
+                    }, {
+                        from: 160,
+                        to: 200,
+                        color: '#DF5353' // red
+                    }]
+                },
+
+                series: [{
+                    name: 'Speed',
+                    data: [80],
+                    tooltip: {
+                        valueSuffix: ' km/h'
+                    }
+                }]
+
+            },
+        // Add some life
+        function (chart) {
+            if (!chart.renderer.forExport) {
+                setInterval(function () {
+                    var point = chart.series[0].points[0],
+                        newVal,
+                        inc = Math.round((Math.random() - 0.5) * 20);
+
+                    newVal = point.y + inc;
+                    if (newVal < 0 || newVal > 200) {
+                        newVal = point.y - inc;
+                    }
+
+                    point.update(newVal);
+
+                }, 3000);
+            }
+        });
+        }
+    </script>
+</head>
+<body style="background-image: url(../Content/Images/bg.png);background-repeat:no-repeat; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
+    <div style="margin: 10px;">
+        <table style="width: 50%">
+            <tr>
+                <td id="one">
+                    <div class="Task" style="background-color: #E7191B;margin-left:30%">
+                        <i></i>
+                        <div class="centre">
+                            <div class="icon">
+                                <img src="~/Content/Images/task-1.png" />
+                            </div>
+                            <div class="Number">10</div>
+                        </div>
+                        <div class="text">
+                            个人分析
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="Task" style="background-color: #EEAE44">
+                        <i></i>
+                        <div class="centre">
+                            <div class="icon">
+                                <img src="~/Content/Images/task-2.png" />
+                            </div>
+                            <div class="Number">11</div>
+                        </div>
+                        <div class="text">
+                            区域对比
+                        </div>
+                    </div>
+                </td>
+                @*<td>
+                        <div class="Task" style="background-color: #28B779">
+                            <i></i>
+                            <div class="centre">
+                                <div class="icon">
+                                    <img src="~/Content/Images/task-3.png" />
+                                </div>
+                                <div class="Number">20</div>
+                            </div>
+                            <div class="text">
+                                对私待处理任务
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="Task" style="background-color: #2BA9E3">
+                            <i></i>
+                            <div class="centre">
+                                <div class="icon">
+                                    <img src="~/Content/Images/task-4.png" />
+                                </div>
+                                <div class="Number">78</div>
+                            </div>
+                            <div class="text">
+                                订单变更待处理任务
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="Task" style="background-color: #C07FE7">
+                            <div class="centre">
+                                <div class="icon">
+                                    <img src="~/Content/Images/task-5.png" />
+                                </div>
+                                <div class="Number">18</div>
+                            </div>
+                            <div class="text">
+                                本周销售订单
+                            </div>
+                        </div>
+                    </td>*@
+            </tr>
+        </table>
+        <div id="GR">
+            <div style="width:20%;float:left;">
+                <img src="~/Content/Images/ren.png" style="width:300px;margin-left:10%;margin-top:5%" />
+            </div>
+            <div style="width:30%;height:500px;float:left;">
+                <div class="box case-content">
+                    <style type="text/css">
+                                              .box {
+                                                  width: 70%;
+                                                  height: 200px;
+                                                  margin: 50px auto;
+                                                  background-color: #fff;
+                                              }
+
+                                                  .box h1 {
+                                                      font-size: 20px;
+                                                      line-height: 200px;
+                                                      text-align: center;
+                                                  }
+
+                                              .case-content {
+                                                  position: relative;
+                                                  -webkit-box-shadow: 0 1px 4px rgba(0,0,0,0.3),0 0 40px rgba(0,0,0,0.1) inset;
+                                                  -moz-box-shadow: 0 1px 4px rgba(0,0,0,0.3),0 0 40px rgba(0,0,0,0.1) inset;
+                                                  box-shadow: 0 1px 4px rgba(0,0,0,0.3),0 0 40px rgba(0,0,0,0.1) inset;
+                                                  -o-box-shadow: 0 1px 4px rgba(0,0,0,0.3),0 0 40px rgba(0,0,0,0.1) inset;
+                                              }
+
+                                                  .case-content:before, .case-content:after {
+                                                      z-index: -1;
+                                                      content: "";
+                                                      background-color: #foo;
+                                                      position: absolute;
+                                                      top: 50%;
+                                                      bottom: 0;
+                                                      left: 10px;
+                                                      right: 10px;
+                                                      -webkit-box-shadow: 0 0 20px rgba(0,0,0,0.8);
+                                                      -moz-box-shadow: 0 0 20px rgba(0,0,0,0.8);
+                                                      box-shadow: 0 0 20px rgba(0,0,0,0.8);
+                                                      -o-box-shadow: 0 0 20px rgba(0,0,0,0.8);
+                                                      border-radius: 100px/10px;
+                                                  }
+                                                  </style>
+
+                                              <table class="form" style="color: white; background-color: black; font-weight: bold; opacity: 0.7" > <tr > <th class='formValue' > 学号：</th > <td class='formValue' > 2015010335 </td > </tr > <tr > <th class='formValue' > 姓名：</th > <td class='formValue' > 张三 </td > </tr > <tr > <th class='formValue' > 性别：</th > <td class='formValue' > 男 </td > </tr > <tr > <th class='formValue' > 年龄：</th > <td class='formValue' > 20 </td > </tr > <tr > <th class='formValue' > 更改时间：</th > <td class='formValue' > </td > </tr > <tr > <th class='formValue' > 备注：</th > <td class='formValue' > </td > </tr > <tr > </tr > </table > </div > <table class="form" style="color: white; background-color: black; font-weight: bold; opacity: 0.7" > <tr > <th class='formValue' > 学号：</th > <td class='formValue' > 2015010335 </td > </tr > <tr > <th class='formValue' > 姓名：</th > <td class='formValue' > 张三 </td > </tr > <tr > <th class='formValue' > 性别：</th > <td class='formValue' > 男 </td > </tr > <tr > <th class='formValue' > 年龄：</th > <td class='formValue' > 20 </td > </tr > <tr > <th class='formValue' > 更改时间：</th > <td class='formValue' > </td > </tr > <tr > <th class='formValue' > 备注：</th > <td class='formValue' > </td > </tr > <tr > </tr > </table > </div > </div > <div style="display:none" id="QY" > <div style="clear:both" > </div > <div style="margin-left: 20px; margin-right: 30px; " > <div id="container" > </div > <script language="JavaScript" > $(document).ready(function () {
+                                          var colors = ['#f45b5b', '#7798BF', '#aaeeee', '#ff0066', '#2b908f', '#eeaaee', '#55BF3B', '#DF5353', '#7798BF', '#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066',
+                             '#aaeeee'];
+
+                                          Highcharts.getOptions().colors = Highcharts.map(colors, function (color) {
+                                              return {
+                                                  linearGradient: { cx: 0, cy: -0.8, r: 2.3 },
+                                                  stops: [[0, color], [2, Highcharts.Color(color).brighten(3).get('rgb')] // darken
+                                                  ]
+                                              };
+                                          });
+                                          var chart = new Highcharts.Chart({
+                                              chart: {
+                                                  renderTo: 'container',
+                                                  type: 'column',
+                                                  backgroundColor: 'rgba(0,0,0,0)',
+                                                  options3d: {
+                                                      enabled: true,
+                                                      alpha: 5,
+                                                      beta: 5,
+                                                      depth: 50,
+                                                      viewDistance: 25, frame: {//3D墙背景
+                                                          bottom: { size: 1, color: 'rgba(0,0,0,0.02)' },
+                                                          back: { size: 1, color: 'rgba(0,0,0,0.04)' },
+                                                          side: { size: 1, color: 'rgba(0,0,0,0.06)' }
+                                                      }
+
+                                                  }
+
+                                              },
+                                              title: {
+                                                  text: '每年学生成绩堆叠图'
+                                              }, xAxis: {
+                                                  categories: ['大一', '大二', '大三', '大四'],
+                                                  labels: {
+                                                      skew3d: true,
+                                                      style: {
+                                                          fontSize: '16px'
+                                                      }
+                                                  }
+                                              }, yAxis: {
+                                                  allowDecimals: false,
+                                                  min: 0,
+                                                  title: {
+                                                      text: '人数',
+                                                      skew3d: true,
+                                                      style: {
+                                                          color: 'black',
+                                                          fontSize: 5
+                                                      }
+                                                  }
+                                              }, tooltip: {
+                                                  headerFormat: '<b>{point.key}</b><br>',
+                                                  pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: {point.y}'
+                                              }, plotOptions: {
+                                                  column: {
+                                                      stacking: 'normal',
+                                                      cursor: 'pointer',
+                                                      depth: 40,
+                                                      dataLabels: {
+                                                          enabled: true,// dataLabels设为true
+                                                          style: {
+                                                              color: '#D7DEE9'
+                                                          }
+                                                      }
+                                                  }
+                                              }, series: [{
+                                                  name: '不及格',
+                                                  data: [100, 200, 300, 250],
+                                                  stack: 'one'
+                                              }, {
+                                                  name: '及格',
+                                                  data: [2500, 3500, 3000, 2500],
+                                                  stack: 'two'
+                                              }, {
+                                                  name: '良好',
+                                                  data: [3000, 2895, 4026, 3768],
+                                                  stack: 'three'
+                                              }, {
+                                                  name: '优秀',
+                                                  data: [500, 647, 700, 600],
+                                                  stack: 'four'
+                                              }]
+                                          });
+                                          $(chart.container).bind('mousedown.hc touchstart.hc', function (e) {
+
+                                              e = chart.pointer.normalize(e);
+
+
+                                              var posX = e.pageX,
+                                                  posY = e.pageY,
+                                                  alpha = chart.options.chart.options3d.alpha,
+                                                  beta = chart.options.chart.options3d.beta,
+                                                  newAlpha,
+                                                  newBeta,
+                                                  sensitivity = 5; // lower is more sensitive
+
+                                              $(document).bind({
+                                                  'mousemove.hc touchdrag.hc': function (e) {
+                                                      // Run beta
+                                                      newBeta = beta + (posX - e.pageX) / sensitivity;
+                                                      newBeta = Math.min(100, Math.max(-100, newBeta));
+                                                      chart.options.chart.options3d.beta = newBeta;
+
+                                                      // Run alpha
+                                                      newAlpha = alpha + (e.pageY - posY) / sensitivity;
+                                                      newAlpha = Math.min(100, Math.max(-100, newAlpha));
+                                                      chart.options.chart.options3d.alpha = newAlpha;
+
+                                                      chart.redraw(false);
+                                                  },
+                                                  'mouseup touchend': function () {
+                                                      $(document).unbind('.hc');
+                                                  }
+                                              });
+                                          });
+
+                                      }); </script > </div > <div style="margin-left: 20px; margin-right: 30px;" > <table style="width: 100%" > <tr > <td style="width: 100%" > <div id="containerA" > </div > <script language="JavaScript" > $(document).ready(function () {
+                                                      var colors = ['#f45b5b', '#7798BF', '#aaeeee', '#ff0066', '#2b908f', '#eeaaee', '#55BF3B', '#DF5353', '#7798BF', '#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066',
+                        '#aaeeee'];
+                                                      Highcharts.getOptions().colors = Highcharts.map(colors, function (color) {
+                                                          return {
+                                                              linearGradient: { cx: 0, cy: -0.8, r: 2.3 },
+                                                              stops: [[0, color], [2, Highcharts.Color(color).brighten(3).get('rgb')]
+                                                              ]
+                                                          };
+                                                      });
+                                                      var chart = new Highcharts.Chart({
+                                                          chart: {
+                                                              renderTo: 'containerA',
+                                                              type: 'column',
+                                                              margin: 75,
+                                                              backgroundColor: 'rgba(0,0,0,0)',
+                                                              options3d: {
+                                                                  enabled: true,
+                                                                  alpha: 5,
+                                                                  beta: 5,
+                                                                  depth: 50,
+                                                                  viewDistance: 25, frame: {//3D墙背景
+                                                                      bottom: { size: 1, color: 'rgba(0,0,0,0.02)' },
+                                                                      back: { size: 1, color: 'rgba(0,0,0,0.04)' },
+                                                                      side: { size: 1, color: 'rgba(0,0,0,0.06)' }
+                                                                  }
+                                                              }
+                                                          }, title: {
+                                                              text: '身高近12年男女对比'
+                                                          }, subtitle: {
+                                                              text: ''
+                                                          }, plotOptions: {
+                                                              column: {
+                                                                  dataLabels: {
+                                                                      enabled: true, // dataLabels设为true
+                                                                      style: {
+                                                                          color: '#D7DEE9'
+                                                                      }
+                                                                  },
+
+                                                                  depth: 25
+                                                              }
+                                                          }, xAxis: {
+                                                              categories: ['2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011'],
+                                                              labels: {
+                                                                  skew3d: true,
+                                                                  style: {
+                                                                      fontSize: '16px'
+                                                                  }
+                                                              }
+                                                          }, yAxis: {
+                                                              allowDecimals: false,
+                                                              min: 155,
+                                                              title: {
+                                                                  text: '厘米（cm）',
+                                                                  skew3d: true,
+                                                                  style: {
+                                                                      color: 'black',
+                                                                      fontSize: 5
+                                                                  }
+                                                              }
+
+                                                          }, series: [{
+                                                              name: '男',
+                                                              data: [165.3, 166.2, 167.6, 168.9, 169.3, 170.2, 171.6, 168.9, 165.3, 166.2, 167.6, 168.9],
+                                                              stack: 'one'
+                                                          }, {
+                                                              name: '女',
+                                                              data: [160.3, 161.2, 162.6, 163.9, 164.3, 165.2, 167.6, 166.9, 164.3, 163.2, 163.6, 160.9],
+                                                              stack: 'two'
+                                                          }]
+                                                      });
+                                                      $(chart.container).bind('mousedown.hc touchstart.hc', function (e) {
+
+                                                          e = chart.pointer.normalize(e);
+
+
+                                                          var posX = e.pageX,
+                                                              posY = e.pageY,
+                                                              alpha = chart.options.chart.options3d.alpha,
+                                                              beta = chart.options.chart.options3d.beta,
+                                                              newAlpha,
+                                                              newBeta,
+                                                              sensitivity = 5; // lower is more sensitive
+
+                                                          $(document).bind({
+                                                              'mousemove.hc touchdrag.hc': function (e) {
+                                                                  // Run beta
+                                                                  newBeta = beta + (posX - e.pageX) / sensitivity;
+                                                                  newBeta = Math.min(100, Math.max(-100, newBeta));
+                                                                  chart.options.chart.options3d.beta = newBeta;
+
+                                                                  // Run alpha
+                                                                  newAlpha = alpha + (e.pageY - posY) / sensitivity;
+                                                                  newAlpha = Math.min(100, Math.max(-100, newAlpha));
+                                                                  chart.options.chart.options3d.alpha = newAlpha;
+
+                                                                  chart.redraw(false);
+                                                              },
+                                                              'mouseup touchend': function () {
+                                                                  $(document).unbind('.hc');
+                                                              }
+                                                          });
+                                                      });
+                                                  }); </script > </td > </tr > <tr > <td style="width:100%" > <div id="containerB" > </div > <script language="JavaScript" > $(document).ready(function () {
+                                                      var chart = new Highcharts.Chart({
+                                                          chart: {
+                                                              renderTo: 'containerB',
+                                                              type: 'pie',
+                                                              backgroundColor: 'rgba(0,0,0,0)',
+                                                              options3d: {
+                                                                  enabled: true,
+                                                                  alpha: 45
+                                                              }
+                                                          }, title: {
+                                                              text: '每年学生优秀及格圆形图'
+                                                          }, plotOptions: {
+                                                              pie: {
+                                                                  stacking: 'normal',
+                                                                  cursor: 'pointer',
+                                                                  dataLabels: {
+                                                                      enabled: true,
+                                                                      style: {
+                                                                          fontWeight: 'bold',
+                                                                          color: 'white',
+                                                                          textShadow: '0px 1px 2px black'
+                                                                      },
+                                                                      format: '{point.name}:({y})%'
+                                                                  },
+                                                                  innerSize: 100,
+                                                                  depth: 45
+                                                              }
+                                                          }, series: [{
+                                                              name: '人数',
+                                                              data: [
+                                                                 ['及格', 20],
+                                                                 ['不及格', 3],
+                                                                 ['良好', 1],
+                                                                 ['优秀', 6]
+                                                              ],
+                                                          }]
+                                                      });
+                                                  }); </script > </td > </tr > <tr > <td style="width: 100%;" > <div id="containerC" > </div > <script > $(function () {
+                                                      var colors = ['#f45b5b', '#7798BF', '#aaeeee', '#ff0066', '#2b908f', '#eeaaee', '#55BF3B', '#DF5353', '#7798BF', '#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066',
+                                              '#aaeeee'];
+                                                      Highcharts.getOptions().colors = Highcharts.map(colors, function (color) {
+                                                          return {
+                                                              radialGradient: { cx: 0, cy: -0.8, r: 2.3 },
+                                                              stops: [[0, color], [2, Highcharts.Color(color).brighten(-0.3).get('rgb')] // darken
+                                                              ]
+                                                          };
+                                                      });
+
+                                                      var chart = new Highcharts.Chart({
+                                                          chart: {
+                                                              renderTo: 'containerC',
+                                                              type: 'line',
+                                                              backgroundColor: 'rgba(0,0,0,0)',
+                                                              options3d: {
+                                                                  enabled: true,
+                                                                  alpha: 7,
+                                                                  beta: 5,
+                                                                  depth: 60,
+                                                                  viewDistance: 25, frame: {//3D墙背景
+                                                                      bottom: { size: 1, color: 'rgba(0,0,0,0.02)' },
+                                                                      back: { size: 1, color: 'rgba(0,0,0,0.04)' },
+                                                                      side: { size: 1, color: 'rgba(0,0,0,0.06)' }
+                                                                  }
+                                                              }
+                                                          },
+                                                          title: {
+                                                              text: 'Stacked column chart'
+                                                          },
+                                                          xAxis: {
+                                                              categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']
+                                                          },
+                                                          yAxis: {
+                                                              min: 0,
+                                                              title: {
+                                                                  text: 'Total fruit consumption'
+                                                              }
+                                                          },
+                                                          tooltip: {
+                                                              pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br />',
+                                                              shared: true
+                                                          },
+                                                          plotOptions: {
+                                                              column: {
+                                                                  pointWidth: 20,
+                                                                  stacking: 'percent'
+                                                              }
+                                                          },
+                                                          series: [{
+                                                              name: 'John',
+                                                              data: [5, 3, 4, 7, 2]
+                                                          }, {
+                                                              name: 'Jane',
+                                                              data: [2, 2, 3, 2, 1]
+                                                          }, {
+                                                              name: 'Joe',
+                                                              data: [3, 4, 4, 2, 5]
+                                                          }]
+                                                      });
+                                                      $(chart.container).bind('mousedown.hc touchstart.hc', function (e) {
+
+                                                          e = chart.pointer.normalize(e);
+
+
+                                                          var posX = e.pageX,
+                                                              posY = e.pageY,
+                                                              alpha = chart.options.chart.options3d.alpha,
+                                                              beta = chart.options.chart.options3d.beta,
+                                                              newAlpha,
+                                                              newBeta,
+                                                              sensitivity = 5; // lower is more sensitive
+
+                                                          $(document).bind({
+                                                              'mousemove.hc touchdrag.hc': function (e) {
+                                                                  // Run beta
+                                                                  newBeta = beta + (posX - e.pageX) / sensitivity;
+                                                                  newBeta = Math.min(100, Math.max(-100, newBeta));
+                                                                  chart.options.chart.options3d.beta = newBeta;
+
+                                                                  // Run alpha
+                                                                  newAlpha = alpha + (e.pageY - posY) / sensitivity;
+                                                                  newAlpha = Math.min(100, Math.max(-100, newAlpha));
+                                                                  chart.options.chart.options3d.alpha = newAlpha;
+
+                                                                  chart.redraw(false);
+                                                              },
+                                                              'mouseup touchend': function () {
+                                                                  $(document).unbind('.hc');
+                                                              }
+                                                          });
+                                                      });
+
+                                                  }); </script > </td > </tr > <tr > <td style="width:100%" > <div id="containerD" > </div > <script > $(function () {
+                                                      $('#containerD').highcharts({
+                                                          chart: {
+                                                              backgroundColor: 'rgba(0,0,0,0)',
+                                                              plotBackgroundColor: null,
+                                                              plotBorderWidth: 0,
+                                                              plotShadow: false,
+                                                              options3d: {
+                                                                  enabled: true,
+
+                                                              }
+                                                          },
+                                                          title: {
+                                                              text: 'Browser<br>shares',
+                                                              align: 'center',
+                                                              verticalAlign: 'middle',
+                                                              y: 50
+                                                          },
+                                                          tooltip: {
+                                                              pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                                                          },
+                                                          plotOptions: {
+                                                              pie: {
+                                                                  dataLabels: {
+                                                                      enabled: true,
+                                                                      distance: -50,
+                                                                      style: {
+                                                                          fontWeight: 'bold',
+                                                                          color: 'white',
+                                                                          textShadow: '0px 1px 2px black'
+                                                                      },
+                                                                      format: '{y}%'
+                                                                  },
+                                                                  startAngle: -90,
+                                                                  endAngle: 90,
+                                                                  center: ['50%', '75%']
+                                                              }
+                                                          },
+                                                          series: [{
+                                                              type: 'pie',
+                                                              name: 'Browser share',
+                                                              innerSize: '50%',
+                                                              data: [
+                                                              ['Firefox', 45.0],
+                                                              ['IE', 26.8],
+                                                              ['Chrome', 12.8],
+                                                              ['Safari', 8.5],
+                                                              ['Opera', 6.2],
+                                                              {
+                                                                  name: 'Others',
+                                                                  y: 0.7,
+                                                                  dataLabels: {
+                                                                      enabled: false
+                                                                  }
+                                                              }
+                                                              ]
+                                                          }]
+                                                      });
+                                                  }); </script > </td > </tr > </table > <table style="width:100%" > <tr > <td > <div id="containerE" > </div > <script language="JavaScript" > $(document).ready(function () {
+                                                      var colors = ['#f45b5b', '#7798BF', '#aaeeee', '#ff0066', '#2b908f', '#eeaaee', '#55BF3B', '#DF5353', '#7798BF', '#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066',
+                                              '#aaeeee'];
+                                                      Highcharts.getOptions().colors = Highcharts.map(colors, function (color) {
+                                                          return {
+                                                              linearGradient: { cx: 0, cy: -0.8, r: 2.3 },
+                                                              stops: [[0, color], [2, Highcharts.Color(color).brighten(3).get('rgb')]
+                                                              ]
+                                                          };
+                                                      });
+                                                      var chart = new Highcharts.Chart({
+                                                          chart: {
+                                                              renderTo: 'containerE',
+                                                              type: 'line',
+                                                              backgroundColor: 'rgba(0,0,0,0)',
+                                                              options3d: {
+                                                                  enabled: true,
+                                                                  alpha: 5,
+                                                                  beta: 5,
+                                                                  depth: 50,
+                                                                  viewDistance: 25, frame: {//3D墙背景
+                                                                      bottom: { size: 1, color: 'rgba(0,0,0,0.02)' },
+                                                                      back: { size: 1, color: 'rgba(0,0,0,0.04)' },
+                                                                      side: { size: 1, color: 'rgba(0,0,0,0.06)' }
+                                                                  }
+                                                              }
+                                                          }, title: {
+                                                              text: '12年平均身高男女对比'
+                                                          }, subtitle: {
+                                                              text: ''
+                                                          }, plotOptions: {
+                                                              column: {
+                                                                  dataLabels: {
+                                                                      enabled: true, // dataLabels设为true
+                                                                      style: {
+                                                                          color: '#D7DEE9'
+                                                                      }
+                                                                  },
+
+                                                                  depth: 25
+                                                              }
+                                                          }, xAxis: {
+                                                              categories: ['2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011'],
+                                                              labels: {
+                                                                  skew3d: true,
+                                                                  style: {
+                                                                      fontSize: '16px'
+                                                                  }
+                                                              }
+                                                          }, yAxis: {
+                                                              allowDecimals: false,
+                                                              min: 155,
+                                                              title: {
+                                                                  text: '厘米（cm）',
+                                                                  skew3d: true,
+                                                                  style: {
+                                                                      color: 'white',
+                                                                      fontSize: 5
+                                                                  }
+                                                              }
+
+                                                          }, series: [{
+                                                              name: '男',
+                                                              data: [165.3, 166.2, 167.6, 168.9, 169.3, 170.2, 171.6, 168.9, 165.3, 166.2, 167.6, 168.9],
+                                                              stack: 'one'
+                                                          }, {
+                                                              name: '女',
+                                                              data: [160.3, 161.2, 162.6, 163.9, 164.3, 165.2, 167.6, 166.9, 164.3, 163.2, 163.6, 160.9],
+                                                              stack: 'two'
+                                                          }]
+                                                      });
+                                                      $(chart.container).bind('mousedown.hc touchstart.hc', function (e) {
+
+                                                          e = chart.pointer.normalize(e);
+
+
+                                                          var posX = e.pageX,
+                                                              posY = e.pageY,
+                                                              alpha = chart.options.chart.options3d.alpha,
+                                                              beta = chart.options.chart.options3d.beta,
+                                                              newAlpha,
+                                                              newBeta,
+                                                              sensitivity = 5; // lower is more sensitive
+
+                                                          $(document).bind({
+                                                              'mousemove.hc touchdrag.hc': function (e) {
+                                                                  // Run beta
+                                                                  newBeta = beta + (posX - e.pageX) / sensitivity;
+                                                                  newBeta = Math.min(100, Math.max(-100, newBeta));
+                                                                  chart.options.chart.options3d.beta = newBeta;
+
+                                                                  // Run alpha
+                                                                  newAlpha = alpha + (e.pageY - posY) / sensitivity;
+                                                                  newAlpha = Math.min(100, Math.max(-100, newAlpha));
+                                                                  chart.options.chart.options3d.alpha = newAlpha;
+
+                                                                  chart.redraw(false);
+                                                              },
+                                                              'mouseup touchend': function () {
+                                                                  $(document).unbind('.hc');
+                                                              }
+                                                          });
+                                                      });
+                                                  }); </script > </td > <td > <div id="containerF" > </div > <script language="JavaScript" > $(document).ready(function () {
+                                                      var colors = ['#f45b5b', '#7798BF', '#aaeeee', '#ff0066', '#2b908f', '#eeaaee', '#55BF3B', '#DF5353', '#7798BF', '#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066',
+                        '#aaeeee'];
+                                                      Highcharts.getOptions().colors = Highcharts.map(colors, function (color) {
+                                                          return {
+                                                              linearGradient: { cx: 0, cy: -0.8, r: 2.3 },
+                                                              stops: [[0, color], [2, Highcharts.Color(color).brighten(3).get('rgb')]
+                                                              ]
+                                                          };
+                                                      });
+                                                      var chart = new Highcharts.Chart({
+                                                          chart: {
+                                                              renderTo: 'containerF',
+                                                              type: 'line',
+
+                                                              backgroundColor: 'rgba(0,0,0,0)',
+                                                              options3d: {
+                                                                  enabled: true,
+                                                                  alpha: 5,
+                                                                  beta: 5,
+                                                                  depth: 50,
+                                                                  viewDistance: 25, frame: {//3D墙背景
+                                                                      bottom: { size: 1, color: 'rgba(0,0,0,0.02)' },
+                                                                      back: { size: 1, color: 'rgba(0,0,0,0.04)' },
+                                                                      side: { size: 1, color: 'rgba(0,0,0,0.06)' }
+                                                                  }
+                                                              }
+                                                          }, title: {
+                                                              text: '近12年平均体重对比'
+                                                          }, subtitle: {
+                                                              text: ''
+                                                          }, plotOptions: {
+                                                              column: {
+                                                                  dataLabels: {
+                                                                      enabled: true, // dataLabels设为true
+                                                                      style: {
+                                                                          color: '#D7DEE9'
+                                                                      }
+                                                                  },
+
+                                                                  depth: 25
+                                                              }
+                                                          }, xAxis: {
+                                                              categories: ['2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011'],
+                                                              labels: {
+                                                                  skew3d: true,
+                                                                  style: {
+                                                                      fontSize: '16px'
+                                                                  }
+                                                              }
+                                                          }, yAxis: {
+                                                              allowDecimals: false,
+                                                              min: 50,
+                                                              title: {
+                                                                  text: '体重（kg）',
+                                                                  skew3d: true,
+                                                                  style: {
+                                                                      color: 'white',
+                                                                      fontSize: 5
+                                                                  }
+                                                              }
+
+                                                          }, series: [{
+                                                              name: '男',
+                                                              data: [52.6, 53.7, 54.6, 55.9, 56.3, 57.2, 58.6, 59.9, 60.3, 61.2, 62.6, 63.9],
+                                                              stack: 'one'
+                                                          }, {
+                                                              name: '女',
+                                                              data: [50.3, 51.2, 52.6, 53.9, 54.3, 55.2, 56.6, 57.9, 58.3, 59.2, 60.6, 61.9],
+                                                              stack: 'two'
+                                                          }]
+                                                      });
+                                                      $(chart.container).bind('mousedown.hc touchstart.hc', function (e) {
+
+                                                          e = chart.pointer.normalize(e);
+
+
+                                                          var posX = e.pageX,
+                                                              posY = e.pageY,
+                                                              alpha = chart.options.chart.options3d.alpha,
+                                                              beta = chart.options.chart.options3d.beta,
+                                                              newAlpha,
+                                                              newBeta,
+                                                              sensitivity = 5; // lower is more sensitive
+
+                                                          $(document).bind({
+                                                              'mousemove.hc touchdrag.hc': function (e) {
+                                                                  // Run beta
+                                                                  newBeta = beta + (posX - e.pageX) / sensitivity;
+                                                                  newBeta = Math.min(100, Math.max(-100, newBeta));
+                                                                  chart.options.chart.options3d.beta = newBeta;
+
+                                                                  // Run alpha
+                                                                  newAlpha = alpha + (e.pageY - posY) / sensitivity;
+                                                                  newAlpha = Math.min(100, Math.max(-100, newAlpha));
+                                                                  chart.options.chart.options3d.alpha = newAlpha;
+
+                                                                  chart.redraw(false);
+                                                              },
+                                                              'mouseup touchend': function () {
+                                                                  $(document).unbind('.hc');
+                                                              }
+                                                          });
+                                                      });
+                                                  }); </script > </td > <td > <div id="containerG" > </div > <script language="JavaScript" > $(document).ready(function () {
+                                                      var colors = ['#f45b5b', '#7798BF', '#aaeeee', '#ff0066', '#2b908f', '#eeaaee', '#55BF3B', '#DF5353', '#7798BF', '#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066',
+                        '#aaeeee'];
+                                                      Highcharts.getOptions().colors = Highcharts.map(colors, function (color) {
+                                                          return {
+                                                              linearGradient: { cx: 0, cy: -0.8, r: 2.3 },
+                                                              stops: [[0, color], [2, Highcharts.Color(color).brighten(3).get('rgb')]
+                                                              ]
+                                                          };
+                                                      });
+                                                      var chart = new Highcharts.Chart({
+                                                          chart: {
+                                                              renderTo: 'containerG',
+                                                              type: 'line',
+
+                                                              backgroundColor: 'rgba(0,0,0,0)',
+                                                              options3d: {
+                                                                  enabled: true,
+                                                                  alpha: 5,
+                                                                  beta: 5,
+                                                                  depth: 50,
+                                                                  viewDistance: 25, frame: {//3D墙背景
+                                                                      bottom: { size: 1, color: 'rgba(0,0,0,0.02)' },
+                                                                      back: { size: 1, color: 'rgba(0,0,0,0.04)' },
+                                                                      side: { size: 1, color: 'rgba(0,0,0,0.06)' }
+                                                                  }
+                                                              }
+                                                          }, title: {
+                                                              text: '近12年平局肺活量男女对比'
+                                                          }, subtitle: {
+                                                              text: ''
+                                                          }, plotOptions: {
+                                                              column: {
+                                                                  dataLabels: {
+                                                                      enabled: true, // dataLabels设为true
+                                                                      style: {
+                                                                          color: '#D7DEE9'
+                                                                      }
+                                                                  },
+
+                                                                  depth: 25
+                                                              }
+                                                          }, xAxis: {
+                                                              categories: ['2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011'],
+                                                              labels: {
+                                                                  skew3d: true,
+                                                                  style: {
+                                                                      fontSize: '16px'
+                                                                  }
+                                                              }
+                                                          }, yAxis: {
+                                                              allowDecimals: false,
+                                                              min: 2700,
+                                                              title: {
+                                                                  text: '肺活量（ml）',
+                                                                  skew3d: true,
+                                                                  style: {
+                                                                      color: 'white',
+                                                                      fontSize: 5
+                                                                  }
+                                                              }
+
+                                                          }, series: [{
+                                                              name: '男',
+                                                              data: [3500, 3550, 3600, 3560, 3700, 3720, 3770, 3650, 3680, 3900, 3500, 3800],
+                                                              stack: 'one'
+                                                          }, {
+                                                              name: '女',
+                                                              data: [2800, 2900, 3000, 3150, 3200, 3150, 3200, 3250, 3360, 3380, 3500, 3400],
+                                                              stack: 'two'
+                                                          }]
+                                                      });
+                                                      $(chart.container).bind('mousedown.hc touchstart.hc', function (e) {
+
+                                                          e = chart.pointer.normalize(e);
+
+
+                                                          var posX = e.pageX,
+                                                              posY = e.pageY,
+                                                              alpha = chart.options.chart.options3d.alpha,
+                                                              beta = chart.options.chart.options3d.beta,
+                                                              newAlpha,
+                                                              newBeta,
+                                                              sensitivity = 5; // lower is more sensitive
+
+                                                          $(document).bind({
+                                                              'mousemove.hc touchdrag.hc': function (e) {
+                                                                  // Run beta
+                                                                  newBeta = beta + (posX - e.pageX) / sensitivity;
+                                                                  newBeta = Math.min(100, Math.max(-100, newBeta));
+                                                                  chart.options.chart.options3d.beta = newBeta;
+
+                                                                  // Run alpha
+                                                                  newAlpha = alpha + (e.pageY - posY) / sensitivity;
+                                                                  newAlpha = Math.min(100, Math.max(-100, newAlpha));
+                                                                  chart.options.chart.options3d.alpha = newAlpha;
+
+                                                                  chart.redraw(false);
+                                                              },
+                                                              'mouseup touchend': function () {
+                                                                  $(document).unbind('.hc');
+                                                              }
+                                                          });
+                                                      });
+                                                  }); </script > </td > </tr > <tr > <td > <div id="containerI" > </div > <script language="JavaScript" > $(document).ready(function () {
+                                                      var colors = ['#f45b5b', '#7798BF', '#aaeeee', '#ff0066', '#2b908f', '#eeaaee', '#55BF3B', '#DF5353', '#7798BF', '#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066',
+                                              '#aaeeee'];
+                                                      Highcharts.getOptions().colors = Highcharts.map(colors, function (color) {
+                                                          return {
+                                                              linearGradient: { cx: 0, cy: -0.8, r: 2.3 },
+                                                              stops: [[0, color], [2, Highcharts.Color(color).brighten(3).get('rgb')]
+                                                              ]
+                                                          };
+                                                      });
+                                                      var chart = new Highcharts.Chart({
+                                                          chart: {
+                                                              renderTo: 'containerI',
+                                                              type: 'line',
+
+                                                              backgroundColor: 'rgba(0,0,0,0)',
+                                                              options3d: {
+                                                                  enabled: true,
+                                                                  alpha: 5,
+                                                                  beta: 5,
+                                                                  depth: 50,
+                                                                  viewDistance: 25, frame: {//3D墙背景
+                                                                      bottom: { size: 1, color: 'rgba(0,0,0,0.02)' },
+                                                                      back: { size: 1, color: 'rgba(0,0,0,0.04)' },
+                                                                      side: { size: 1, color: 'rgba(0,0,0,0.06)' }
+                                                                  }
+                                                              }
+                                                          }, title: {
+                                                              text: '身高近12年男女对比'
+                                                          }, subtitle: {
+                                                              text: ''
+                                                          }, plotOptions: {
+                                                              column: {
+                                                                  dataLabels: {
+                                                                      enabled: true, // dataLabels设为true
+                                                                      style: {
+                                                                          color: '#D7DEE9'
+                                                                      }
+                                                                  },
+
+                                                                  depth: 25
+                                                              }
+                                                          }, xAxis: {
+                                                              categories: ['2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011'],
+                                                              labels: {
+                                                                  skew3d: true,
+                                                                  style: {
+                                                                      fontSize: '16px'
+                                                                  }
+                                                              }
+                                                          }, yAxis: {
+                                                              allowDecimals: false,
+                                                              min: 155,
+                                                              title: {
+                                                                  text: '厘米（cm）',
+                                                                  skew3d: true,
+                                                                  style: {
+                                                                      color: 'black',
+                                                                      fontSize: 5
+                                                                  }
+                                                              }
+
+                                                          }, series: [{
+                                                              name: '男',
+                                                              data: [165.3, 166.2, 167.6, 168.9, 169.3, 170.2, 171.6, 168.9, 165.3, 166.2, 167.6, 168.9],
+                                                              stack: 'one'
+                                                          }, {
+                                                              name: '女',
+                                                              data: [160.3, 161.2, 162.6, 163.9, 164.3, 165.2, 167.6, 166.9, 164.3, 163.2, 163.6, 160.9],
+                                                              stack: 'two'
+                                                          }]
+                                                      });
+                                                      $(chart.container).bind('mousedown.hc touchstart.hc', function (e) {
+
+                                                          e = chart.pointer.normalize(e);
+
+
+                                                          var posX = e.pageX,
+                                                              posY = e.pageY,
+                                                              alpha = chart.options.chart.options3d.alpha,
+                                                              beta = chart.options.chart.options3d.beta,
+                                                              newAlpha,
+                                                              newBeta,
+                                                              sensitivity = 5; // lower is more sensitive
+
+                                                          $(document).bind({
+                                                              'mousemove.hc touchdrag.hc': function (e) {
+                                                                  // Run beta
+                                                                  newBeta = beta + (posX - e.pageX) / sensitivity;
+                                                                  newBeta = Math.min(100, Math.max(-100, newBeta));
+                                                                  chart.options.chart.options3d.beta = newBeta;
+
+                                                                  // Run alpha
+                                                                  newAlpha = alpha + (e.pageY - posY) / sensitivity;
+                                                                  newAlpha = Math.min(100, Math.max(-100, newAlpha));
+                                                                  chart.options.chart.options3d.alpha = newAlpha;
+
+                                                                  chart.redraw(false);
+                                                              },
+                                                              'mouseup touchend': function () {
+                                                                  $(document).unbind('.hc');
+                                                              }
+                                                          });
+                                                      });
+                                                  }); </script > </td > <td > <div id="containerJ" > </div > <script language="JavaScript" > $(document).ready(function () {
+                                                      var colors = ['#f45b5b', '#7798BF', '#aaeeee', '#ff0066', '#2b908f', '#eeaaee', '#55BF3B', '#DF5353', '#7798BF', '#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066',
+                        '#aaeeee'];
+                                                      Highcharts.getOptions().colors = Highcharts.map(colors, function (color) {
+                                                          return {
+                                                              linearGradient: { cx: 0, cy: -0.8, r: 2.3 },
+                                                              stops: [[0, color], [2, Highcharts.Color(color).brighten(3).get('rgb')]
+                                                              ]
+                                                          };
+                                                      });
+                                                      var chart = new Highcharts.Chart({
+                                                          chart: {
+                                                              renderTo: 'containerJ',
+                                                              type: 'line',
+
+                                                              backgroundColor: 'rgba(0,0,0,0)',
+                                                              options3d: {
+                                                                  enabled: true,
+                                                                  alpha: 5,
+                                                                  beta: 5,
+                                                                  depth: 50,
+                                                                  viewDistance: 25, frame: {//3D墙背景
+                                                                      bottom: { size: 1, color: 'rgba(0,0,0,0.02)' },
+                                                                      back: { size: 1, color: 'rgba(0,0,0,0.04)' },
+                                                                      side: { size: 1, color: 'rgba(0,0,0,0.06)' }
+                                                                  }
+                                                              }
+                                                          }, title: {
+                                                              text: '身高近12年男女对比'
+                                                          }, subtitle: {
+                                                              text: ''
+                                                          }, plotOptions: {
+                                                              column: {
+                                                                  dataLabels: {
+                                                                      enabled: true, // dataLabels设为true
+                                                                      style: {
+                                                                          color: '#D7DEE9'
+                                                                      }
+                                                                  },
+
+                                                                  depth: 25
+                                                              }
+                                                          }, xAxis: {
+                                                              categories: ['2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011'],
+                                                              labels: {
+                                                                  skew3d: true,
+                                                                  style: {
+                                                                      fontSize: '16px'
+                                                                  }
+                                                              }
+                                                          }, yAxis: {
+                                                              allowDecimals: false,
+                                                              min: 155,
+                                                              title: {
+                                                                  text: '厘米（cm）',
+                                                                  skew3d: true,
+                                                                  style: {
+                                                                      color: 'black',
+                                                                      fontSize: 5
+                                                                  }
+                                                              }
+
+                                                          }, series: [{
+                                                              name: '男',
+                                                              data: [165.3, 166.2, 167.6, 168.9, 169.3, 170.2, 171.6, 168.9, 165.3, 166.2, 167.6, 168.9],
+                                                              stack: 'one'
+                                                          }, {
+                                                              name: '女',
+                                                              data: [160.3, 161.2, 162.6, 163.9, 164.3, 165.2, 167.6, 166.9, 164.3, 163.2, 163.6, 160.9],
+                                                              stack: 'two'
+                                                          }]
+                                                      });
+                                                      $(chart.container).bind('mousedown.hc touchstart.hc', function (e) {
+
+                                                          e = chart.pointer.normalize(e);
+
+
+                                                          var posX = e.pageX,
+                                                              posY = e.pageY,
+                                                              alpha = chart.options.chart.options3d.alpha,
+                                                              beta = chart.options.chart.options3d.beta,
+                                                              newAlpha,
+                                                              newBeta,
+                                                              sensitivity = 5; // lower is more sensitive
+
+                                                          $(document).bind({
+                                                              'mousemove.hc touchdrag.hc': function (e) {
+                                                                  // Run beta
+                                                                  newBeta = beta + (posX - e.pageX) / sensitivity;
+                                                                  newBeta = Math.min(100, Math.max(-100, newBeta));
+                                                                  chart.options.chart.options3d.beta = newBeta;
+
+                                                                  // Run alpha
+                                                                  newAlpha = alpha + (e.pageY - posY) / sensitivity;
+                                                                  newAlpha = Math.min(100, Math.max(-100, newAlpha));
+                                                                  chart.options.chart.options3d.alpha = newAlpha;
+
+                                                                  chart.redraw(false);
+                                                              },
+                                                              'mouseup touchend': function () {
+                                                                  $(document).unbind('.hc');
+                                                              }
+                                                          });
+                                                      });
+                                                  }); </script > </td > <td > <div id="containerH" > </div > <script language="JavaScript" > $(document).ready(function () {
+                                                      var colors = ['#f45b5b', '#7798BF', '#aaeeee', '#ff0066', '#2b908f', '#eeaaee', '#55BF3B', '#DF5353', '#7798BF', '#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066',
+                        '#aaeeee'];
+                                                      Highcharts.getOptions().colors = Highcharts.map(colors, function (color) {
+                                                          return {
+                                                              linearGradient: { cx: 0, cy: -0.8, r: 2.3 },
+                                                              stops: [[0, color], [2, Highcharts.Color(color).brighten(3).get('rgb')]
+                                                              ]
+                                                          };
+                                                      });
+                                                      var chart = new Highcharts.Chart({
+                                                          chart: {
+                                                              renderTo: 'containerH',
+                                                              type: 'line',
+
+                                                              backgroundColor: 'rgba(0,0,0,0)',
+                                                              options3d: {
+                                                                  enabled: true,
+                                                                  alpha: 5,
+                                                                  beta: 5,
+                                                                  depth: 50,
+                                                                  viewDistance: 25, frame: {//3D墙背景
+                                                                      bottom: { size: 1, color: 'rgba(0,0,0,0.02)' },
+                                                                      back: { size: 1, color: 'rgba(0,0,0,0.04)' },
+                                                                      side: { size: 1, color: 'rgba(0,0,0,0.06)' }
+                                                                  }
+                                                              }
+                                                          }, title: {
+                                                              text: '身高近12年男女对比'
+                                                          }, subtitle: {
+                                                              text: ''
+                                                          }, plotOptions: {
+                                                              column: {
+                                                                  dataLabels: {
+                                                                      enabled: true, // dataLabels设为true
+                                                                      style: {
+                                                                          color: '#D7DEE9'
+                                                                      }
+                                                                  },
+
+                                                                  depth: 25
+                                                              }
+                                                          }, xAxis: {
+                                                              categories: ['2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011'],
+                                                              labels: {
+                                                                  skew3d: true,
+                                                                  style: {
+                                                                      fontSize: '16px'
+                                                                  }
+                                                              }
+                                                          }, yAxis: {
+                                                              allowDecimals: false,
+                                                              min: 155,
+                                                              title: {
+                                                                  text: '厘米（cm）',
+                                                                  skew3d: true,
+                                                                  style: {
+                                                                      color: 'black',
+                                                                      fontSize: 5
+                                                                  }
+                                                              }
+
+                                                          }, series: [{
+                                                              name: '男',
+                                                              data: [165.3, 166.2, 167.6, 168.9, 169.3, 170.2, 171.6, 168.9, 165.3, 166.2, 167.6, 168.9],
+                                                              stack: 'one'
+                                                          }, {
+                                                              name: '女',
+                                                              data: [160.3, 161.2, 162.6, 163.9, 164.3, 165.2, 167.6, 166.9, 164.3, 163.2, 163.6, 160.9],
+                                                              stack: 'two'
+                                                          }]
+                                                      });
+                                                      $(chart.container).bind('mousedown.hc touchstart.hc', function (e) {
+
+                                                          e = chart.pointer.normalize(e);
+
+
+                                                          var posX = e.pageX,
+                                                              posY = e.pageY,
+                                                              alpha = chart.options.chart.options3d.alpha,
+                                                              beta = chart.options.chart.options3d.beta,
+                                                              newAlpha,
+                                                              newBeta,
+                                                              sensitivity = 5; // lower is more sensitive
+
+                                                          $(document).bind({
+                                                              'mousemove.hc touchdrag.hc': function (e) {
+                                                                  // Run beta
+                                                                  newBeta = beta + (posX - e.pageX) / sensitivity;
+                                                                  newBeta = Math.min(100, Math.max(-100, newBeta));
+                                                                  chart.options.chart.options3d.beta = newBeta;
+
+                                                                  // Run alpha
+                                                                  newAlpha = alpha + (e.pageY - posY) / sensitivity;
+                                                                  newAlpha = Math.min(100, Math.max(-100, newAlpha));
+                                                                  chart.options.chart.options3d.alpha = newAlpha;
+
+                                                                  chart.redraw(false);
+                                                              },
+                                                              'mouseup touchend': function () {
+                                                                  $(document).unbind('.hc');
+                                                              }
+                                                          });
+                                                      });
+                                                  }); </script > </td > </tr > <tr > <td > <div id="containerK" > </div > <script language="JavaScript" > $(document).ready(function () {
+                                                      var colors = ['#f45b5b', '#7798BF', '#aaeeee', '#ff0066', '#2b908f', '#eeaaee', '#55BF3B', '#DF5353', '#7798BF', '#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066',
+                        '#aaeeee'];
+                                                      Highcharts.getOptions().colors = Highcharts.map(colors, function (color) {
+                                                          return {
+                                                              linearGradient: { cx: 0, cy: -0.8, r: 2.3 },
+                                                              stops: [[0, color], [2, Highcharts.Color(color).brighten(3).get('rgb')]
+                                                              ]
+                                                          };
+                                                      });
+                                                      var chart = new Highcharts.Chart({
+                                                          chart: {
+                                                              renderTo: 'containerK',
+                                                              type: 'line',
+
+                                                              backgroundColor: 'rgba(0,0,0,0)',
+                                                              options3d: {
+                                                                  enabled: true,
+                                                                  alpha: 5,
+                                                                  beta: 5,
+                                                                  depth: 50,
+                                                                  viewDistance: 25, frame: {//3D墙背景
+                                                                      bottom: { size: 1, color: 'rgba(0,0,0,0.02)' },
+                                                                      back: { size: 1, color: 'rgba(0,0,0,0.04)' },
+                                                                      side: { size: 1, color: 'rgba(0,0,0,0.06)' }
+                                                                  }
+                                                              }
+                                                          }, title: {
+                                                              text: '身高近12年男女对比'
+                                                          }, subtitle: {
+                                                              text: ''
+                                                          }, plotOptions: {
+                                                              column: {
+                                                                  dataLabels: {
+                                                                      enabled: true, // dataLabels设为true
+                                                                      style: {
+                                                                          color: '#D7DEE9'
+                                                                      }
+                                                                  },
+
+                                                                  depth: 25
+                                                              }
+                                                          }, xAxis: {
+                                                              categories: ['2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011'],
+                                                              labels: {
+                                                                  skew3d: true,
+                                                                  style: {
+                                                                      fontSize: '16px'
+                                                                  }
+                                                              }
+                                                          }, yAxis: {
+                                                              allowDecimals: false,
+                                                              min: 155,
+                                                              title: {
+                                                                  text: '厘米（cm）',
+                                                                  skew3d: true,
+                                                                  style: {
+                                                                      color: 'black',
+                                                                      fontSize: 5
+                                                                  }
+                                                              }
+
+                                                          }, series: [{
+                                                              name: '男',
+                                                              data: [165.3, 166.2, 167.6, 168.9, 169.3, 170.2, 171.6, 168.9, 165.3, 166.2, 167.6, 168.9],
+                                                              stack: 'one'
+                                                          }, {
+                                                              name: '女',
+                                                              data: [160.3, 161.2, 162.6, 163.9, 164.3, 165.2, 167.6, 166.9, 164.3, 163.2, 163.6, 160.9],
+                                                              stack: 'two'
+                                                          }]
+                                                      });
+                                                      $(chart.container).bind('mousedown.hc touchstart.hc', function (e) {
+
+                                                          e = chart.pointer.normalize(e);
+
+
+                                                          var posX = e.pageX,
+                                                              posY = e.pageY,
+                                                              alpha = chart.options.chart.options3d.alpha,
+                                                              beta = chart.options.chart.options3d.beta,
+                                                              newAlpha,
+                                                              newBeta,
+                                                              sensitivity = 5; // lower is more sensitive
+
+                                                          $(document).bind({
+                                                              'mousemove.hc touchdrag.hc': function (e) {
+                                                                  // Run beta
+                                                                  newBeta = beta + (posX - e.pageX) / sensitivity;
+                                                                  newBeta = Math.min(100, Math.max(-100, newBeta));
+                                                                  chart.options.chart.options3d.beta = newBeta;
+
+                                                                  // Run alpha
+                                                                  newAlpha = alpha + (e.pageY - posY) / sensitivity;
+                                                                  newAlpha = Math.min(100, Math.max(-100, newAlpha));
+                                                                  chart.options.chart.options3d.alpha = newAlpha;
+
+                                                                  chart.redraw(false);
+                                                              },
+                                                              'mouseup touchend': function () {
+                                                                  $(document).unbind('.hc');
+                                                              }
+                                                          });
+                                                      });
+                                                  }); </script > </td > <td > <div id="containerL" > </div > <script language="JavaScript" > $(document).ready(function () {
+                                                      var colors = ['#f45b5b', '#7798BF', '#aaeeee', '#ff0066', '#2b908f', '#eeaaee', '#55BF3B', '#DF5353', '#7798BF', '#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066',
+                        '#aaeeee'];
+                                                      Highcharts.getOptions().colors = Highcharts.map(colors, function (color) {
+                                                          return {
+                                                              linearGradient: { cx: 0, cy: -0.8, r: 2.3 },
+                                                              stops: [[0, color], [2, Highcharts.Color(color).brighten(3).get('rgb')]
+                                                              ]
+                                                          };
+                                                      });
+                                                      var chart = new Highcharts.Chart({
+                                                          chart: {
+                                                              renderTo: 'containerL',
+                                                              type: 'line',
+                                                              margin: 75,
+                                                              backgroundColor: 'rgba(0,0,0,0)',
+                                                              options3d: {
+                                                                  enabled: true,
+                                                                  alpha: 5,
+                                                                  beta: 5,
+                                                                  depth: 50,
+                                                                  viewDistance: 25, frame: {//3D墙背景
+                                                                      bottom: { size: 1, color: 'rgba(0,0,0,0.02)' },
+                                                                      back: { size: 1, color: 'rgba(0,0,0,0.04)' },
+                                                                      side: { size: 1, color: 'rgba(0,0,0,0.06)' }
+                                                                  }
+                                                              }
+                                                          }, title: {
+                                                              text: '身高近12年男女对比'
+                                                          }, subtitle: {
+                                                              text: ''
+                                                          }, plotOptions: {
+                                                              column: {
+                                                                  dataLabels: {
+                                                                      enabled: true, // dataLabels设为true
+                                                                      style: {
+                                                                          color: '#D7DEE9'
+                                                                      }
+                                                                  },
+
+                                                                  depth: 25
+                                                              }
+                                                          }, xAxis: {
+                                                              categories: ['2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011'],
+                                                              labels: {
+                                                                  skew3d: true,
+                                                                  style: {
+                                                                      fontSize: '16px'
+                                                                  }
+                                                              }
+                                                          }, yAxis: {
+                                                              allowDecimals: false,
+                                                              min: 155,
+                                                              title: {
+                                                                  text: '厘米（cm）',
+                                                                  skew3d: true,
+                                                                  style: {
+                                                                      color: 'black',
+                                                                      fontSize: 5
+                                                                  }
+                                                              }
+
+                                                          }, series: [{
+                                                              name: '男',
+                                                              data: [165.3, 166.2, 167.6, 168.9, 169.3, 170.2, 171.6, 168.9, 165.3, 166.2, 167.6, 168.9],
+                                                              stack: 'one'
+                                                          }, {
+                                                              name: '女',
+                                                              data: [160.3, 161.2, 162.6, 163.9, 164.3, 165.2, 167.6, 166.9, 164.3, 163.2, 163.6, 160.9],
+                                                              stack: 'two'
+                                                          }]
+                                                      });
+                                                      $(chart.container).bind('mousedown.hc touchstart.hc', function (e) {
+
+                                                          e = chart.pointer.normalize(e);
+
+
+                                                          var posX = e.pageX,
+                                                              posY = e.pageY,
+                                                              alpha = chart.options.chart.options3d.alpha,
+                                                              beta = chart.options.chart.options3d.beta,
+                                                              newAlpha,
+                                                              newBeta,
+                                                              sensitivity = 5; // lower is more sensitive
+
+                                                          $(document).bind({
+                                                              'mousemove.hc touchdrag.hc': function (e) {
+                                                                  // Run beta
+                                                                  newBeta = beta + (posX - e.pageX) / sensitivity;
+                                                                  newBeta = Math.min(100, Math.max(-100, newBeta));
+                                                                  chart.options.chart.options3d.beta = newBeta;
+
+                                                                  // Run alpha
+                                                                  newAlpha = alpha + (e.pageY - posY) / sensitivity;
+                                                                  newAlpha = Math.min(100, Math.max(-100, newAlpha));
+                                                                  chart.options.chart.options3d.alpha = newAlpha;
+
+                                                                  chart.redraw(false);
+                                                              },
+                                                              'mouseup touchend': function () {
+                                                                  $(document).unbind('.hc');
+                                                              }
+                                                          });
+                                                      });
+                                                  }); </script > </td > </tr > </table > </div > </div > </div > </body > </html >
+                        

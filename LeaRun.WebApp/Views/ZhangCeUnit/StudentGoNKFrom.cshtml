@@ -1,0 +1,344 @@
+﻿@{
+    ViewBag.Title = "CreateNKAndDelFrom";
+}
+@using LeaRun.Entity;
+@model List<DBase_NK>
+<script src="~/Content/Scripts/jquery/jquery-1.8.2.min.js"></script>
+<script src="~/Content/layer/layer.js"></script>
+<script src="~/Content/Scripts/jquery.form.js"></script>
+<link href="~/Content/Styles/learunui-framework.css" rel="stylesheet" />
+<script src="~/Content/Scripts/learunui-framework.js"></script>
+<!--日期组件start-->
+<script src="~/Content/Scripts/datepicker/WdatePicker.js"></script>
+<!--日期组件start-->
+<style>
+    .NKStyle {
+        width: 70px;
+        float: left;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        line-height: 25px;
+        cursor: pointer;
+        text-align: center;
+        margin-left: 10px;
+        background-color: #08587d; /*间春绿*/
+        color: white;
+        font-weight: bold;
+        margin-top: 7px;
+    }
+</style>
+
+<script type="text/javascript">
+    var flg = false;
+    function checkNK()
+    {
+        var kouLing = $("#NKMark").val();
+        if (kouLing == "")
+        {
+            layer.alert("请输入口令！");
+            return false;
+        }
+
+        $.ajax({
+            type: 'POST', // HTTP请求方式
+            url: '/ZhangCeUnit/CheckNKKouLing', // 请求的URL地址
+            dataType: 'json', // 服务器返回数据转换成的类型
+            async: false,
+            data: { "kouLing": kouLing },
+            success: function (data) {
+                if (data.IsOk)
+                    flg = true;
+                else
+                    layer.alert("口令错误,或该账户没有权限！如忘记口令请与管理员联系！");
+            }
+        });
+    }
+
+    //创建年库
+    function createNK() {
+        checkNK();
+        if (flg) {
+            flg = false;
+            var NK = $("#NKDate").val();
+            if (NK == "")
+            {
+                layer.alert('请选择要创建的年库！');
+                return false;
+            }
+            Loading(true, "正在创建年库...");
+            $.ajax({
+                type: 'POST', // HTTP请求方式
+                url: '/ZhangCeUnit/CreateNK', // 请求的URL地址
+                dataType: 'json', // 服务器返回数据转换成的类型
+                data: { "NK": NK },
+                success: function (data) {
+                    Loading(false);
+                    if (data.IsOk=="1") {
+                         layer.confirm('创建年库成功！', {
+                            title: "提示",
+                            closeBtn: 0,
+                            btn: ['确定', '取消'] //按钮
+                        }, function () {
+                            window.location.href = '@Url.Content("~/ZhangCeUnit/CreateNKAndDelFrom")';
+                        }, function () {
+                            window.location.href = '@Url.Content("~/ZhangCeUnit/CreateNKAndDelFrom")';
+                        });
+                    }
+                    else if (data.IsOk == "-1") {
+                        layer.alert(data.Msg);
+                    }
+                    else if (data.IsOk == "-2")
+                    {
+                        layer.alert(data.Msg);
+                    }
+                    else {
+                        layer.alert("不合法！与管理员联系！");
+                    }
+                }
+            });
+        }
+    }
+
+    //删除年库
+    function delNK() {
+        checkNK();
+        if (flg) {
+            flg = false;
+            layer.confirm('删除年库后，该年库信息将彻底清除，无法恢复，造成后果自负！', {
+                title: "提示",
+                closeBtn: 0,
+                btn: ['确定', '取消'] //按钮
+            }, function () {
+                var NK = $("#NKDate").val();
+                $.ajax({
+                    type: 'POST', // HTTP请求方式
+                    url: '/ZhangCeUnit/DelNK', // 请求的URL地址
+                    dataType: 'json', // 服务器返回数据转换成的类型
+                    data: { "NK": NK },
+                    success: function (data) {
+                        if (data.IsOk == "1") {
+                            layer.confirm('删除年库成功！', {
+                            title: "提示",
+                            closeBtn: 0,
+                            btn: ['确定', '取消'] //按钮
+                        }, function () {
+                            window.location.href = '@Url.Content("~/ZhangCeUnit/CreateNKAndDelFrom")';
+                        }, function () {
+                            window.location.href = '@Url.Content("~/ZhangCeUnit/CreateNKAndDelFrom")';
+                        });
+                        }
+                        else if (data.IsOk == "-1") {
+                            layer.alert(data.Msg);
+                        }
+                        else if (data.IsOk == "-2") {
+                            layer.alert(data.Msg);
+                        }
+                        else {
+                            layer.alert("不合法！与管理员联系！");
+                        }
+                    }
+                });
+            }, function () {
+                window.location.href = '@Url.Content("~/ZhangCeUnit/CreateNKAndDelFrom")';
+            })
+        }
+    }
+
+    //修改操作口令
+    function updNKKouLing()
+    {
+        var updOldMark = $("#updOldMark").val();
+        if (updOldMark == "") {
+            layer.alert("请输入原口令！");
+            return false;
+        }
+        var updNKMark = $("#updNKMark").val();
+        if (updNKMark == "") {
+            layer.alert("要修改的口令不能为空！");
+            return false;
+        }
+        var updNKRequiredMark = $("#updNKRequiredMark").val();
+        if (updNKRequiredMark == "") {
+            layer.alert("确认修改的口令不能为空！");
+            return false;
+        }
+        if (updNKMark != updNKMark) {
+            layer.alert("两次口令输入不一致，请重新输入！");
+            $("#updNKRequiredMark").val("");
+            return false;
+        }
+        else {
+            $.ajax({
+                type: 'POST', // HTTP请求方式
+                url: '/ZhangCeUnit/CheckNKKouLing', // 请求的URL地址
+                dataType: 'json', // 服务器返回数据转换成的类型
+                data: { "kouLing": updOldMark },
+                success: function (data) {
+                    if (data.IsOk)
+                        flg = true;
+                    else
+                        layer.alert("原口令错误,或该账户没有权限！如忘记口令请与管理员联系！");
+                }
+            });
+        }
+        if (flg) {
+            flg = false;
+            $.ajax({
+                type: 'POST', // HTTP请求方式
+                url: '/ZhangCeUnit/UpdNKKouLing', // 请求的URL地址
+                dataType: 'json', // 服务器返回数据转换成的类型
+                data: { "updNKMark": updNKMark, "oldNKMark": updOldMark },
+                success: function (data) {
+                    if (data.IsOk) {
+                        layer.confirm('修改口令成功！', {
+                            title: "提示",
+                            closeBtn: 0,
+                            btn: ['确定', '取消'] //按钮
+                        }, function () {
+                            window.location.href = '@Url.Content("~/ZhangCeUnit/CreateNKAndDelFrom")';
+                        }, function () {
+                            window.location.href = '@Url.Content("~/ZhangCeUnit/CreateNKAndDelFrom")';
+                        });
+
+                    }
+                    else {
+                        layer.alert('修改口令失败！服务器错误，与管理员联系！');
+                    }
+
+
+                }
+            });
+        }
+    }
+
+    //返回上一级
+    function GotoShouYe() {
+        window.location.href = '@Url.Content("~/Home/AccordionPage")';
+    }
+</script>
+
+<form id="form1" style="margin: 1px">
+    <div id="message" style="display: none"></div>
+
+    <div class="note-prompt" style="height:300px;overflow:auto;width:95%">
+        <div style="padding-right:3%;margin-top:2%;padding-left:3%;">
+           提示：（调库不常用。只是针对复学学学生）
+             <br />1、请先查询学生信息是否在年库中存在，如果确定调库，则原有年库的学生信息和成绩都会调到到现有年库
+             <br />2、原有年库的基本信息和体测成绩将被清空。现有年库基本信息和体测成绩会覆盖。）
+            <table class="form">
+                <tr>
+                    <th class="formTitle" style="width:30%">
+                        请输入学号：
+                    </th>
+                    <td class="formValue">
+                        <input id="StudentCode" style="color:red" value="" class="txt required" datacol="yes" placeholder="特殊口令，和登录密码不一样" err="口令" checkexpession="NotNull" />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle" style="width:30%">
+                        请选择创建或删除年库：
+                    </th>
+                    <td class="formValue">
+                        <input id="NKDate" maxlength=-1 style="color:red" type="text" class="txt required" onclick="new WdatePicker({ dateFmt: 'yyyy' })" />
+                    </td>
+                </tr>
+            </table>
+
+           
+        </div>
+    </div>
+
+
+
+    <table style="width: 100%;min-width:1000px">
+        <tr>
+            <td style="width:50%">
+                <div class="note-prompt" style="height:300px;overflow:auto;width:95%">
+                    已存在的年库如下：
+                    <br />
+                    <div>
+                        @{
+                            foreach (DBase_NK entity in Model)
+                            {
+                                <p onclick="SelectNK('@entity.NK')" id="selectNK" style="font-size:30px;width:130px;height:40px;line-height:40px; background-color: #0a692c;" class="NKStyle">@entity.NK</p>
+
+                            }
+                        }
+                    </div>
+                </div>
+            </td>
+            <td style="width:50%">
+                <div class="note-prompt" style="height:300px;overflow:auto;background:none;background-color:#efe6e6;width:100%;margin:0;padding:0">
+                    <div style="padding-right:3%;margin-top:2%;padding-left:3%;">
+                        <table class="form">
+                            <tr>
+                                <th class="formTitle" style="width:30%">
+                                    请输入口令：
+                                </th>
+                                <td class="formValue">
+                                    <input id="NKMark" style="color:red" value="" class="txt required" datacol="yes" placeholder="特殊口令，和登录密码不一样" err="口令" checkexpession="NotNull" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle" style="width:30%">
+                                    请选择创建或删除年库：
+                                </th>
+                                <td class="formValue">
+                                    <input id="NKDate" maxlength=-1 style="color:red" type="text" class="txt required" onclick="new WdatePicker({ dateFmt: 'yyyy' })" />
+                                </td>
+                            </tr>
+                        </table>
+
+                        <p onclick="createNK()" id="btnImport" style="margin-left:0px;width:70px" class="NKStyle">创建年库</p>
+                        <p onclick="delNK()" id="btnImport" style="width:70px" class="NKStyle">删除年库</p>
+                        <br />
+                        <hr />
+                        <p style="color:red"><b>修改口令：该口令和数据备份与恢复口令相同（务必谨记修改后口令，如忘记口令，用户自己无法找回！！！）</b></p>
+                        <table class="form">
+                            <tr>
+                                <th class="formTitle" style="width:30%">
+                                    用户名：
+                                </th>
+                                <td class="formValue">
+                                    <input id="account" style="color:red" class="txt required" disabled datacol="yes" value="@ViewBag.Account" err="口令" checkexpession="NotNull" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle" style="width:30%">
+                                    请输入原口令：
+                                </th>
+                                <td class="formValue">
+                                    <input id="updOldMark" style="color:red" class="txt required" datacol="yes" placeholder="特殊口令，和登录密码不一样" err="口令" checkexpession="NotNull" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle" style="width:30%">
+                                    请输入要修改的口令：
+                                </th>
+                                <td class="formValue">
+                                    <input id="updNKMark" style="color:red" class="txt required" datacol="yes" placeholder="特殊口令，和登录密码不一样" err="口令" checkexpession="NotNull" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle" style="width:30%">
+                                    确认修改的口令：
+                                </th>
+                                <td class="formValue">
+                                    <input id="updNKRequiredMark" maxlength=-1 style="color:red" type="text" class="txt required" placeholder="特殊口令，和登录密码不一样" err="口令" checkexpession="NotNull" />
+                                </td>
+                            </tr>
+
+                        </table>
+                        <p onclick="updNKKouLing()" id="btnImport" style="width:160px;margin-left:0px" class="NKStyle">确定修改口令</p>
+
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <p onclick="GotoShouYe()" id="backto" style="width:160px; float: left; cursor: pointer; border: 1px solid #ccc; border-radius: 3px; line-height: 25px; cursor: pointer; text-align: center;margin-left:20px;margin-top:20px;
+ background-color: red;color:white ">返回上一级</p>
+</form>
+
+

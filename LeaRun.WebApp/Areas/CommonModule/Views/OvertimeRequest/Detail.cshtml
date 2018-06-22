@@ -1,0 +1,127 @@
+@{
+    ViewBag.Title = "加班申请表》明细页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        InitControl();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        //加班类型
+        BindDropItem("#Type", "Overtime", "==请选择==");
+        //加班时长
+        BindDropItem("#Time", "OvertimeLong", "==请选择==");
+        AjaxJson("/CommonModule/OvertimeRequest/SetForm", { KeyValue: GetQuery("KeyValue") }, function (data) {
+            SetWebControls(data);
+            BindDepartment();
+            BindMember();
+            $("#DepartmentId").val(data.DepartmentId);
+            $("#CreateDepartmentId").val(data.CreateDepartmentId);
+            $("#UserId").val(data.UserId);
+            $("#CreateUserId").val(data.CreateUserId);
+        });
+        $("#tb_basic tr").each(function () {
+            $(this).find('td').find('input,select,textarea').each(function () {
+                var pk_id = $(this).attr('id');
+                if (pk_id == "DepartmentId") {
+                    $("#" + pk_id).parent().html($("#DepartmentId").find("option:selected").text());
+                } else if (pk_id == "CreateDepartmentId") {
+                    $("#" + pk_id).parent().html($("#CreateDepartmentId").find("option:selected").text());
+                } else if (pk_id == "UserId") {
+                    $("#" + pk_id).parent().html($("#UserId").find("option:selected").text());
+                } else if (pk_id == "CreateUserId") {
+                    $("#" + pk_id).parent().html($("#CreateUserId").find("option:selected").text());
+                } else if (pk_id == "Type") {
+                    $("#" + pk_id).parent().html($("#Type").find("option:selected").text());
+                } else if (pk_id == "Time") {
+                    $("#" + pk_id).parent().html($("#Time").find("option:selected").text());
+                } else {
+                    $("#" + pk_id).parent().html($(this).val());
+                }
+            })
+        });
+        //if (!!GetQuery('KeyValue')) {
+        //    AjaxJson("/CommonModule/OvertimeRequest/SetForm", { KeyValue: GetQuery('KeyValue') }, function (data) {
+        //        SetWebLable(data);
+        //    });
+        //}
+    }
+    //部门下拉框
+    function BindDepartment() {
+        $("#DepartmentId").html("");
+        $("#CreateDepartmentId").html("");
+        AjaxJson("/CommonModule/Department/ListJson", { CompanyId: "" }, function (DataJson) {
+            $.each(DataJson, function (i) {
+                $("#DepartmentId").append($("<option></option>").val(DataJson[i].departmentid).html(DataJson[i].fullname));
+                $("#CreateDepartmentId").append($("<option></option>").val(DataJson[i].departmentid).html(DataJson[i].fullname));
+            });
+        })
+    }
+    //人员下拉框
+    function BindMember() {
+        $("#UserId").html("");
+        $("#CreateUserId").html("");
+        AjaxJson("/CommonModule/OvertimeRequest/GetMember", { DepartmentId: "" }, function (DataJson) {
+            $.each(DataJson, function (i) {
+                $("#UserId").append($("<option></option>").val(DataJson[i].userid).html(DataJson[i].realname));
+                $("#CreateUserId").append($("<option></option>").val(DataJson[i].userid).html(DataJson[i].realname));
+            });
+        })
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <table class="form" id="tb_basic">
+        <tr>
+            <th class='formTitle'>加班类型：</th>
+            <td class='formValue'>
+                <select id="Type" class="txtselect"></select>
+            </td>
+            <th class='formTitle'>加班日期：</th>
+            <td class='formValue'>
+                <input id="Date" type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>加班开始时间：</th>
+            <td class='formValue'>
+                <input id="StartTime" type="text" class="txt" />
+            </td>
+            <th class='formTitle'>加班结束时间：</th>
+            <td class='formValue'>
+                <input id="EndTime" type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>加班时长：</th>
+            <td class='formValue'>
+                <select id="Time" class="txtselect"></select>
+            </td>
+            <th class='formTitle'>加班人部门：</th>
+            <td class='formValue'>
+                <select id="DepartmentId" class="txtselect"></select>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>加班人：</th>
+            <td class='formValue'>
+                <select id="UserId" class="txtselect"></select>
+            </td>
+            <th class='formTitle'>申请人部门：</th>
+            <td class='formValue'>
+                <select id="CreateDepartmentId" class="txtselect"></select>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>申请人：</th>
+            <td class='formValue'>
+                <select id="CreateUserId" class="txtselect"></select>
+            </td>
+            <th class='formTitle'>申请时间：</th>
+            <td class='formValue'>
+                <input id="CreateTime" type="text" class="txt" />
+            </td>
+        </tr>
+        <tr></tr>
+    </table>
+</form>

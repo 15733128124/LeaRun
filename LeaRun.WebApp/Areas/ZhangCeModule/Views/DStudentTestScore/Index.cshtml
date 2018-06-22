@@ -1,0 +1,265 @@
+@{
+    ViewBag.Title = "学生成绩测试";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<script src="~/Content/layer/layer.js"></script>
+<script type="text/javascript">
+    $(function () {
+        GetGrid();
+    })
+    //加载表格
+    function GetGrid() {
+        $("#gridTable").jqGrid({
+            url: "@Url.Content("~/ZhangCeModule/DStudentTestScore/GridDStudentTestScoreJson")",
+            datatype: "json",
+            height: $(window).height() - 149,
+            autowidth: true,
+            colModel: [
+                    { label: '主键ID', name: 'id', index: 'id', width: 0, align: 'left', sortable: true, hidden: true },
+                    { label: '学生学号', name: 'studentcode', index: 'studentcode', width: 0, align: 'left', sortable: true },
+                    { label: '学生姓名', name: 'studentname', index: 'studentname', width: 0, align: 'left', sortable: true },
+                    {
+                        label: '学生性别  ', name: 'studentsex', index: 'studentsex', width: 0, align: 'left', sortable: true,
+                        formatter: function (cellvalue, options, rowObject) {
+                            if (cellvalue == '1') return "男：1";
+                            if (cellvalue == '2') return "女：2";
+                        }
+                    },
+                    { label: '身高（cm）', name: 'heigh', index: 'heigh', width: 0, align: 'left', sortable: true },
+                    { label: '体重（kg）', name: 'weight', index: 'weight', width: 0, align: 'left', sortable: true },
+                    { label: '体重指数', name: 'bmi', index: 'bmi', width: 0, align: 'left', sortable: true },
+                    { label: '得分', name: 'bmiscore', index: 'bmiscore', width: 0, align: 'left', sortable: true, hidden: true },
+                    { label: '级别', name: 'bmilevel', index: 'bmilevel', width: 0, align: 'left', sortable: true, hidden: true },
+                    { label: '肺活量（ml）', name: 'pulmonary', index: 'pulmonary', width: 0, align: 'left', sortable: true },
+                    { label: '肺活量分数', name: 'pulmonaryscore', index: 'pulmonaryscore', width: 0, align: 'left', sortable: true, hidden: true },
+                    { label: '肺活量级别', name: 'pulmonarylevel', index: 'pulmonarylevel', width: 0, align: 'left', sortable: true, hidden: true },
+                    { label: '50米跑（s）', name: 'fiftyrun', index: 'fiftyrun', width: 0, align: 'left', sortable: true },
+                    { label: '50跑分数', name: 'fiftyrunscore', index: 'fiftyrunscore', width: 0, align: 'left', sortable: true, hidden: true },
+                    { label: '50米跑级别', name: 'fiftyrunlevel', index: 'fiftyrunlevel', width: 0, align: 'left', sortable: true, hidden: true },
+                    { label: '立定跳远（cm）', name: 'standjump', index: 'standjump', width: 0, align: 'left', sortable: true },
+                    { label: '立定跳远得分', name: 'standjumpscore', index: 'standjumpscore', width: 0, align: 'left', sortable: true, hidden: true },
+                    { label: '立定跳远级别', name: 'standjumplevel', index: 'standjumplevel', width: 0, align: 'left', sortable: true, hidden: true },
+                    { label: '座位体前屈（cm）', name: 'sitandreach', index: 'sitandreach', width: 0, align: 'left', sortable: true },
+                    { label: '座位体前屈得分', name: 'sitandreachscore', index: 'sitandreachscore', width: 0, align: 'left', sortable: true, hidden: true },
+                    { label: '座位体前屈级别', name: 'sitandreachlevel', index: 'sitandreachlevel', width: 0, align: 'left', sortable: true, hidden: true },
+                    { label: '800米(注：3分50秒显示：350)', name: 'eighthundred', index: 'eighthundred', width: 0, align: 'left', sortable: true,},
+                    { label: '800米得分', name: 'eighthundredscore', index: 'eighthundredscore', width: 0, align: 'left', sortable: true, hidden: true },
+                    { label: '800米级别', name: 'eighthundredlevel', index: 'eighthundredlevel', width: 0, align: 'left', sortable: true, hidden: true },
+                    { label: '800米加分', name: 'eighthundredaddscore', index: 'eighthundredaddscore', width: 0, align: 'left', sortable: true, hidden: true },
+                    { label: '1000米(注：3分50秒显示：350)', name: 'thousandrun', index: 'thousandrun', width: 0, align: 'left', sortable: true },
+                    { label: '1000米得分', name: 'thousandrunscore', index: 'thousandrunscore', width: 0, align: 'left', sortable: true, hidden: true },
+                    { label: '1000米级别', name: 'thousandrunlevel', index: 'thousandrunlevel', width: 0, align: 'left', sortable: true, hidden: true },
+                    { label: '1000米得分', name: 'thousandrunaddscore', index: 'thousandrunaddscore', width: 0, align: 'left', sortable: true, hidden: true },
+                    { label: '1分钟仰卧起坐（个）', name: 'minsupination', index: 'minsupination', width: 0, align: 'left', sortable: true },
+                    { label: '1分钟仰卧起坐得分', name: 'minsupinationscore', index: 'minsupinationscore', width: 0, align: 'left', sortable: true, hidden: true },
+                    { label: '1分钟仰卧起坐级别', name: 'minsupinationlevel', index: 'minsupinationlevel', width: 0, align: 'left', sortable: true, hidden: true },
+                    { label: '1分钟仰卧起坐加分', name: 'minsupinationaddscore', index: 'minsupinationaddscore', width: 0, align: 'left', sortable: true, hidden: true },
+                    { label: '引体向上（个）', name: 'pullup', index: 'pullup', width: 0, align: 'left', sortable: true },
+                    { label: '引体向上得分', name: 'pullupscore', index: 'pullupscore', width: 0, align: 'left', sortable: true, hidden: true },
+                    { label: '引体向上级别', name: 'pulluplevel', index: 'pulluplevel', width: 0, align: 'left', sortable: true, hidden: true },
+                    { label: '引体向上加分', name: 'pullupaddscore', index: 'pullupaddscore', width: 0, align: 'left', sortable: true, hidden: true },
+                    { label: '测试结果', name: 'testresult', index: 'testresult', width: 0, align: 'left', sortable: true },
+                    { label: '学生真实成绩', name: 'studenttruescore', index: 'studenttruescore', width: 0, align: 'left', sortable: true },
+                   // { label: '测试类型', name: 'testtype', index: 'testtype', width: 0, align: 'left', sortable: true },
+                    { label: '创建时间', name: 'createtime', index: 'createtime', width: 0, align: 'left', sortable: true },
+                    { label: '更改时间', name: 'updatetime', index: 'updatetime', width: 0, align: 'left', sortable: true },
+                    { label: '备注', name: 'remark', index: 'remark', width: 0, align: 'left', sortable: true },
+            ],
+            pager: "#gridPager",
+            sortname: '',
+            rowNum: 20,
+            rowList: [20, 30, 50, 100, 500, 1000],
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+        });
+    }
+
+    //编辑
+    function btn_edit() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "studentcode");
+        var  StudentSex= GetJqGridRowValue("#gridTable", "studentsex");
+        if (IsChecked(KeyValue)) {
+            var url = "/ZhangCeModule/DStudentTestScore/Form?KeyValue=" + KeyValue + "&StudentSex=" + StudentSex;
+            openDialog(url, "Form", "编辑学生成绩测试表", 770, 500, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //删除
+    function btn_delete() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "studentcode");
+        if (IsDelData(KeyValue)) {
+            var id = 'KeyValue=' + KeyValue;
+            delConfig('/ZhangCeModule/DStudentTestScore/DelDStudentTestScore', id, KeyValue.split(",").length);
+        }
+    }
+
+    //标记免测
+    function btn_free() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "studentcode");
+        
+        if (IsDelData(KeyValue)) {
+            layer.confirm('确定标记为免测，标记后无法更改？', {
+                title: "提示",
+                closeBtn: 0,
+                btn: ['确定', '取消'] //按钮
+            }, function () {
+                $.ajax({
+                    url: "/ZhangCeModule/DStudentTestScore/MarkFree",
+                    type: 'POST',
+                    cache: false,
+                    //异步
+                    async: false,
+                    error: function (XMLHttpRequest) {
+                        layer.alert("意外错误标记失败！");
+                    },
+                    data: { "studentcode": KeyValue },
+                    success: function (data) {
+                        if (data.IsOk) {
+                            layer.alert("标记免测成功！");
+                            $("#gridTable").trigger("reloadGrid"); //重新载入
+                        }
+                        else {
+                            layer.alert("标记免测失败！与管理员联系！");
+                        }
+                    }
+                });
+            }, function () {
+                $("#gridTable").trigger("reloadGrid"); //重新载入
+            });
+        }
+    }
+
+    //标记作弊
+    function btn_cheat() {
+       
+        var KeyValue = GetJqGridRowValue("#gridTable", "studentcode");
+        var testResult = GetJqGridRowValue("#gridTable", "testresult");
+        if (testResult == "免测") {
+            layer.msg("该学生是免测学生无法标记作弊！");
+            return false;
+        }
+        if (IsDelData(KeyValue)) {
+            layer.confirm('确定标记为作弊？', {
+                title: "提示",
+                closeBtn: 0,
+                btn: ['确定', '取消'] //按钮
+            }, function () {
+                $.ajax({
+                    url: "/ZhangCeModule/DStudentTestScore/MarkCheat",
+                    type: 'POST',
+                    cache: false,
+                    //异步
+                    async: false,
+                    error: function (XMLHttpRequest) {
+                        layer.alert("意外错误标记失败！");
+                    },
+                    data: { "studentcode": KeyValue },
+                    success: function (data) {
+                        if (data.IsOk) {
+                            layer.alert("标记作弊成功！");
+                            $("#gridTable").trigger("reloadGrid"); //重新载入
+                        }
+                        else {
+                            layer.alert("标记作弊失败！与管理员联系！");
+                        }
+                    }
+                });
+            }, function () {
+                $("#gridTable").trigger("reloadGrid"); //重新载入
+            });
+        }
+    }
+
+    //取消作弊
+    function btn_cheatdel() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "studentcode");
+        var testResult = GetJqGridRowValue("#gridTable", "testresult");
+        if (testResult == "免测") {
+            layer.msg("该学生是免测学生无法取消作弊！");
+            return false;
+        }
+        if (IsDelData(KeyValue)) {
+            layer.confirm('确定取消该学生作弊？', {
+                title: "提示",
+                closeBtn: 0,
+                btn: ['确定', '取消'] //按钮
+            }, function () {
+                $.ajax({
+                    url: "/ZhangCeModule/DStudentTestScore/DelCheat",
+                    type: 'POST',
+                    cache: false,
+                    //异步
+                    async: false,
+                    error: function (XMLHttpRequest) {
+                        layer.alert("意外错误标记失败！");
+                    },
+                    data: { "studentcode": KeyValue },
+                    success: function (data) {
+                        if (data.IsOk) {
+                            layer.alert("取消作弊成功！");
+                            $("#gridTable").trigger("reloadGrid"); //重新载入
+                        }
+                        else {
+                            layer.alert("取消作弊失败！与管理员联系！");
+                        }
+                    }
+                });
+            }, function () {
+                $("#gridTable").trigger("reloadGrid"); //重新载入
+            });
+        }
+    }
+
+    //关键字查找
+    function btn_Search() {
+        var keywords = $("#keywords").val();
+        $("#gridTable").jqGrid('setGridParam', {
+            url: "@Url.Content("~/ZhangCeModule/DStudentTestScore/GridDStudentTestScoreJson")?keyvalue=" + escape(keywords), page: 1
+    }).trigger('reloadGrid');
+
+    }
+
+    //明细
+    //function btn_detail() {
+    //    var KeyValue = GetJqGridRowValue("#gridTable", "id");
+    //    if (IsChecked(KeyValue)) {
+    //        var url = "/ZhangCeModule/DStudentTestScore/Detail?KeyValue=" + KeyValue;
+    //        Dialog(url, "Detail", "学生成绩测试表明细", 820, 500, function (iframe) {
+    //            top.frames[iframe].AcceptClick();
+    //        });
+    //    }
+    //}
+    //刷新
+    function windowload() {
+        $("#gridTable").trigger("reloadGrid"); //重新载入
+
+    }
+</script>
+<span style="color:red;position:fixed;right:20px;z-index:999;right:10px;top:15px;text-align:center;line-height:100%"><b>当前库年份--@ViewBag.NK--年</b></span>
+<!--工具栏-->
+<div class="tools_bar leftline rightline" style="margin: 1px; margin-bottom: 0px;">
+    <div class="PartialButton">
+        @Html.Partial("_PartialButton")
+    </div>
+</div>
+<div class="leftline rightline QueryArea" style="margin: 1px; margin-top: 0px; margin-bottom: 0px;">
+    <table border="0" class="form-find" style="height: 45px;">
+        <tr>
+            <th>学生学号：</th>
+            <td>
+                <input id="keywords" type="text" class="txt" style="width: 200px" />
+            </td>
+            <td>
+                <input id="btnSearch" type="button" class="btnSearch" value="搜 索" onclick="btn_Search()" />
+            </td>
+        
+        </tr>
+    </table>
+</div>
+<div class="topline rightline" style="margin: 1px; margin-top: -1px;">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>

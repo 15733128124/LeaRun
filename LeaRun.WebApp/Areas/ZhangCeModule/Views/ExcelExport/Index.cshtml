@@ -1,0 +1,190 @@
+﻿@{
+    ViewBag.Title = "导出上报信息";
+}
+@using LeaRun.Entity;
+@model List<BaseFile>
+<script src="~/Content/Scripts/jquery/jquery-1.8.2.min.js"></script>
+<script src="~/Content/layer/layer.js"></script>
+<script src="~/Content/Scripts/jquery.form.js"></script>
+<link href="~/Content/Styles/learunui-framework.css" rel="stylesheet" />
+<script src="~/Content/Scripts/learunui-framework.js"></script>
+<!--日期组件start-->
+<script src="~/Content/Scripts/datepicker/WdatePicker.js"></script>
+<!--日期组件start-->
+<style>
+    .NKStyle {
+        width: 70px;
+        float: left;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        line-height: 25px;
+        cursor: pointer;
+        text-align: center;
+        margin-left: 10px;
+        background-color: #08587d; /*间春绿*/
+        color: white;
+        font-weight: bold;
+        margin-top: 7px;
+    }
+
+    .not-prompt-extend {
+        height: 240px;
+        overflow: auto;
+        width: 100%;
+        background: none;
+        background-color: #efe6e6;
+        margin: 0;
+        padding: 0;
+    }
+
+    .btn-export {
+        width: 160px;
+        float: right;
+        margin-right: 10px;
+    }
+
+    .table-div {
+        padding-right: 3%;
+        margin-top: 2%;
+        padding-left: 3%;
+        height: 180px;
+        overflow:auto;
+       line-height:22px;
+          }
+</style>
+
+<script type="text/javascript">
+    //测试模版导出
+    function testModuleExport()
+    {
+        Loading(true, "数据正在导出...");
+        location.href = "/ZhangCeModule/ExcelExport/TestModuleExcelExport";
+        Loading(false);        
+    }
+    //班级上报导出
+    function classInfoExport()
+    {
+        Loading(true, "数据正在导出...");
+        location.href = "/ZhangCeModule/ExcelExport/ClassInfoExcelExport";
+        Loading(false);
+    }
+    //上报成绩（男）
+    function studentScoreManExport()
+    {
+         Loading(true, "数据正在导出...");
+         location.href = "/ZhangCeModule/ExcelExport/StudentScoreManExcelExport";
+         Loading(false);
+         
+    }
+    //上报成绩（女）
+    function studentScoreWoManExport() {
+        Loading(true, "数据正在导出...");
+        location.href = "/ZhangCeModule/ExcelExport/StudentScoreWoManExcelExport";
+        Loading(false);
+    }
+
+    //河北学生成绩
+    function studentHeBeiScoreTableExport() {
+        Loading(true, "数据正在导出...");
+        location.href = "/ZhangCeModule/ExcelExport/HeBeiStudentTestTableExport";
+        Loading(false);
+    }
+</script>
+
+<form id="form1" style="margin: 1px">
+    <div id="message" style="display: none"></div>
+    <b style="margin-left:10px;color:red;line-height:30px">当前库年份--@ViewBag.NK--年</b>
+    <table style="width: 100%;min-width:1000px;">
+        <tr>
+            <td style="width:25%;">
+                <div class="note-prompt not-prompt-extend">
+                    <div class="table-div">
+                        <p style="color: #08587d;">
+                            <b>测试信息模版导出：</b>
+                            <br />
+                            <span style="color:red">
+                                提示：
+                                <br />
+                                包括字段（年级、班级编号、班级名称、项目名称、测试老师、测试时间、测试地点、测试器材、测试方式（手工/仪器））
+                                测试老师是根据测试老师随即生成，其它若要更改，请自行修改下载的模版
+                            </span>        
+                        </p>
+                    </div>     
+                    <p onclick="testModuleExport()" id="testModule" class="NKStyle btn-export">导出</p>  
+                </div>
+            </td>
+            <td style="width:25%">
+                <div class="note-prompt not-prompt-extend">
+                    <div class="table-div">
+                        <p style="color: #08587d;">
+                            <b>班级信息上报表导出：</b>
+                            <br />
+                            <span style="color:red">
+                                提示：
+                                <br />
+                                包括字段（年级、班级编号、班级名称）
+                            </span>    
+                        </p>
+                    </div>
+                    <p onclick="classInfoExport()" id="classInfo" class="NKStyle btn-export">导出</p>
+                </div>
+            </td>
+            <td style="width:25%">
+                <div class="note-prompt not-prompt-extend">
+                    <div class="table-div">
+                        <p style="color: #08587d;">
+                            <b>学生体测信息上报（男）：</b>
+                            <br />
+                            <span style="color:red">
+                                提示：<br />
+                            不包括作弊、免测。 字段包括（ 年级编号、班级编号、班级名称、学籍号、民族代码、性别（男：1，女：2）、性别、出生日期、
+            学生来源、身份证号、家庭住址、身高、体重、肺活量、50米跑、立定跳远、坐位体前屈、800米跑、1000米跑、一分钟仰卧起坐、引体向上）</span>
+                        </p>
+
+                    </div>
+                    <p onclick="studentScoreManExport()" id="studentScoreMan" class="NKStyle btn-export">导出</p>
+                </div>
+            </td>
+            <td style="width:25%">
+                <div class="note-prompt not-prompt-extend">
+                    <div class="table-div">
+                        <p style="color: #08587d;">
+                            <b>学生体测信息上报（女）：</b>
+                            <br />
+                            <span style="color:red">
+                            提示：<br />
+                                不包括作弊、免测。字段包括（ 年级编号、班级编号、班级名称、学籍号、民族代码、性别（男：1，女：2）、性别、出生日期、
+                                学生来源、身份证号、家庭住址、身高、体重、肺活量、50米跑、立定跳远、坐位体前屈、800米跑、1000米跑、一分钟仰卧起坐、引体向上）
+                            </span>
+                        </p>
+
+                    </div>
+                    <p onclick="studentScoreWoManExport()" id="studentScoreWoMan" class="NKStyle btn-export">导出</p>
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="width:25%">
+                <div class="note-prompt not-prompt-extend">
+                    <div class="table-div">
+                        <p style="color: #08587d;">
+                            <b>河北省新生体测表：</b>
+
+                            <span style="color:red">
+                                <br />
+                                提示：<br />
+                                序号、新生来源地（以省内11个设区市为单位、性别、人数、优秀率、良好率、及格率、总达标率
+                                </span>
+</p>
+
+                    </div>
+                    <p onclick="studentHeBeiScoreTableExport()" id="studentHeBeiScoreTable" class="NKStyle btn-export">导出</p>
+                </div>
+            </td>
+
+        </tr>
+    </table>
+
+
+</form>

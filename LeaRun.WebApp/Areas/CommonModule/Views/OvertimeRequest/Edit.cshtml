@@ -1,0 +1,77 @@
+@{
+    ViewBag.Title = "加班申请表》表单页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script type="text/javascript">
+    var KeyValue = GetQuery('KeyValue');//主键
+    $(function () {
+        BindCombobox();
+        InitControl();
+    })
+    
+    function BindCombobox() {
+        //加班类型
+        BindDropItem("#Type", "Overtime", "==请选择==");
+        //加班时长
+        BindDropItem("#Time", "OvertimeLong", "==请选择==");
+
+    }
+  
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/CommonModule/OvertimeRequest/SetForm", { KeyValue: KeyValue }, function (data) {
+                SetWebControls(data);
+            });
+        }
+    }
+    //保存事件
+    function AcceptClick() {
+        if (!CheckDataValid('#form1')) {
+            return false;
+        }
+        var postData = GetWebControls("#form1");
+        AjaxJson("/CommonModule/OvertimeRequest/SubmitForm?KeyValue=" + KeyValue, postData, function (data) {
+            tipDialog(data.Message, 3, data.Code);
+            top.frames[tabiframeId()].windowload();
+            closeDialog();
+        });
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <div id="message" style="display: none"></div>
+    <table class="form">
+        <tr>
+            <th class='formTitle'>加班类型：</th>
+            <td class='formValue'>
+                <select id="Type" class="txtselect"  ></select>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>加班日期：</th>
+            <td class='formValue'>
+                <input id="Date" maxlength=20 type="text" class="txt Wdate" onfocus="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>加班开始时间：</th>
+            <td class='formValue'>
+                <input id="StartTime" maxlength=20 type="text" class="txt Wdate" onfocus="WdatePicker({ dateFmt: 'HH:mm' })" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>加班结束时间：</th>
+            <td class='formValue'>
+                <input id="EndTime" maxlength=20 type="text" class="txt Wdate" onfocus="WdatePicker({ dateFmt: 'HH:mm', minDate: '#F{$dp.$D(\'StartTime\')}' })" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>加班时长：</th>
+            <td class='formValue'>
+                <select id="Time" class="txtselect"  ></select>
+            </td>
+        </tr>
+        <tr>
+        </tr>
+    </table>
+</form>

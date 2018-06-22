@@ -1,0 +1,128 @@
+@{
+    ViewBag.Title = "供应商表》表单页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script type="text/javascript">
+    var KeyValue = GetQuery('KeyValue');//主键
+    $(function () {
+        BindCombobox();
+        InitControl();
+        UserAutocomplete();
+    })
+    function BindCombobox() {
+        //结算方式
+        BindDropItem("#AccountsMethod", "accountmethod", "==请选择=");
+    }
+    function UserAutocomplete() {
+        var $LeadingOfficialId = $("#LeadingOfficialId");
+        $LeadingOfficialId.bind("keyup", function (e) {
+            if (e.which != 13 && e.which != 40 && e.which != 38) {
+                DataSource();
+            }
+        }).focus(function () {
+            $(this).select();
+            DataSource();
+        });
+        //上，下键盘回调
+        autocompletekeydown("LeadingOfficialId", function (data) {
+            $("#LeadingOfficialId").val(data.RealName)
+        });
+        //获取数据源
+        function DataSource() {
+            AjaxJson("/CommonModule/User/Autocomplete", { keywords: $LeadingOfficialId.val() },
+            function (DataJson) {
+                var html = "";
+                $.each(DataJson, function (i) {
+                    html += "<tr>";
+                    html += '<td id="UserId" style="display: none;">' + DataJson[i].userid +
+                    '</td>';
+                    html += '<td id="Code" style="width: 60px;">' + DataJson[i].code + '</td>';
+                    html += '<td id="RealName" style="width: 80px;">' + DataJson[i].realname +
+                    '</td>';
+                    html += '<td id="DepartmentName">' + DataJson[i].departmentname + '</td>';
+                    html += "</tr>";
+                });
+                //点击事件回调
+                autocomplete("LeadingOfficialId", $LeadingOfficialId.width() + "px", "200px",
+                html, function (data) {
+                    $("#LeadingOfficialId").val(data.RealName)
+                });
+            });
+        }
+    }
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/CommonModule/Base_Supplies/SetForm", { KeyValue: KeyValue }, function (data) {
+                SetWebControls(data);
+            });
+        }
+    }
+    //保存事件
+    function AcceptClick() {
+        if (!CheckDataValid('#form1')) {
+            return false;
+        }
+        var postData = GetWebControls("#form1");
+        AjaxJson("/CommonModule/Base_Supplies/SubmitForm?KeyValue=" + KeyValue, postData, function (data) {
+            tipDialog(data.Message, 3, data.Code);
+            top.frames[tabiframeId()].windowload();
+            closeDialog();
+        });
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <div id="message" style="display: none"></div>
+    <table class="form">
+        <tr>
+            <th class='formTitle'>供应商编码：</th>
+            <td class='formValue'>
+                <input id="Code" maxlength=50 type="text" class="txt" datacol="yes" err="供应商编码" checkexpession="NotNull"  />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>供应商名称：</th>
+            <td class='formValue'>
+                <input id="FullName" maxlength=50 type="text" class="txt" datacol="yes" err="供应商名称" checkexpession="NotNull"  />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>电话：</th>
+            <td class='formValue'>
+                <input id="Telephone" maxlength=50 type="text" class="txt" datacol="yes" err="电话" checkexpession="Phone"  />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>传真：</th>
+            <td class='formValue'>
+                <input id="Fax" maxlength=50 type="text" class="txt" datacol="yes" err="传真" checkexpession="PhoneOrNull"  />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>结算方式：</th>
+            <td class='formValue'>
+                <select id="AccountsMethod"class="txtselect" datacol="yes" err="结算方式" checkexpession="NotNull" ></select>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>联系人：</th>
+            <td class='formValue'>
+                <input id="LinkMan" maxlength=50 type="text" class="txt" datacol="yes" err="联系人" checkexpession="NotNull"  />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>负责人：</th>
+            <td class='formValue'>
+                <input id="LeadingOfficialId" maxlength=50 type="text" class="txt" datacol="yes" err="负责人" checkexpession="NotNull"  />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>地址：</th>
+            <td class='formValue'>
+                <input id="Address" maxlength=50 type="text" class="txt"   />
+            </td>
+        </tr>
+        <tr>
+        </tr>
+    </table>
+</form>

@@ -1,0 +1,377 @@
+@{
+    ViewBag.Title = "学生测试设置";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<script src="~/Content/layer/layer.js"></script>
+<script type="text/javascript">
+    $(function () {
+        GetGrid();
+    })
+
+    //加载表格
+    function GetGrid() {
+        $("#gridTable").jqGrid({
+            url: "@Url.Content("~/ZhangCeModule/DStudentTestSet/GridDStudentTestSetJson")?testType=约考测试",
+            datatype: "json",
+            height: $(window).height() - 149,
+            autowidth: true,
+            colModel: [
+                    { label: 'ID主键', name: 'id', index: 'id', width: 0, align: 'left', sortable: true, hidden: true },
+                    { label: '测试开始日期', name: 'testbegindate', index: 'testbegindate', width: 0, align: 'left', sortable: true },
+                    { label: '测试开始星期', name: 'testbeginweek', index: 'testbeginweek', width: 0, align: 'left', sortable: true },
+                    { label: '测试地址', name: 'testaddress', index: 'testaddress', width: 0, align: 'left', sortable: true },
+                    {
+                        label: '学生性别  ', name: 'studentsex', index: 'studentsex', width: 0, align: 'left', sortable: true,
+                        formatter: function (cellvalue, options, rowobject) {
+                            if (cellvalue == '1') return "男：1";
+                            if (cellvalue == '2') return "女：2";
+                        }
+                    },
+                    { label: '测试人数', name: 'teststudentcount', index: 'teststudentcount', width: 0, align: 'left', sortable: true, editable: true },
+                    { label: '测试开始时段', name: 'testbegintime', index: 'testbegintime', width: 0, align: 'left', sortable: true },
+                    { label: '已约人数', name: 'teststudentokcount', index: 'teststudentokcount', width: 0, align: 'left', sortable: true },
+                    { label: '未约人数', name: 'teststudentnocount', index: 'teststudentnocount', width: 0, align: 'left', sortable: true },
+                    { label: '分配状态', name: 'allotstate', index: 'allotstate', width: 0, align: 'left', sortable: true },
+                    {
+                        label: '测试限制', name: 'testlimit', index: 'testlimit', width: 0, align: 'left', sortable: true,
+                        formatter: function (cellvalue, options, rowobject) {
+                            if (cellvalue == '40') return "不限";
+                            if (cellvalue == '41') return "大一";
+                            if (cellvalue == '42') return "大二";
+                            if (cellvalue == '43') return "大三";
+                            if (cellvalue == '44') return "大四";
+                        }
+                    },
+                    { label: '测试类型', name: 'testtype', index: 'testtype', width: 0, align: 'left', sortable: true },
+                    { label: '创建时间', name: 'createtime', index: 'createtime', width: 0, align: 'left', sortable: true },
+                    { label: '更新时间', name: 'updatetime', index: 'updatetime', width: 0, align: 'left', sortable: true },
+                    { label: '备注', name: 'remark', index: 'remark', width: 0, align: 'left', sortable: true, hidden: true },
+            ],
+            pager: "#gridPager",
+            sortname: '',
+            rowNum: 20,
+            rowList: [20, 30, 50, 100, 500, 1000],
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            multiselect: true,
+            onSelectRow: function () {
+                SelectRowIndx = GetJqGridRowIndx("#" + this.id);
+            }
+        });
+       
+
+    }
+
+
+
+    //新增
+    function btn_add() {
+        var url = "/ZhangCeModule/DStudentTestSet/Form"
+        openDialog(url, "Form", "新增约考测试信息", 385, 190, function (iframe) {
+            top.frames[iframe].AcceptClick()
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "id");
+        var IsOk = GetJqGridRowValue("#gridTable", "teststudentokcount");
+        if (parseInt(IsOk) > 0) {
+            layer.alert("这条测试记录已有人预约，不能编辑！");
+            return false;
+        } else {
+            if (IsChecked(KeyValue)) {
+                var url = "/ZhangCeModule/DStudentTestSet/Form?KeyValue=" + KeyValue;
+                openDialog(url, "Form", "编辑约考测试信息", 385, 190, function (iframe) {
+                    top.frames[iframe].AcceptClick();
+                });
+            }
+        }
+    }
+    //删除
+    function btn_delete() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "id");
+        var allotState = GetJqGridRowValue("#gridTable", "allotstate");
+        if (allotState == "已分配") {
+            layer.alert("这条测试记录已经分配，如果想删除，请点击审核按钮：1：'已作废'不保存测试记录！2：'已测完'保存测试记录！");
+            return false;
+        }
+        if (IsDelData(KeyValue)) {
+            var delparm = 'id=' + KeyValue;
+            delConfig('/ZhangCeModule/DStudentTestSet/DelDStudentTestSet', delparm, KeyValue.split(",").length);
+        }
+    }
+
+    //条件
+    function btn_Search() {
+        var testBeginDate = $("#testBeginDate").val() == "0" ? "" : $("#testBeginDate").val();
+        var studentSex = $("#studentSex").val() == "0" ? "" : $("#studentSex").val();
+        var testBeginTime = $("#testBeginTime").val() == "0" ? "" : $("#testBeginTime").val();
+        var allotState = $("#allotState").val() == "0" ? "" : $("#allotState").val();
+        var testLimit = $("#testLimit").val() == "0" ? "" : $("#testLimit").val();
+        $("#gridTable").jqGrid('setGridParam', {
+            url: "@Url.Content("~/ZhangCeModule/DStudentTestSet/GridDStudentTestSetJson")?testBeginDate=" + testBeginDate + "&&studentSex=" + studentSex
+            + "&&testBeginTime=" + testBeginTime + "&&allotState=" + allotState + "&&testLimit=" + testLimit+"&&testType=约考测试", page: 1
+        }).trigger('reloadGrid');
+
+    }
+
+    //分配
+    function btn_allot() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "id");
+        var IsOk = GetJqGridRowValue("#gridTable", "teststudentokcount");
+        var allotState = GetJqGridRowValue("#gridTable", "allotstate");
+        if (allotState == "已测完" || allotState == "已作废") {
+            layer.alert("这条测试记录已测完，或已作废，不能重新分配！");
+            return false;
+        }
+        if (parseInt(IsOk) <= 0) {
+            layer.alert("这条测试记录没有人预约，无法分配！");
+            return false;
+        } else {
+            if (IsChecked(KeyValue)) {
+                var url = "/ZhangCeModule/DStudentTestSet/AllotForm?KeyValue=" + KeyValue;
+                openDialog(url, "Form", "分配约考测试", 700, 530, function (iframe) {
+                    top.frames[iframe].AcceptClick();
+
+                });
+            }
+        }
+    }
+
+
+
+    //新增学生约考
+    function btn_addTestAbout() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "id");
+        if (IsChecked(KeyValue)) {
+            var url = "/ZhangCeModule/DStudentTestSet/AddTestAboutForm?KeyValue=" + KeyValue;
+            openDialog(url, "Form", "添加学生约考测试", 700, 480, function (iframe) {
+                top.frames[iframe].AcceptClick()
+            });
+        }
+    }
+
+    //审核为已作废
+    function btn_auditBlankOut() {
+        var testSetID = GetJqGridRowValue("#gridTable", "id");
+        var allotState = GetJqGridRowValue("#gridTable", "allotstate");
+        var allotStateArray = allotState.split(',');
+        if (allotState.length > 1) {
+            var flg = true;
+            for (var i = 0; i < allotStateArray.length; i++) {
+
+                if (allotStateArray[i] != allotStateArray[0]) {
+                    flg = false;
+                    break;
+                }
+            }
+
+            if (!flg) {
+                layer.alert("选择的多条记录分配状态不一致！不能多行审核！");
+                return false;
+            }
+            else {
+                if (allotStateArray[0] == "已测完") {
+                    layer.alert("测试记录已测完，不能审核为已作废！");
+                    return false;
+                }
+            }
+        } else {
+            if (allotState == "已测完") {
+                layer.alert("这条测试记录已测完，不能审核为已作废！");
+                return false;
+            }
+        }
+        //可以选择多行
+        if (IsDelData(testSetID)) {
+            layer.confirm('确定审核为已作废，标记后无法更改？', {
+                title: "提示",
+            }, function () {
+                $.ajax({
+                    url: "/ZhangCeModule/DStudentTestSet/AuditState",
+                    type: 'POST',
+                    cache: false,
+                    //异步
+                    async: false,
+                    error: function (XMLHttpRequest) {
+                        layer.alert("意外错误标记失败！");
+                    },
+                    data: { "testSetID": testSetID, "allotState": "已作废" },
+                    success: function (data) {
+                        if (data.IsOk) {
+                            layer.alert("已经审核为已作废！");
+                            $("#gridTable").trigger("reloadGrid"); //重新载入
+                        }
+                        else {
+                            layer.alert("审核已作废失败！与管理员联系！");
+                        }
+                    }
+                });
+            }, function () {
+                $("#gridTable").trigger("reloadGrid"); //重新载入
+            });
+        }
+    }
+
+    //审核为已测完
+    function btn_auditTested() {
+        var testSetID = GetJqGridRowValue("#gridTable", "id");
+        var allotState = GetJqGridRowValue("#gridTable", "allotstate");
+
+        var allotStateArray = allotState.split(',');
+        if (allotState.length > 1) {
+            var flg = true;
+            for (var i = 0; i < allotStateArray.length; i++) {
+                if (allotStateArray[i] != allotStateArray[0]) {
+                    flg = false;
+                    break;
+                }
+            }
+
+            if (!flg) {
+                layer.alert("选择的多条记录分配状态不一致！不能多行审核！");
+                return false;
+            }
+            else {
+                if (allotStateArray[0] == "已作废") {
+                    layer.alert("测试记录已作废，不能审核为已测完！");
+                    return false;
+                }
+                if (allotStateArray[0] != "已分配") {
+                    layer.alert("测试记录未分配，不能审核为已测完！");
+                    return false;
+                }
+            }
+        }
+
+        else {
+            if (allotState == "已作废") {
+                layer.alert("这条测试记录已作废，不能审核为已测完！");
+                return false;
+            }
+            if (allotState != "已分配") {
+                layer.alert("这条测试记录未分配，不能审核为已测完！");
+                return false;
+            }
+        }
+        //可以选择多行
+        if (IsDelData(testSetID)) {
+            layer.confirm('确定审核为已测完，标记后无法更改？', {
+                title: "提示",
+            }, function () {
+                $.ajax({
+                    url: "/ZhangCeModule/DStudentTestSet/AuditState",
+                    type: 'POST',
+                    cache: false,
+                    //异步
+                    async: false,
+                    error: function (XMLHttpRequest) {
+                        layer.alert("意外错误标记失败！");
+                    },
+                    data: { "testSetID": testSetID, "allotState": "已测完" },
+                    success: function (data) {
+                        if (data.IsOk) {
+                            layer.alert("已经审核为已测完！");
+                            $("#gridTable").trigger("reloadGrid"); //重新载入
+                        }
+                        else {
+                            layer.alert("审核已测完失败！与管理员联系！");
+                        }
+                    }
+                });
+            }, function () {
+                $("#gridTable").trigger("reloadGrid"); //重新载入
+            });
+        }
+    }
+
+
+    //取消约考
+    function btn_deleteTestAbout() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "id");
+
+        var url = "/ZhangCeModule/DStudentTestSet/DeleteTestAboutForm?KeyValue=" + KeyValue;
+        openDialog(url, "Form", "取消学生约考测试", 700, 480, function (iframe) {
+            top.frames[iframe].AcceptClick()
+        });
+
+    }
+
+    //刷新
+    function windowload() {
+        $("#gridTable").trigger("reloadGrid"); //重新载入
+
+    }
+</script>
+
+
+<span style="color:red;position:fixed;right:20px;z-index:999;right:10px;top:15px;text-align:center;line-height:100%">
+    <span style="color:blue">提示：（单元测试、约考测试、补测约考）同一学生不能同时存在。如果重新测试按照提示删除记录。</span><b>当前库年份--@ViewBag.NK--年</b></span>
+<!--工具栏-->
+<div class="tools_bar leftline rightline" style="margin: 1px; margin-bottom: 0px;">
+    <div class="PartialButton">
+        @Html.Partial("_PartialButton")
+    </div>
+</div>
+<div class="leftline rightline QueryArea" style="margin: 1px; margin-top: 0px; margin-bottom: 0px;">
+    <table border="0" class="form-find" style="height: 45px;">
+        <tr>
+            <th>测试日期：</th>
+            <td>
+                <input id="testBeginDate" type="text" onclick="new WdatePicker({ dateFmt: 'yyyy-MM-dd' })" class="txt Wdate" />
+            </td>
+            <th>学生性别：</th>
+            <td>
+                <select id="studentSex" style="height:25px" class="txtArea">
+                    <option value="0">--请选择--</option>
+                    <option value="1">男</option>
+                    <option value="2">女</option>
+                </select>
+            </td>
+            <th>测试时段：</th>
+            <td>
+                <select id="testBeginTime" style="height:25px" class="txtArea">
+                    <option value="0">--请选择--</option>
+                    <option value="8:00-9:30">8:00-9:30</option>
+                    <option value="10:00-11:30">10:00-11:30</option>
+                    <option value="14:00-15:30">14:00-15:30</option>
+                    <option value="16:00-17:30">16:00-17:30</option>
+                </select>
+            </td>
+            <th>分配状态：</th>
+            <td>
+                <select id="allotState" style="height:25px" class="txtArea">
+                    <option value="0">--请选择--</option>
+                    <option value="未分配">未分配</option>
+                    <option value="已分组">已分组</option>
+                    <option value="已分配">已分配</option>
+                </select>
+            </td>
+            <th>测试限制：</th>
+            <td>
+                <select id="testLimit" style="height:25px" class="txtArea">
+                    <option value="0">--请选择--</option>
+                    <option value="40">不限</option>
+                    <option value="41">大一</option>
+                    <option value="42">大二</option>
+                    <option value="43">大三</option>
+                    <option value="44">大四</option>
+                </select>
+            </td>
+
+            <td>
+                <input id="btnSearch" type="button" class="btnSearch" value="搜 索" onclick="btn_Search()" />
+            </td>
+
+            <td></td>
+        </tr>
+    </table>    
+</div>
+<div class="topline rightline" style="margin: 1px; margin-top: -1px;">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>
+
+

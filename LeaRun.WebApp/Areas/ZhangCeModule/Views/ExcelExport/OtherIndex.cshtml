@@ -1,0 +1,217 @@
+﻿@{
+    ViewBag.Title = "导出上报信息";
+}
+@using LeaRun.Entity;
+@model List<BaseFile>
+<script src="~/Content/Scripts/jquery/jquery-1.8.2.min.js"></script>
+<script src="~/Content/layer/layer.js"></script>
+<script src="~/Content/Scripts/jquery.form.js"></script>
+<link href="~/Content/Styles/learunui-framework.css" rel="stylesheet" />
+<script src="~/Content/Scripts/learunui-framework.js"></script>
+<!--日期组件start-->
+<script src="~/Content/Scripts/datepicker/WdatePicker.js"></script>
+<!--日期组件start-->
+   <!--jqgrid表格组件start-->
+<script src="~/Content/Scripts/jqgrid/jquery-ui-custom.min.js"></script>
+<script src="~/Content/Scripts/jqgrid/grid.locale-cn.js"></script>
+<link href="~/Content/Scripts/jqgrid/css/jqgrid.css" rel="stylesheet" />
+<script src="~/Content/Scripts/jqgrid/jqGrid.js"></script>
+<!--表格组件end-->
+<style>
+    .NKStyle {
+        width: 70px;
+        float: left;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        line-height: 25px;
+        cursor: pointer;
+        text-align: center;
+        margin-left: 10px;
+        background-color: #08587d; /*间春绿*/
+        color: white;
+        font-weight: bold;
+        margin-top: 7px;
+    }
+
+    .not-prompt-extend {
+        height: 240px;
+        overflow: auto;
+        width: 100%;
+        background: none;
+        background-color: #efe6e6;
+        margin: 0;
+        padding: 0;
+    }
+
+    .btn-export {
+        width: 160px;
+        float: right;
+        margin-right: 10px;
+    }
+    
+    .table-div {
+        padding-right: 3%;
+        margin-top: 2%;
+        padding-left: 3%;
+        height: 180px;
+        overflow:auto;
+       line-height:22px;
+          }
+</style>
+<script>
+    $(function () {
+        GetGrid();
+    })
+    //加载表格
+    function GetGrid() {
+        $("#gridTable").jqGrid({
+            url: "@Url.Content("~/ZhangCeModule/ExcelExport/GridOtherStudentInfoJson")",
+            datatype: "json",
+            height: 0,
+            autowidth: true,
+            colModel: [
+                    { label: '编号,自增列', name: 'id', index: 'id', width: 0, align: 'left', sortable: true,  },
+                    { label: '学生学号', name: 'studentcode', index: 'studentcode', width: 0, align: 'left', sortable: true },
+                    { label: '学生姓名', name: 'studentname', index: 'studentname', width: 0, align: 'left', sortable: true },
+                    {
+                        label: '学生性别  ', name: 'studentsex', index: 'studentsex', width: 0, align: 'left', sortable: true,
+                        formatter: function (cellvalue, options, rowObject) {
+                            if (cellvalue == '1') return "男：1";
+                            if (cellvalue == '2') return "女：2";
+                        }
+                    },
+                    { label: '出生日期', name: 'studentborndate', index: 'studentborndate', width: 0, align: 'left', sortable: true,  },
+                    { label: '学生住址', name: 'studenthomeaddress', index: 'studenthomeaddress', width: 0, align: 'left', sortable: true,  },
+                    { label: '年级编号', name: 'gradecode', index: 'gradecode', width: 0, align: 'left', sortable: true,  },
+                    { label: '学院名称', name: 'schoolname', index: 'schoolname', width: 0, align: 'left', sortable: true,  },
+                    { label: '学院编号', name: 'schoolcode', index: 'schoolcode', width: 0, align: 'left', sortable: true,  },
+                    { label: '班级名称', name: 'classname', index: 'classname', width: 0, align: 'left', sortable: true,  },
+                    { label: '班级编号', name: 'classcode', index: 'classcode', width: 0, align: 'left', sortable: true,  },
+                    { label: '民族编号', name: 'nationcode', index: 'nationcode', width: 0, align: 'left', sortable: true,  },
+                    { label: '民族名称', name: 'nationname', index: 'nationname', width: 0, align: 'left', sortable: true,  },
+                    { label: '学生籍贯', name: 'studentnative', index: 'studentnative', width: 0, align: 'left', sortable: true,  },
+                    { label: '异动类型', name: 'studentmovetype', index: 'studentmovetype', width: 0, align: 'left', sortable: true,  },
+                    { label: '身份证号', name: 'studentidnumber', index: 'studentidnumber', width: 0, align: 'left', sortable: true,  },
+                    { label: '学生电话', name: 'studentphone', index: 'studentphone', width: 0, align: 'left', sortable: true,  },
+                    { label: '是否注册', name: 'studentisregister', index: 'studentisregister', width: 0, align: 'left', sortable: true,  },
+                                { label: '身高（cm）', name: 'heigh', index: 'heigh', width: 0, align: 'left', sortable: true,  },
+                        { label: '体重（kg）', name: 'weight', index: 'weight', width: 0, align: 'left', sortable: true,  },
+                        { label: '体重指数', name: 'bmi', index: 'bmi', width: 0, align: 'left', sortable: true,  },
+                        { label: '得分', name: 'bmiscore', index: 'bmiscore', width: 0, align: 'left', sortable: true,  },
+                        { label: '级别', name: 'bmilevel', index: 'bmilevel', width: 0, align: 'left', sortable: true,  },
+                        { label: '肺活量（ml）', name: 'pulmonary', index: 'pulmonary', width: 0, align: 'left', sortable: true,  },
+                        { label: '肺活量分数', name: 'pulmonaryscore', index: 'pulmonaryscore', width: 0, align: 'left', sortable: true,  },
+                        { label: '肺活量级别', name: 'pulmonarylevel', index: 'pulmonarylevel', width: 0, align: 'left', sortable: true,  },
+                        { label: '50米跑（s）', name: 'fiftyrun', index: 'fiftyrun', width: 0, align: 'left', sortable: true,  },
+                        { label: '50跑分数', name: 'fiftyrunscore', index: 'fiftyrunscore', width: 0, align: 'left', sortable: true,  },
+                        { label: '50米跑级别', name: 'fiftyrunlevel', index: 'fiftyrunlevel', width: 0, align: 'left', sortable: true,  },
+                        { label: '立定跳远（cm）', name: 'standjump', index: 'standjump', width: 0, align: 'left', sortable: true,  },
+                        { label: '立定跳远得分', name: 'standjumpscore', index: 'standjumpscore', width: 0, align: 'left', sortable: true,  },
+                        { label: '立定跳远级别', name: 'standjumplevel', index: 'standjumplevel', width: 0, align: 'left', sortable: true,  },
+                        { label: '座位体前屈（cm）', name: 'sitandreach', index: 'sitandreach', width: 0, align: 'left', sortable: true,  },
+                        { label: '座位体前屈得分', name: 'sitandreachscore', index: 'sitandreachscore', width: 0, align: 'left', sortable: true,  },
+                        { label: '座位体前屈级别', name: 'sitandreachlevel', index: 'sitandreachlevel', width: 0, align: 'left', sortable: true,  },
+                        { label: '800米(注：3分50秒显示：350)', name: 'eighthundred', index: 'eighthundred', width: 0, align: 'left', sortable: true,  },
+                        { label: '800米得分', name: 'eighthundredscore', index: 'eighthundredscore', width: 0, align: 'left', sortable: true,  },
+                        { label: '800米级别', name: 'eighthundredlevel', index: 'eighthundredlevel', width: 0, align: 'left', sortable: true,  },
+                        { label: '800米加分', name: 'eighthundredaddscore', index: 'eighthundredaddscore', width: 0, align: 'left', sortable: true,  },
+                        { label: '1000米(注：3分50秒显示：350)', name: 'thousandrun', index: 'thousandrun', width: 0, align: 'left', sortable: true,  },
+                        { label: '1000米得分', name: 'thousandrunscore', index: 'thousandrunscore', width: 0, align: 'left', sortable: true,  },
+                        { label: '1000米级别', name: 'thousandrunlevel', index: 'thousandrunlevel', width: 0, align: 'left', sortable: true,  },
+                        { label: '1000米得分', name: 'thousandrunaddscore', index: 'thousandrunaddscore', width: 0, align: 'left', sortable: true,  },
+                        { label: '1分钟仰卧起坐（个）', name: 'minsupination', index: 'minsupination', width: 0, align: 'left', sortable: true,  },
+                        { label: '1分钟仰卧起坐得分', name: 'minsupinationscore', index: 'minsupinationscore', width: 0, align: 'left', sortable: true,  },
+                        { label: '1分钟仰卧起坐级别', name: 'minsupinationlevel', index: 'minsupinationlevel', width: 0, align: 'left', sortable: true,  },
+                        { label: '1分钟仰卧起坐加分', name: 'minsupinationaddscore', index: 'minsupinationaddscore', width: 0, align: 'left', sortable: true,  },
+                        { label: '引体向上（个）', name: 'pullup', index: 'pullup', width: 0, align: 'left', sortable: true,  },
+                        { label: '引体向上得分', name: 'pullupscore', index: 'pullupscore', width: 0, align: 'left', sortable: true,  },
+                        { label: '引体向上级别', name: 'pulluplevel', index: 'pulluplevel', width: 0, align: 'left', sortable: true,  },
+                        { label: '引体向上加分', name: 'pullupaddscore', index: 'pullupaddscore', width: 0, align: 'left', sortable: true,  },
+                        { label: '测试结果', name: 'testresult', index: 'testresult', width: 0, align: 'left', sortable: true,  },
+                        { label: '学生真实成绩', name: 'studenttruescore', index: 'studenttruescore', width: 0, align: 'left', sortable: true },
+                        { label: '测试类型', name: 'testtype', index: 'testtype', width: 0, align: 'left', sortable: true },
+                        { label: '创建时间', name: 'createtime', index: 'createtime', width: 0, align: 'left', sortable: true,  },
+                        { label: '更改时间', name: 'updatetime', index: 'updatetime', width: 0, align: 'left', sortable: true,  },
+                        { label: '备注', name: 'remark', index: 'remark', width: 0, align: 'left', sortable: true,  },
+            ],
+            pager: "#gridPager",
+            sortname: '',
+            rowNum: 1,
+            rowList: [20, 30, 50, 100, 500, 1000],
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+        });
+    }
+    function studentOtherExport() {
+        var resultType = $("#resultType").val();
+        if ($("#resultType").find("option:selected").attr("code") == "0") {
+            resultType = "0";
+        } else if ($("#resultType").find("option:selected").attr("code") == "4") {
+            resultType = "4";
+        }
+
+        SetDeriveExcel("#gridTable", "学生信息自定义导出");
+        openDialog("/ZhangCeModule/ExcelExport/DeriveForm?ResultType=" + resultType, "DeriveFrom", "学生信息自定义导出", 640, 300, function (iframe) {
+            top.frames[iframe].AcceptClick();
+        });
+    }
+</script>
+<div style="display:none">
+    <table id="gridTable" style="height:0px;display:none !important"></table><div id="gridPager" style="height:0px"></div>
+</div>
+<form id="form1" style="margin: 1px">
+    <div id="message" style="display: none"></div>
+    <b style="margin-left:10px;color:red;line-height:30px">当前库年份--@ViewBag.NK--年</b>
+    <table style="width: 100%;min-width:1000px;">
+        <tr>
+            <td style="width:50%;">
+                <div class="note-prompt not-prompt-extend">
+                    <div class="table-div" >
+                        <p style="color: #08587d;">
+                            <b>学生信息自定义导出：</b>
+                            <br />
+                            <span style="color:red">
+                                提示：
+                                <br />
+                                包括学生的体测成绩和基本信息，点击导出可以自行选则要导出的字段导出。
+                                <br />
+                                导出条件可以不选择。测试结果补测包括（缺项和成绩小于60分）
+                            </span>
+                        </p>
+                        <br />
+                        <table class="form">
+                            <tr>
+                                <th class="formTitle" style="width:30%">
+                                    请选择测试结果：
+                                </th>
+                                <td class="formValue">
+                                    <select id="resultType" class="txtArea" style="height:25px">
+                                        <option code="0" selected>全部</option>
+                                        <option code="1">免测</option>
+                                        <option code="2">作弊</option>
+                                        <option code="3">通过</option>
+                                        <option code="4">未测</option>
+                                        <option code="5">补测</option>
+                                    </select>
+
+                                </td>
+                            </tr>
+
+                        </table>
+                    </div>
+               
+                    <p onclick="studentOtherExport()" id="testModule" class="NKStyle btn-export">导出</p>
+                </div>
+            </td>
+            <td style="width:50%;">
+             
+            </td>
+        </tr>
+
+
+    </table>
+
+
+</form>

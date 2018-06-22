@@ -1,0 +1,484 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+@using LeaRun.Business
+@using LeaRun.Entity
+<script src="~/Content/layer/layer.js"></script>
+<link href="~/Content/Styles/fileinput.css" rel="stylesheet" />
+<script src="~/Content/Scripts/fileinput.js"></script>
+<script src="~/Content/Scripts/jquery.form.js"></script>
+<script type="text/javascript">
+
+    var KeyValue = GetQuery('KeyValue');//主键
+    $(function () {
+        InitControl();
+    })
+
+
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/ZhangCeModule/DStudentTestSet/GetDStudentTestSetModel", { Id: KeyValue }, function (data) {
+                SetWebControls(data);
+            });
+        }
+    }
+    //保存事件
+    function AcceptClick() {
+        top.frames[tabiframeId()].windowload();
+        closeDialog();
+    }
+
+
+
+    //分组
+    function allotGroup() {
+        var GroupNum = $("#GroupNum").val();
+        if (GroupNum == "") {
+            layer.alert("请输入组数");
+            return false;
+        }
+        var EveryGroupCount = $("#EveryGroupCount").val();
+        var SurplusCount = $("#SurplusCount").val();
+        var TestBeginDate = $("#TestBeginDate").val();
+        var TestBeginWeek = $("#TestBeginWeek").val();
+        var TestBeginTime = $("#TestBeginTime").val();
+        var StudentSex = $("#StudentSex").val() == "1" ? "男" : "女";
+        Loading(true);
+        $.ajax({
+            url: "/ZhangCeModule/DStudentTestSet/CheakAllotGroup",
+            type: 'POST',
+            cache: false,
+            //异步
+            async: false,
+            error: function (XMLHttpRequest) {
+                Loading(false);
+                layer.alert("意外错误修改失败！");
+            },
+            data: { "testSetId": KeyValue },
+            success: function (data) {
+                Loading(false);
+                if (data.IsOk) {
+                    layer.confirm('已经分过组了是否重新分组？如果重新分组则之前分组作废。', {
+                        title: "提示",
+                        closeBtn: 0,
+                        btn: ['确定', '取消'] //按钮
+                    }, function () {
+                        Loading(true);
+                        $.ajax({
+                            url: "/ZhangCeModule/DStudentTestSet/DelAllotGroup",
+                            type: 'POST',
+                            cache: false,
+                            //异步
+                            async: false,
+                            error: function (XMLHttpRequest) {
+                                Loading(false);
+                                layer.alert("意外错误修改失败！");
+                            },
+                            data: { "testSetId": KeyValue },
+                            success: function (data) {
+                               
+                                if (data.IsOk) {
+                                    $.ajax({
+                                        url: "/ZhangCeModule/DStudentTestSet/AllotGroup",
+                                        type: 'POST',
+                                        cache: false,
+                                        //异步
+                                        async: false,
+                                        error: function (XMLHttpRequest) {
+                                            Loading(false);
+                                            layer.alert("意外错误修改失败！");
+                                        },
+                                        data: { "testSetId": KeyValue, "testBeginDate": TestBeginDate, "testBeginWeek": TestBeginWeek, "testBeginTime": TestBeginTime, "groupNum": GroupNum, "everyGroupCount": EveryGroupCount, "surplusCount": SurplusCount, "studentSex": StudentSex },
+                                        success: function (data) {
+                                            Loading(false);
+                                            if (data.IsOk) {
+                                                layer.confirm('重新分组成功！', {
+                                                    title: "提示",
+                                                    closeBtn: 0,
+                                                    btn: ['确定', '取消'] //按钮
+                                                }, function () {
+                                                    window.location.reload();
+
+                                                }, function () {
+                                                    window.location.reload();
+                                                });
+                                            }
+                                            else {
+                                                layer.alert("重新分组失败！");
+                                            }
+                                        }
+                                    });
+                                }
+                                else {
+                                    layer.alert("意外错误修改失败！");
+                                }
+
+                            }
+                        });
+
+                    }, function () {
+                        //InitControl(); //重新载入
+                    });
+                }
+                if (!data.IsOk) {
+                    Loading(true);
+                    $.ajax({
+                        url: "/ZhangCeModule/DStudentTestSet/AllotGroup",
+                        type: 'POST',
+                        cache: false,
+                        //异步
+                        async: false,
+                        error: function (XMLHttpRequest) {
+                            Loading(false);
+                            layer.alert("意外错误修改失败！");
+                        },
+                        data: { "testSetId": KeyValue, "testBeginDate": TestBeginDate, "testBeginWeek": TestBeginWeek, "testBeginTime": TestBeginTime, "groupNum": GroupNum, "everyGroupCount": EveryGroupCount, "surplusCount": SurplusCount, "studentSex": StudentSex },
+                        success: function (data) {
+                            Loading(false);
+                            if (data.IsOk) {
+                                layer.confirm('分组成功！', {
+                                    title: "提示",
+                                    closeBtn: 0,
+                                    btn: ['确定', '取消'] //按钮
+                                }, function () {
+                                    window.location.reload();
+
+                                }, function () {
+                                    window.location.reload();
+                                });
+                            }
+                            else {
+                                layer.alert("分组失败！");
+                            }
+                        }
+                    });
+                }
+
+            }
+        });
+
+
+    }
+
+    //计算分组
+    function CalculationGroup() {
+
+        var testStudentOkCount = $("#TestStudentOkCount").val();
+        var groupNum = $("#GroupNum").val();
+        if (groupNum == "") {
+            $("#GroupNum").val("");
+            $("#EveryGroupCount").val("");
+            $("#SurplusCount").val("");
+        }
+        if (parseInt(groupNum) <= 0) {
+            $("#GroupNum").val("");
+            $("#EveryGroupCount").val("");
+            $("#SurplusCount").val("");
+        }
+        if (parseInt(groupNum) > parseInt(testStudentOkCount)) {
+            layer.alert("组数不能大于已约人数！");
+            $("#GroupNum").val("");
+            $("#EveryGroupCount").val("");
+            $("#SurplusCount").val("");
+            return false;
+        }
+        if (GroupNum != "0" && testStudentOkCount != "0" && GroupNum != "") {
+            var groupCount = parseInt((testStudentOkCount) / parseInt(groupNum));
+            var surplusCount = parseInt((testStudentOkCount) % parseInt(groupNum));
+            $("#EveryGroupCount").val(groupCount);
+            $("#SurplusCount").val(surplusCount)
+        }
+
+    }
+
+    //分配老师
+    function allotTeacher(obj) {
+        var p = $(obj).parent().parent();
+        var testGroup = p.find("#TestGroup").val();
+        var groupCount = p.find("#GroupCount").val();
+        var testTeacher = p.find("#TestTeacher").val();
+        if (testTeacher == "0") {
+            layer.alert("请选择测试老师！");
+            return false;
+        }
+
+        $.ajax({
+            url: "/ZhangCeModule/DStudentTestSet/AllotTeacher",
+            type: 'POST',
+            cache: false,
+            //异步
+            async: false,
+            error: function (XMLHttpRequest) {
+                layer.alert("意外错误修改失败！");
+            },
+            data: { "id": KeyValue, "testGroup": testGroup, "groupCount": groupCount, "testTeacher": testTeacher },
+            success: function (data) {
+                if (data.IsOk) {
+                    layer.alert("分配老师成功。");
+                }
+            }
+        });
+    }
+
+    //点击那一行，那一行变颜色
+    function clickTr(obj) {
+        $(obj).parent().find(".t").css("background-color", "#f7f7f7").css("color", "red");
+        $(obj).parent().find(".s").css("background-color", "white").css("color", "black");
+        $(obj).find(".t").css("background-color", "#4a5b79").css("color", "white");
+        $(obj).find(".s").css("background-color", "#4a5b79").css("color", "white");
+    }
+
+
+
+    //导入学生约考
+    function AddTestStudent() {
+      
+            Loading(true);
+            var file = $("#filePath").val();
+            if (file == '' || file == null) {
+                layer.alert("请选择所要上传的文件！");
+            } else {
+                var index = file.lastIndexOf(".");
+                if (index < 0) {
+                    layer.alert("上传的文件格式不正确，请选择Excel文件(*.xls或*.xlsx)！");
+                } else {
+                    var ext = file.substring(index + 1, file.length);
+                    if (ext != "xls" & ext != "xlsx") {
+                        layer.alert("上传的文件格式不正确，请选择Excel文件(*.xls或*.xlsx)！");
+                    } else {
+                        var testGroup = "";
+                        var groupCount = "";
+                        var testTeacher = "";
+                        var postData = {
+                            "testSetID": KeyValue,
+                            "studentSex": $("#StudentSex").val(),
+                            "testBeginDate": $("#TestBeginDate").val(),
+                            "testBeginWeek": $("#TestBeginWeek").val(),
+                            "testBeginTime": $("#TestBeginTime").val(),
+                            "testAddress": $("#TestAddress").val(),
+                            "testGroup": testGroup,
+                            "groupCount": groupCount,
+                            "testTeacher": testTeacher,
+                            "testType": "单元测试",
+                            "testLimit": $("#TestLimit").val()
+                        };
+                        $('#form1').ajaxSubmit({
+                            type: 'POST', // HTTP请求方式
+                            url: '/ZhangCeModule/DStudentTestSet/ImportExcelData', // 请求的URL地址
+                            dataType: 'json', // 服务器返回数据转换成的类型
+                            data: postData,
+                            success: function (data, responseStatus) {
+                                Loading(false);
+                                layer.confirm(data.Msg, {
+                                    title: "结果展示",
+                                    closeBtn: 0,
+                                    btn: ['复制错误日志', '确定'] //按钮
+                                }, function () {
+                                    alert("请按Ctrl+C，Ctrl+V，和右键复制！");
+                                    return false;
+                                }, function () {
+                                    window.location.reload();
+                                });
+                            }
+                        });
+
+                    }
+                }
+            }
+        
+    }
+
+</script>
+
+<form id="form1" style="margin: 1px">
+    <div id="message" style="display: none"></div>
+    <div class="note-prompt" style="margin: 1px;">
+        提示：根据Excel模板中的提示导入测试数据。（学生在该年库必须存在！测试人数可忽略！）
+    </div>
+
+    <div style="line-height: 30px; color: #808080; margin-left: 5px">
+        <b>分配数据如下：</b>
+    </div>
+
+    <table class="form">
+        <tr>
+            <th class='formTitle'>测试日期：</th>
+            <td class='formValue'>
+                <input id="TestBeginDate" maxlength=-1 type="text" class="txt disabled" disabled />
+            </td>
+            <th class='formTitle'>测试星期：</th>
+            <td class='formValue'>
+                <input id="TestBeginWeek" maxlength=-1 type="text" class="txt disabled" disabled />
+            </td>
+
+        </tr>
+
+        <tr>
+            <th class='formTitle'>测试时间：</th>
+            <td class='formValue'>
+                <input id="TestBeginTime" maxlength=-1 type="text" class="txt disabled" disabled />
+            </td>
+            <th class='formTitle'>测试地址：</th>
+            <td class='formValue'>
+                <input id="TestAddress" maxlength=-1 type="text" class="txt disabled" disabled />
+            </td>
+
+        </tr>
+
+        <tr>
+            <th class='formTitle'>学生性别：</th>
+            <td class='formValue'>
+                <select id="StudentSex" style="height:25px" class="txtArea disabled" disabled>
+                    <option value="1">男</option>
+                    <option value="2">女</option>
+                </select>
+            </td>
+
+            <th class='formTitle'>测试人数：</th>
+            <td class='formValue'>
+                <input id="TestStudentCount" maxlength=-1 type="text" class="txt disabled" disabled />
+            </td>
+
+        </tr>
+
+
+        <tr>
+            <th class='formTitle'>已约人数：</th>
+            <td class='formValue'>
+                <input id="TestStudentOkCount" maxlength=-1 type="text" class="txt disabled" disabled />
+            </td>
+            <th class='formTitle'>未约人数：</th>
+            <td class='formValue'>
+                <input id="TestStudentNoCount" maxlength=-1 type="text" class="txt disabled" disabled />
+            </td>
+
+        </tr>
+        <tr>
+            <th class='formTitle'>测试限制：</th>
+            <td class='formValue'>
+                <select id="TestLimit" style="height:25px" class="txtArea">
+                    <option value="40">不限</option>
+                    <option value="41">大一</option>
+                    <option value="42">大二</option>
+                    <option value="43">大三</option>
+                    <option value="44">大四</option>
+                </select>
+            </td>
+            <th class='formTitle'>备注：</th>
+            <td class='formValue'></td>
+
+        </tr>
+
+    </table>
+
+
+
+    <table border="0" class="frm" style="height: 35px; width: auto; padding-top: 5px;">
+        <tr>
+            <th style="width: 100px; color: #808080;">
+                导入文件：
+            </th>
+            <td>
+                <input type="file" id="filePath" class="keyword" style="width: 300px; border-radius: 0px;" name="filePath" />
+            </td>
+            <td>
+                <p onclick="AddTestStudent()" id="btnImport" style="width: 80px; float: right; cursor: pointer; border: 1px solid #ccc; border-radius: 3px; line-height: 25px; cursor: pointer; text-align: center;
+ background-color: #4a5b79;color:white ">导入</p>
+                @*<input type="submit" class="btnSearch" value="导入" onclick="Loading(true, '正在导入数据...')" />*@
+            </td>
+            <th style="width: 100px; color: #808080;text-align:right">
+                Excel模板：
+            </th>
+            <td>
+                @Html.ActionLink("Excel模板下载", "GetExcelFile", "DStudentTestSet")
+            </td>
+        </tr>
+    </table>
+
+
+
+
+    <div style="clear:both"></div>
+
+
+    <div style="line-height:30px;color:#808080;margin-left:5px">
+        <b>分组设置：</b><span style="color:red"> (说明：分组后剩余人数将平均分配到各组)</span>
+    </div>
+
+    <table class="form">
+        <tr>
+            <th class='formTitle'>请输入组数：</th>
+            <td class='formValue'>
+                <input id="GroupNum" maxlength=-1 type="number" style="color:red" onkeyup="CalculationGroup()" class="txt" />
+            </td>
+            <th class='formTitle'>每组人数：</th>
+            <td class='formValue'>
+                <input id="EveryGroupCount" maxlength=-1 type="number" style="color:red" class="txt disabled" disabled />
+            </td>
+            <th class='formTitle'>剩余人数：</th>
+            <td class='formValue'>
+                <input id="SurplusCount" maxlength=-1 type="number" style="color:red" class="txt disabled" disabled />
+            </td>
+        </tr>
+    </table>
+
+    <div onclick="allotGroup()" style="width: 80px; float: right; cursor: pointer; border: 1px solid #ccc; border-radius: 3px; line-height: 25px; cursor: pointer; text-align: center;
+margin-top: 5px; background-color: #4a5b79;color:white ">分组</div>
+    <div style="clear:both;height:15px"></div>
+    <div style="overflow-y:scroll">
+        <table class="form">
+            <tr>
+                <th class='formTitle' style="text-align:center">组号</th>
+                <th class='formTitle' style="text-align:center">人数</th>
+                <th class='formTitle' style="text-align:center">测试老师</th>
+                <th class='formTitle' style="text-align:center">分配老师</th>
+            </tr>
+        </table>
+    </div>
+    <div style="height: 187px; overflow-y:scroll" id="t">
+        <table class="form">
+            @{
+                DStudent_TestAllotBll taBll = new DStudent_TestAllotBll();
+                DBase_UsersBll uBll = new DBase_UsersBll();
+                List<DStudent_TestAllot> listTestAllot = taBll.GetDStudentTestAllotListByTestSetID(ViewBag.TestSetID, ViewBag.NK);
+                List<DBase_Users> listUsers = uBll.GetTeacherName();
+                var str = "";
+                var teacherName = "";
+                if (listTestAllot.Count > 0)
+                {
+                    teacherName += "<option value=\"0\">--请选择--</option>";
+                    foreach (DBase_Users entityUser in listUsers)
+                    {
+                        teacherName += "<option value='" + entityUser.UserName + "'>" + entityUser.UserName + "</option>";
+                    }
+                    var teacherNameMsg = "";
+                    foreach (DStudent_TestAllot entityTestAllot in listTestAllot)
+                    {
+                        //onmouseover=\"over(this)\" onmouseout=\"out(this)\"
+                        str += "<tr onclick=\"clickTr(this)\" >";
+                        str += "<td class='formValue t' style=\"text-align:center\"><input id=\"TestGroup\" maxlength=-1 type=\"text\" style=\"color:red;text-align:center\" class=\"txt disabled t\" disabled value='" + entityTestAllot.TestGroup + "' />";
+                        str += "</td><td class='formValue t' style=\"text-align:center\"><input id=\"GroupCount\" maxlength=-1 type=\"number\" style=\"color:red;text-align:center\" class=\"txt disabled t\" disabled value='" + entityTestAllot.GroupCount + "' />";
+                        str += "</td><td class='formValue s'><select id=\"TestTeacher\" style=\"height:25px;\" class=\"txt s\">";
+                        if (entityTestAllot.TestTeacher != "" && entityTestAllot.TestTeacher != null)
+                        {
+                            teacherNameMsg = teacherName + "<option value='" + entityTestAllot.TestTeacher + "' selected>" + entityTestAllot.TestTeacher + "</option>";
+                        }
+                        else
+                        {
+                            teacherNameMsg = teacherName;
+                        }
+                        str += teacherNameMsg;
+                        str += "</select></td><td class='formValue t' style=\"text-align:center;\"><img src=\"../../Content/Images/Icon16/user_edit.png\"  onclick=\"allotTeacher(this)\" style=\"margin-top:5px;cursor:pointer\" class=\"t\" /></td></tr>";
+                        teacherNameMsg = teacherName;
+                    }
+                }
+            }
+
+            @Html.Raw(str)
+        </table>
+
+    </div>
+
+</form>

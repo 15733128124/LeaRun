@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>设计流程</title>
+    <!--框架必需start-->
+    <link href="~/Content/Styles/learunui-framework.css" rel="stylesheet" />
+    <script src="~/Content/Scripts/jquery/jquery-1.8.2.min.js"></script>
+    <script src="~/Content/Scripts/learunui-framework.js"></script>
+    <!--框架必需end-->
+    <!--流程设计器start-->
+    <link href="~/Content/Scripts/GooFlow/GooFlow.css" rel="stylesheet" />
+    <script src="~/Content/Scripts/GooFlow/GooFlow.js"></script>
+    <!--流程设计器end-->
+    <!--Jquery打印 start-->
+    <script src="~/Content/Scripts/jqprint/jquery.jqprint-0.3.js"></script>
+    <!--Jquery打印 end-->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            LoadGooFlow();
+        });
+        //初始化设计流程器
+        function LoadGooFlow() {
+            var FlowPanel = $.createGooFlow($("#FlowPanel"), {
+                width: $(window).width() - 2,
+                height: $(window).height() - 45,
+                haveHead: true,
+                headBtns: ["undo", "redo"],
+                haveTool: true,
+                toolBtns: ["startround", "endround", "stepnode", "shuntnode", "confluencenode"],
+                haveGroup: true,
+                useOperStack: true
+            });
+            FlowPanel.setNodeRemarks({
+                cursor: "选择指针",
+                direct: "步骤连线",
+                startround: "开始节点",
+                endround: "结束节点",
+                stepnode: "普通节点",
+                shuntnode: "分流节点",
+                confluencenode: "合流节点",
+                group: "区域规划"
+            });
+            var jsondata = { "title": "newFlow_1", "nodes": { "FlowPanel_node_1": { "name": "新建节点1", "left": 118, "top": 88, "type": "startround", "css": "", "width": 24, "height": 24, "alt": true }, "FlowPanel_node_2": { "name": "新建节点2", "left": 410, "top": 140, "type": "stepnode", "css": "stepnode", "width": 150, "height": 70, "alt": true }, "FlowPanel_node_3": { "name": "新建节点3", "left": 168, "top": 296, "type": "shuntnode", "css": "shuntnode", "width": 150, "height": 70, "alt": true }, "FlowPanel_node_4": { "name": "新建节点4", "left": 491, "top": 336, "type": "confluencenode", "css": "confluencenode", "width": 150, "height": 70, "alt": true } }, "lines": {}, "areas": {}, "initNum": 5 };
+            FlowPanel.loadData(jsondata);
+            $("#save").click(function () {
+                document.getElementById("demotext").value = JSON.stringify(FlowPanel.exportData());
+            })
+        }
+        function BaseInfo() {
+            var NodeNo = $('.item_focus').attr('id');                           //节点ID
+            var NodeName = $(".item_focus table tr:eq(0) td:eq(1)").text();     //节点名称
+            alert(NodeNo)
+            alert(NodeName)
+        };
+    </script>
+</head>
+<body>
+    <div class="nui-toolbar leftline rightline" style="margin: 1px;">
+        <div class="nui-toolbar-item" onclick="Replace()">
+            <span class="nui-btn-text">刷新</span>
+        </div>
+        <div id="save" class="nui-toolbar-item">
+            <span class="nui-btn-text">保存布局</span>
+        </div>
+        <div class="nui-toolbar-item nui-btn-right" onclick="$('.GooFlow_head_btn').find('.ico_undo').trigger('click')">
+            <span class="nui-btn-text">撤销</span>
+        </div>
+        <div class="nui-toolbar-item nui-btn-left" onclick="$('.GooFlow_head_btn').find('.ico_redo').trigger('click')">
+            <span class="nui-btn-text">重做</span>
+        </div>
+        <input id="demotext" type="text" />
+        <div style="position:absolute;float: right;top:5px; right:5px;">
+            <ul class="switch-btns">
+                <li id="li-switch-list" style="border: 1px solid #ccc;" title="切换到列表视图">
+                    <div class="icon icon-btn-switch-list-select"></div>
+                </li>
+                <li id="li-switch-view" class="selected" style="border: 1px solid #ccc; border-left: none;" title="切换到图形视图">
+                    <div class="icon icon-btn-switch-view"></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div id="FlowPanel" style="margin: 1px; margin-top: 0px;"></div>
+    <div class="rightMenu">
+        <ul>
+            <li onclick="BaseInfo()">节点属性</li>
+            <li>节点类型</li>
+            <li>更换图标</li>
+            <li>删除节点</li>
+        </ul>
+    </div>
+</body>
+</html>

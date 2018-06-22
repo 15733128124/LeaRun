@@ -1,0 +1,1107 @@
+@{
+    ViewBag.Title = "学生成绩测试";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script src="~/Content/layer/layer.js"></script>
+<link href="~/Content/Styles/dstudenttestscoreform.css" rel="stylesheet" />
+<script type="text/javascript">
+    var KeyValue = GetQuery('KeyValue');//主键
+    $(function () {
+        InitControl();
+
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/ZhangCeModule/DStudentTestScore/GetDStudentTestScoreModel", { studentcode: KeyValue }, function (data) {
+                $("#heigh").val(data.Heigh);
+                $("#weight").val(data.Weight);
+                $("#bmi").val(data.BMI);
+                $("#bmiscore").val(data.BMIScore);
+                $("#pulmonary").val(data.Pulmonary);
+                $("#pulmonaryscore").val(data.PulmonaryScore);
+                $("#fiftyrun").val(data.FiftyRun == null ? "" : data.FiftyRun.replace('.', ''));
+                $("#fiftyrunscore").val(data.FiftyRunScore);
+                $("#standjump").val(data.StandJump);
+                $("#standjumpscore").val(data.StandJumpScore);
+                $("#sitandreach").val(data.SitAndReach == null ? "" : data.SitAndReach.replace('.', ''));
+                $("#sitandreachscore").val(data.SitAndReachScore);
+                $("#eighthundred").val(data.EightHundred);
+                $("#eighthundredscore").val(data.EightHundredScore);
+                $("#eighthundredaddscore").val(data.EightHundredAddScore);
+                $("#thousandrun").val(data.ThousandRun);
+                $("#thousandrunscore").val(data.ThousandRunScore);
+                $("#thousandrunaddscore").val(data.ThousandRunAddScore);
+                $("#minsupination").val(data.MinSupination);
+                $("#minsupinationscore").val(data.MinSupinationScore);
+                $("#minsupinationaddscore").val(data.MinSupinationAddScore);
+                $("#pullup").val(data.PullUp);
+                $("#pullupscore").val(data.PullUpScore);
+                $("#pullupaddscore").val(data.PullUpAddScore);
+                $("#studenttruescore").val(data.StudentTrueScore);
+                $("#testresult").val(data.TestResult);
+
+            });
+            AjaxJson("/ZhangCeModule/DStudentTestScore/GetDStudentInfosModel", { studentcode: KeyValue }, function (data) {
+                //alert(JSON.stringify(data));
+                $("#gradecode").html(data.GradeCode);
+                $("#schoolname").html(data.SchoolName);
+                $("#schoolcode").html(data.SchoolCode);
+                $("#classname").html(data.ClassName);
+                $("#classcode").html(data.ClassCode);
+                $("#studentname").html(data.StudentName);
+                var sex = data.StudentSex == "1" ? "男" : "女";
+                $("#studentsex").html(sex);
+                $("#studentcode").html(data.StudentCode);
+
+            });
+        }
+    }
+    //保存事件
+    function AcceptClick() {
+        var studentname = $("#studentname").html();
+        var studentsex = $("#studentsex").html() == "男" ? "1" : "2";
+        var gradecode = $("#gradecode").html();
+        var heigh = $("#heigh").val();
+        var heighreg = /^\d+$/;
+        if (heigh != "" && !heighreg.test(heigh)) {
+            layer.alert("身高数据输入有误！");
+            $("#heigh").val("");
+            return false;
+        }
+        if (heigh == "") {
+            heigh = "-1";
+        }
+        var weight = $("#weight").val();
+        if (weight != "" && !heighreg.test(weight)) {
+            layer.alert("体重数据输入有误！");
+            $("#weight").val("");
+            return false;
+        }
+        if (weight == "") {
+            weight = "-1";
+        }
+        var pulmonary = $("#pulmonary").val();
+        var preg = /^[0-9]$|^([1-9])([0-9]){0,3}$|^10000$/;
+        if (pulmonary != "" && !preg.test(pulmonary)) {
+            layer.alert("肺活量数据输入有误！");
+            $("#pulmonary").val("");
+            return false;
+        }
+        if (pulmonary == "") {
+            pulmonary = "-1";
+        }
+
+        var fiftyrun = $("#fiftyrun").val();
+        var regf = /^\d+$/;
+        if (fiftyrun != "" && !regf.test(fiftyrun)) {
+            layer.alert("50米跑数据输入有误！5.0s应输50");
+            $("#fifty").val("");
+            return false;
+        }
+        else {
+            if (fiftyrun.length > 0 && fiftyrun.length < 2) {
+                layer.alert("50米跑数据输入有误！如：5.0s应输50");
+                return false;
+            }
+            else if (fiftyrun == "") {
+                fiftyrun = "-1";
+            } else {
+                var sf = fiftyrun.substring(0, fiftyrun.length - 1) + "." + fiftyrun.substring(fiftyrun.length - 1, fiftyrun.length);
+                fiftyrun = sf;
+            }
+
+        }
+
+        if (fiftyrun == "") {
+            fiftyrun = "-1";
+        }
+        if (parseInt(fiftyrun) > 0 && parseInt(fiftyrun) < 6) {
+            layer.alert("50米跑数据超出人类极限请重新输入！");
+            $("#fiftyrun").val("");
+            return false;
+        }
+
+        var standjump = $("#standjump").val();
+        var regj = /^\d+$/;
+        if (standjump != "" && !regj.test(standjump)) {
+            layer.alert("立定跳远数据输入有误！");
+            $("#standjump").val("");
+            return false;
+        }
+
+
+        if (standjump == "") {
+            standjump = "-1";
+        }
+
+        var sitandreach = $("#sitandreach").val();
+        var regs = /^-?\d+\.?\d{0,1}$/;
+        if (sitandreach != "" && !regs.test(sitandreach)) {
+            layer.alert("坐位体前屈数据输入有误！");
+            $("#sit").val("");
+            return false;
+        }
+        else {
+            if (sitandreach.length < 2 && sitandreach.length > 0) {
+                layer.alert("坐位体前屈数据输入有误！如：1.2cm应输12");
+                return false;
+            }
+            else if (sitandreach == "") {
+                sitandreach = "-1000";
+            } else {
+                var sf = sitandreach.substring(0, sitandreach.length - 1) + "." + sitandreach.substring(sitandreach.length - 1, sitandreach.length);
+
+                sitandreach = sf;
+            }
+        }
+        if (sitandreach == "") {
+            sitandreach = "-1000";
+        }
+
+        var eighthundred = $("#eighthundred").val();
+
+        var rege = /^\d{3,4}$/;
+        if (eighthundred != "" && !rege.test(eighthundred)) {
+            layer.alert("800米跑数据应为3-4位数字，输入有误！");
+            $("#eighthundred").val("");
+            return false;
+        }
+        if (parseInt(eighthundred.substring(eighthundred.length - 2, eighthundred.length)) >= 60) {
+            layer.alert("800米数据输入有误！");
+            $("#eighthundred").val("");
+            return false;
+        }
+        if (eighthundred == "") {
+            eighthundred = "-1";
+        }
+
+        var thousandrun = $("#thousandrun").val();
+        var regt = /^\d{3,4}$/;;
+        if (thousandrun != "" && !regt.test(thousandrun)) {
+            layer.alert("1000米跑数据应为3-4位数字，输入有误！");
+            return false;
+        }
+        if (parseInt(thousandrun.substring(thousandrun.length - 2, thousandrun.length)) >= 60) {
+            layer.alert("1000米数据输入有误！");
+            return false;
+        }
+
+        if (thousandrun == "") {
+            thousandrun = "-1";
+        }
+
+        var minsupination = $("#minsupination").val();
+        var regm = /^(?:0|[1-9][0-9]?|100)$/;
+        if (minsupination != "" && !regm.test(minsupination)) {
+            layer.alert("一分钟仰卧起坐数据输入有误！");
+            return false;
+        }
+
+        if (minsupination == "") {
+            minsupination = "-1";
+        }
+
+        var pullup = $("#pullup").val();
+        var regp = /^(?:0|[1-9][0-9]?|100)$/;
+        if (pullup != "" && !regp.test(pullup)) {
+            layer.alert("引体向上数据输入有误！");
+            return false;
+        }
+
+        if (pullup == "") {
+            pullup = "-1";
+        }
+
+        var studentcode = $("#studentcode").html();
+
+        var postData = {
+            "studentname": studentname, "studentsex": studentsex, "gradecode": gradecode, "heigh": heigh, "weight": weight, "pulmonary": pulmonary, "fiftyrun": fiftyrun,
+            "standjump": standjump, "sitandreach": sitandreach, "eighthundred": eighthundred, "thousandrun": thousandrun, "minsupination": minsupination, "pullup": pullup, "studentcode": studentcode
+        }
+
+        AjaxJson("/ZhangCeModule/DStudentTestScore/UpdateStudentScore", postData, function (data) {
+            tipDialog(data.Message, 3, data.Code);
+            top.frames[tabiframeId()].windowload();
+            closeDialog();
+        });
+    }
+
+
+
+
+    function HWBmi() {
+        var studentsex = $("#studentsex").html() == "男" ? "1" : "2";
+        var heigh = $("#heigh").val();
+        var heighreg = /^\d+$/;
+        if (heigh != "" && !heighreg.test(heigh)) {
+            layer.alert("身高数据输入有误！");
+            return false;
+        }
+        if (heigh == "") {
+            heigh = "-1";
+        }
+        var weight = $("#weight").val();
+        if (weight != "" && !heighreg.test(weight)) {
+            layer.alert("体重数据输入有误！");
+            return false;
+        }
+        if (weight == "") {
+            weight = "-1";
+        }
+
+        $.ajax({
+            url: "/ZhangCeModule/DStudentTestScore/BMI",
+            type: 'POST',
+            cache: false,
+            //异步
+            async: false,
+            error: function (XMLHttpRequest) {
+                layer.alert("意外错误修改失败！");
+            },
+            data: { "heigh": heigh, "weight": weight, "studentsex": studentsex },
+            success: function (data) {
+                $("#bmi").val(data.BMI);
+                $("#bmiscore").val(data.BMIScore);
+                truetest(studentsex);
+            }
+        });
+
+
+
+    }
+
+    function Pulmonary() {
+
+        var studentsex = $("#studentsex").html() == "男" ? "1" : "2";
+        var gradecode = $("#gradecode").html();
+        var pulmonary = $("#pulmonary").val();
+        var preg = /^[0-9]$|^([1-9])([0-9]){0,3}$|^10000$/;
+        if (pulmonary != "" && !preg.test(pulmonary)) {
+            layer.alert("肺活量数据输入有误！");
+            return false;
+        }
+        if (pulmonary == "") {
+            pulmonary = "-1";
+        }
+
+
+        $.ajax({
+            url: "/ZhangCeModule/DStudentTestScore/Pulmonary",
+            type: 'POST',
+            cache: false,
+            //异步
+            async: false,
+            error: function (XMLHttpRequest) {
+                layer.alert("意外错误修改失败！");
+            },
+            data: { "gradecode": gradecode, "pulmonary": pulmonary, "studentsex": studentsex },
+            success: function (data) {
+
+                $("#pulmonaryscore").val(data.PulmonaryScore);
+                truetest(studentsex);
+            }
+        });
+
+
+    }
+
+    function FiftyRun() {
+
+        var studentsex = $("#studentsex").html() == "男" ? "1" : "2";
+        var gradecode = $("#gradecode").html();
+        var fiftyrun = $("#fiftyrun").val();
+        var regf = /^\d+$/;
+        if (fiftyrun != "" && !regf.test(fiftyrun)) {
+            layer.alert("50米跑数据输入有误！");
+            return false;
+        } else {
+            if (fiftyrun.length > 0 && fiftyrun.length < 2) {
+                layer.alert("50米跑数据输入有误！如：5.0s应输50");
+                return false;
+            } else if (fiftyrun == "") {
+                fiftyrun = "-1";
+            }
+            else {
+                var sf = fiftyrun.substring(0, fiftyrun.length - 1) + "." + fiftyrun.substring(fiftyrun.length - 1, fiftyrun.length);
+                fiftyrun = sf;
+            }
+
+        }
+        if (fiftyrun == "") {
+            fiftyrun = "-1";
+        }
+
+        $.ajax({
+            url: "/ZhangCeModule/DStudentTestScore/FiftyRun",
+            type: 'POST',
+            cache: false,
+            //异步
+            async: false,
+            error: function (XMLHttpRequest) {
+                layer.alert("意外错误修改失败！");
+            },
+            data: { "gradecode": gradecode, "fiftyrun": fiftyrun, "studentsex": studentsex },
+            success: function (data) {
+
+                $("#fiftyrunscore").val(data.FiftyRunScore);
+                truetest(studentsex);
+            }
+        });
+
+    }
+
+    function StandJump() {
+
+        var studentsex = $("#studentsex").html() == "男" ? "1" : "2";
+        var gradecode = $("#gradecode").html();
+        var standjump = $("#standjump").val();
+        var regj = /^\d+$/;
+        if (standjump != "" && !regj.test(standjump)) {
+            layer.alert("立定跳远数据输入有误！");
+            return false;
+        }
+
+
+        if (standjump == "") {
+            standjump = "-1";
+        }
+
+        $.ajax({
+            url: "/ZhangCeModule/DStudentTestScore/StandJump",
+            type: 'POST',
+            cache: false,
+            //异步
+            async: false,
+            error: function (XMLHttpRequest) {
+                layer.alert("意外错误修改失败！");
+            },
+            data: { "gradecode": gradecode, "standjump": standjump, "studentsex": studentsex },
+            success: function (data) {
+
+                $("#standjumpscore").val(data.StandJumpScore);
+                truetest(studentsex);
+            }
+        });
+
+
+
+    }
+
+    function SitAndReach() {
+
+        var studentsex = $("#studentsex").html() == "男" ? "1" : "2";
+        var gradecode = $("#gradecode").html();
+        var sitandreach = $("#sitandreach").val();
+        var regs = /^-?\d+\.?\d{0,1}$/;
+        if (sitandreach != "" && !regs.test(sitandreach)) {
+            layer.alert("坐位体前屈数据输入有误！");
+            return false;
+        }
+        else {
+            if (sitandreach.length < 2 && sitandreach.length > 0) {
+                layer.alert("坐位体前屈数据输入有误！如：1.2cm应输12");
+                return false;
+            } else if (sitandreach == "") {
+                sitandreach = "-1000";
+            } else {
+                var sf = sitandreach.substring(0, sitandreach.length - 1) + "." + sitandreach.substring(sitandreach.length - 1, sitandreach.length);
+
+                sitandreach = sf;
+            }
+        }
+        if (sitandreach == "") {
+            sit = "-1000";
+        }
+
+        $.ajax({
+            url: "/ZhangCeModule/DStudentTestScore/SitAndReach",
+            type: 'POST',
+            cache: false,
+            //异步
+            async: false,
+            error: function (XMLHttpRequest) {
+                layer.alert("意外错误修改失败！");
+            },
+            data: { "gradecode": gradecode, "sitandreach": sitandreach, "studentsex": studentsex },
+            success: function (data) {
+
+                $("#sitandreachscore").val(data.SitAndReachScore);
+                truetest(studentsex);
+            }
+        });
+
+    }
+
+    function EightHundred() {
+
+        var studentsex = $("#studentsex").html() == "男" ? "1" : "2";
+        var gradecode = $("#gradecode").html();
+        var eighthundred = $("#eighthundred").val();
+        //            var rege = /^[0-9]$|^([1-9])([0-9]){2,3}$|^10000$/;
+        var rege = /^\d{3,4}$/;
+        if (eighthundred != "" && !rege.test(eighthundred)) {
+            layer.alert("800米跑数据应为3-4位数字，输入有误！");
+            return false;
+        }
+        if (parseInt(eighthundred.substring(eighthundred.length - 2, eighthundred.length)) >= 60) {
+            layer.alert("800米数据输入有误！");
+            return false;
+        }
+        if (eighthundred == "") {
+            eighthundred = "-1";
+        }
+
+
+
+        $.ajax({
+            url: "/ZhangCeModule/DStudentTestScore/EightHundred",
+            type: 'POST',
+            cache: false,
+            //异步
+            async: false,
+            error: function (XMLHttpRequest) {
+                layer.alert("意外错误修改失败！");
+            },
+            data: { "gradecode": gradecode, "eighthundred": eighthundred, "studentsex": studentsex },
+            success: function (data) {
+
+                $("#eighthundredscore").val(data.EightHundredScore);
+                $("#eighthundredaddscore").val(data.EightHundredAddScore);
+                truetest(studentsex);
+            }
+        });
+
+
+
+    }
+
+    function ThousandRun() {
+
+        var studentsex = $("#studentsex").html() == "男" ? "1" : "2";
+        var gradecode = $("#gradecode").html();
+
+        var thousandrun = $("#thousandrun").val();
+        var regt = /^\d{3,4}$/;;
+        if (thousandrun != "" && !regt.test(thousandrun)) {
+            layer.alert("1000米跑数据应为3-4位数字，输入有误！");
+            return false;
+        }
+        if (parseInt(thousandrun.substring(thousandrun.length - 2, thousandrun.length)) >= 60) {
+            layer.alert("1000米数据输入有误！");
+            return false;
+        }
+
+        if (thousandrun == "") {
+            thousandrun = "-1";
+        }
+
+        $.ajax({
+            url: "/ZhangCeModule/DStudentTestScore/ThousandRun",
+            type: 'POST',
+            cache: false,
+            //异步
+            async: false,
+            error: function (XMLHttpRequest) {
+                layer.alert("意外错误修改失败！");
+            },
+            data: { "gradecode": gradecode, "thousandrun": thousandrun, "studentsex": studentsex },
+            success: function (data) {
+
+                $("#thousandrunscore").val(data.ThousandRunScore);
+                $("#thousandrunaddscore").val(data.ThousandRunAddScore);
+                truetest(studentsex);
+            }
+        });
+    }
+
+    function MinSupination() {
+
+        var studentsex = $("#studentsex").html() == "男" ? "1" : "2";
+        var gradecode = $("#gradecode").html();
+        var minsupination = $("#minsupination").val();
+        var regm = /^(?:0|[1-9][0-9]?|100)$/;
+        if (minsupination != "" && !regm.test(minsupination)) {
+            layer.alert("一分钟仰卧起坐数据输入有误！");
+            return false;
+        }
+
+        if (minsupination == "") {
+            minsupination = "-1";
+        }
+
+        $.ajax({
+            url: "/ZhangCeModule/DStudentTestScore/MinSupination",
+            type: 'POST',
+            cache: false,
+            //异步
+            async: false,
+            error: function (XMLHttpRequest) {
+                layer.alert("意外错误修改失败！");
+            },
+            data: { "gradecode": gradecode, "minsupination": minsupination, "studentsex": studentsex },
+            success: function (data) {
+                $("#minsupinationscore").val(data.MinSupinationScore);
+                $("#minsupinationaddscore").val(data.MinSupinationAddScore);
+                truetest(studentsex);
+
+            }
+        });
+
+    }
+
+    function PullUp() {
+
+        var studentsex = $("#studentsex").html() == "男" ? "1" : "2";
+        var gradecode = $("#gradecode").html();
+        var pullup = $("#pullup").val();
+        var regp = /^(?:0|[1-9][0-9]?|100)$/;
+        if (pullup != "" && !regp.test(pullup)) {
+            layer.alert("引体向上数据输入有误！");
+            return false;
+        }
+
+        if (pullup == "") {
+            pullup = "-1";
+        }
+
+        $.ajax({
+            url: "/ZhangCeModule/DStudentTestScore/PullUp",
+            type: 'POST',
+            cache: false,
+            //异步
+            async: false,
+            error: function (XMLHttpRequest) {
+                layer.alert("意外错误修改失败！");
+            },
+            data: { "gradecode": gradecode, "pullup": pullup, "studentsex": studentsex },
+            success: function (data) {
+
+                $("#pullupscore").val(data.PullUpScore);
+                $("#pullupaddscore").val(data.PullUpAddScore);
+                truetest(studentsex);
+            }
+        });
+
+
+    }
+
+    function truetest(studentsex) {
+        var bmiscore = $("#bmiscore").val();
+        bmiscore = bmiscore == "" ? "0" : bmiscore;
+        var pulmonaryscore = $("#pulmonaryscore").val();
+        pulmonaryscore = pulmonaryscore == "" ? "0" : pulmonaryscore;
+        var fiftyrunscore = $("#fiftyrunscore").val();
+        fiftyrunscore = fiftyrunscore == "" ? "0" : fiftyrunscore;
+        var standjumpscore = $("#standjumpscore").val();
+        standjumpscore = standjumpscore == "" ? "0" : standjumpscore;
+        var sitandreachscore = $("#sitandreachscore").val();
+        sitandreachscore = sitandreachscore == "" ? "0" : sitandreachscore;
+        var eighthundredscore = $("#eighthundredscore").val();
+        eighthundredscore = eighthundredscore == "" ? "0" : eighthundredscore;
+        var eighthundredaddscore = $("#eighthundredaddscore").val() == "" ? "0" : $("#eighthundredaddscore").val();
+        var thousandrunscore = $("#thousandrunscore").val();
+        thousandrunscore = thousandrunscore == "" ? "0" : thousandrunscore;
+        var thousandrunaddscore = $("#thousandrunaddscore").val() == "" ? "0" : $("#thousandrunaddscore").val();
+        var minsupinationscore = $("#minsupinationscore").val();
+        minsupinationscore = minsupinationscore == "" ? "0" : minsupinationscore;
+        var minsupinationaddscore = $("#minsupinationaddscore").val() == "" ? "0" : $("#minsupinationaddscore").val();
+        var pullupscore = $("#pullupscore").val();
+        pullupscore = pullupscore == "" ? "0" : pullupscore;
+        var pullupaddscore = $("#pullupaddscore").val() == "" ? "0" : $("#pullupaddscore").val();
+        var trueTest = "";
+        if (studentsex == "1") {
+            trueTest = parseFloat(parseInt(bmiscore) * 0.15 + parseInt(pulmonaryscore) * 0.15 + parseInt(fiftyrunscore) * 0.2 + parseInt(standjumpscore) * 0.1 + parseInt(sitandreachscore) * 0.1 + (parseInt(thousandrunscore) > 100 ? 100 : parseInt(thousandrunscore)) * 0.2 + (parseInt(pullupscore) > 100 ? 100 : parseInt(pullupscore)) * 0.1 + parseInt(thousandrunaddscore) + parseInt(pullupaddscore)).toString();
+            $("#studenttruescore").val(trueTest);
+        }
+        if (studentsex == "2") {
+            trueTest = parseFloat(parseInt(bmiscore) * 0.15 + parseInt(pulmonaryscore) * 0.15 + parseInt(fiftyrunscore) * 0.2 + parseInt(standjumpscore) * 0.1 + parseInt(sitandreachscore) * 0.1 + (parseInt(eighthundredscore) > 100 ? 100 : parseInt(eighthundredscore)) * 0.2 + (parseInt(minsupinationscore) > 100 ? 100 : parseInt(minsupinationscore)) * 0.1 + parseInt(eighthundredaddscore) + parseInt(minsupinationaddscore)).toString();
+            $("#studenttruescore").val(trueTest);
+        }
+
+
+    }
+
+
+</script>
+@{ 
+    string StudentSex = Request.QueryString["StudentSex"].ToString().Split('：')[1];
+    string displayMan = "";
+    string displayWomen = "";
+    if (StudentSex == "1")
+    {
+        displayMan = "block";
+        displayWomen = "none";
+    }
+    else
+    {
+        displayMan = "none";
+        displayWomen = "block";
+    }
+}
+<form id="form1">
+    <!-- 页面 -->
+    <div class="dc_con">
+        <div class="tit dc_tit" style="padding-top: 0px">
+            <div class="ykcg" style="text-align: left; padding-bottom: 5px">
+                <b>体测成绩</b>
+            </div>
+            <div class="onecj" style="margin-top: 14px">
+                <ul>
+                    <li style="width: 50%; float: left">年级编号：<span id="gradecode"></span></li>
+                    <li style="width: 50%; float: left">学院名称：<span id="schoolname"></span></li>
+                    <li style="width: 50%; float: left">学院编号：<span id="schoolcode"></span></li>
+                    <li style="width: 50%; float: left">班级名称：<span id="classname"></span></li>
+                    <li style="width: 50%; float: left">班级编号：<span id="classcode"></span></li>
+                    <li style="width: 50%; float: left">姓名：<span id="studentname"></span></li>
+                    <li style="width: 50%; float: left">性别：<span id="studentsex"></span></li>
+                    <li style="width: 50%; float: left">学号：<span id="studentcode"></span></li>
+                    <div class="clear">
+                    </div>
+                </ul>
+            </div>
+            <div class="towcj2">
+                <div class="jbxx">
+                    基本信息
+                </div>
+                <ul style="font-weight: 800">
+                    <li>身高/cm</li>
+                    <li>体重/kg</li>
+                    <li>BMI（体重指数）</li>
+                    <li>得分</li>
+                    <div class="clear">
+                    </div>
+                </ul>
+                <ul>
+                    <li>
+                        <input type="text" id="heigh" value="" onblur="HWBmi()" />
+                    </li>
+                    <li>
+                        <input type="text" id="weight" value="" onblur="HWBmi()" />
+                    </li>
+                    <li>
+                        <input type="text" id="bmi" disabled style="background-color: white;" value="" />
+                    </li>
+                    <li>
+                        <input type="text" id="bmiscore" disabled style="background-color: white;" value="" />
+                    </li>
+                    <div class="clear">
+                    </div>
+                </ul>
+            </div>
+            <div class="towcj">
+                <div class="jbxx" style="">
+                    测试信息
+                </div>
+                <ul style="font-weight: 800">
+                    <li>测试项目</li>
+                    <li>测试数据</li>
+                    <li>得分</li>
+                    <li>加分</li>
+                    <div class="clear">
+                    </div>
+                </ul>
+                <ul>
+                    <li>肺活量</li>
+                    <li style="text-align: left">
+                        <input type="text" id="pulmonary" onblur="Pulmonary()" style="width: 45%; padding-right: 10px;
+                            text-align: right; border: none" value="" />/ml
+                    </li>
+                    <li>
+                        <input type="text" id="pulmonaryscore" disabled style="background-color: white;" value="" />
+                    </li>
+                    <li></li>
+                    <div class="clear">
+                    </div>
+                </ul>
+                <ul>
+                    <li>50米跑</li>
+                    <li style="text-align: left">
+                        <input type="text" id="fiftyrun" onblur="FiftyRun()" style="width: 45%; padding-right: 10px;
+                            text-align: right; border: none" value="" />/(5.0s录50)
+                    </li>
+                    <li>
+                        <input type="text" id="fiftyrunscore" disabled style="background-color: white;" value="" />
+                    </li>
+                    <li></li>
+                    <div class="clear">
+                    </div>
+                </ul>
+                <ul>
+                    <li>立定跳远</li>
+                    <li style="text-align: left">
+                        <input type="text" id="standjump" onblur="StandJump()" style="width: 45%; padding-right: 10px;
+                            text-align: right; border: none" value="" />/cm
+                    </li>
+                    <li>
+                        <input type="text" id="standjumpscore" disabled style="background-color: white;" value="" />
+                    </li>
+                    <li></li>
+                    <div class="clear">
+                    </div>
+                </ul>
+                <ul>
+                    <li>坐位体前屈</li>
+                    <li style="text-align: left">
+                        <input type="text" id="sitandreach" onblur="SitAndReach()" style="width: 45%; padding-right: 10px;
+                            text-align: right; border: none" value="" />
+                        /mm
+                    </li>
+                    <li>
+                        <input type="text" id="sitandreachscore" disabled style="background-color: white;" value="" />
+                    </li>
+                    <li></li>
+                    <div class="clear">
+                    </div>
+                </ul>
+               
+                    <ul class="e" style="display:@displayWomen">
+                        <li>800米跑</li>
+                        <li style="text-align: left">
+                            <input type="text" id="eighthundred" onblur="EightHundred()" style="width: 45%; padding-right: 10px;
+                            text-align: right; border: none" value="" />/m.s
+                        </li>
+                        <li>
+                            <input type="text" id="eighthundredscore" disabled style="background-color: white;" value="" />
+                        </li>
+                        <li>
+                            <input type="text" id="eighthundredaddscore" disabled style="background-color: white;" value="" />
+                        </li>
+                        <div class="clear">
+                        </div>
+                    </ul>
+                    <ul class="yw"  style="display:@displayWomen">
+                        <li>仰卧起坐</li>
+                        <li style="text-align: left">
+                            <input type="text" id="minsupination" onblur="MinSupination()" style="width: 45%; padding-right: 10px;
+                            text-align: right; border: none" value="" />/次
+                        </li>
+                        <li>
+                            <input type="text" id="minsupinationscore" disabled style="background-color: white;" value="" />
+                        </li>
+                        <li>
+                            <input type="text" id="minsupinationaddscore" disabled style="background-color: white;" value="" />
+                        </li>
+                        <div class="clear">
+                        </div>
+                    </ul>
+                
+                <ul class="t"  style="display:@displayMan">
+                    <li>1000米跑</li>
+                    <li style="text-align: left">
+                        <input type="text" id="thousandrun" onblur="ThousandRun()" style="width: 45%; padding-right: 10px;
+                            text-align: right; border: none" value="" />
+                        /m.s
+                    </li>
+                    <li>
+                        <input type="text" id="thousandrunscore" disabled style="background-color: white;" value="" />
+                    </li>
+                    <li>
+                        <input type="text" id="thousandrunaddscore" disabled style="background-color: white;" value="" />
+                    </li>
+                    <div class="clear">
+                    </div>
+                </ul>
+             
+                <ul class="yt"  style="display:@displayMan">
+                    <li>引体向上</li>
+                    <li style="text-align: left">
+                        <input type="text" id="pullup" onblur="PullUp()" style="width: 45%; padding-right: 10px;
+                            text-align: right; border: none" value="" />
+                        /次
+                    </li>
+                    <li>
+                        <input type="text" id="pullupscore" disabled style="background-color: white;" value="" />
+                    </li>
+                    <li>
+                        <input type="text" id="pullupaddscore" disabled style="background-color: white;" value="" />
+                    </li>
+                    <div class="clear">
+                    </div>
+                </ul>
+            </div>
+            <div class="onecj" style="margin-top: 20px">
+                <ul>
+                    <li style="width: 100%; float: left">
+                        真实总成绩：<input type="text" id="studenttruescore" style="width: 10%;
+                        text-align: left; background-color: white; border: none" disabled value="" />
+                    </li>
+                    <li style="width: 100%; float: left">
+                        测试类型：<input type="text" id="testresult" style="width: 10%;
+                        text-align: left; background-color: white; border: none" disabled value="" />
+
+                    </li>
+                    <div class="clear">
+                    </div>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+</form>
+@*<form id="form1" style="margin: 1px">
+        <div id="message" style="display: none"></div>
+        <table class="form">
+            <tr>
+                <th class='formTitle'>ID：</th>
+                <td class='formValue'>
+                    <input id="ID" maxlength=10 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>StudentCode：</th>
+                <td class='formValue'>
+                    <input id="StudentCode" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>StudentName：</th>
+                <td class='formValue'>
+                    <input id="StudentName" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>StudentSex：</th>
+                <td class='formValue'>
+                    <input id="StudentSex" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>Heigh：</th>
+                <td class='formValue'>
+                    <input id="Heigh" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>Weight：</th>
+                <td class='formValue'>
+                    <input id="Weight" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>BMI：</th>
+                <td class='formValue'>
+                    <input id="BMI" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>BMIScore：</th>
+                <td class='formValue'>
+                    <input id="BMIScore" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>BMILevel：</th>
+                <td class='formValue'>
+                    <input id="BMILevel" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>Pulmonary：</th>
+                <td class='formValue'>
+                    <input id="Pulmonary" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>PulmonaryScore：</th>
+                <td class='formValue'>
+                    <input id="PulmonaryScore" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>PulmonaryLevel：</th>
+                <td class='formValue'>
+                    <input id="PulmonaryLevel" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>FiftyRun：</th>
+                <td class='formValue'>
+                    <input id="FiftyRun" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>FiftyRunScore：</th>
+                <td class='formValue'>
+                    <input id="FiftyRunScore" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>FiftyRunLevel：</th>
+                <td class='formValue'>
+                    <input id="FiftyRunLevel" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>StandJump：</th>
+                <td class='formValue'>
+                    <input id="StandJump" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>StandJumpScore：</th>
+                <td class='formValue'>
+                    <input id="StandJumpScore" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>StandJumpLevel：</th>
+                <td class='formValue'>
+                    <input id="StandJumpLevel" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>SitAndReach：</th>
+                <td class='formValue'>
+                    <input id="SitAndReach" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>SitAndReachScore：</th>
+                <td class='formValue'>
+                    <input id="SitAndReachScore" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>SitAndReachLevel：</th>
+                <td class='formValue'>
+                    <input id="SitAndReachLevel" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>EightHundred：</th>
+                <td class='formValue'>
+                    <input id="EightHundred" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>EightHundredScore：</th>
+                <td class='formValue'>
+                    <input id="EightHundredScore" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>EightHundredLevel：</th>
+                <td class='formValue'>
+                    <input id="EightHundredLevel" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>EightHundredAddScore：</th>
+                <td class='formValue'>
+                    <input id="EightHundredAddScore" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>ThousandRun：</th>
+                <td class='formValue'>
+                    <input id="ThousandRun" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>ThousandRunScore：</th>
+                <td class='formValue'>
+                    <input id="ThousandRunScore" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>ThousandRunLevel：</th>
+                <td class='formValue'>
+                    <input id="ThousandRunLevel" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>ThousandRunAddScore：</th>
+                <td class='formValue'>
+                    <input id="ThousandRunAddScore" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>MinSupination：</th>
+                <td class='formValue'>
+                    <input id="MinSupination" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>MinSupinationScore：</th>
+                <td class='formValue'>
+                    <input id="MinSupinationScore" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>MinSupinationLevel：</th>
+                <td class='formValue'>
+                    <input id="MinSupinationLevel" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>MinSupinationAddScore：</th>
+                <td class='formValue'>
+                    <input id="MinSupinationAddScore" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>PullUp：</th>
+                <td class='formValue'>
+                    <input id="PullUp" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>PullUpScore：</th>
+                <td class='formValue'>
+                    <input id="PullUpScore" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>PullUpLevel：</th>
+                <td class='formValue'>
+                    <input id="PullUpLevel" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>PullUpAddScore：</th>
+                <td class='formValue'>
+                    <input id="PullUpAddScore" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>TestResult：</th>
+                <td class='formValue'>
+                    <input id="TestResult" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>StudentTrueScore：</th>
+                <td class='formValue'>
+                    <input id="StudentTrueScore" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>TestType：</th>
+                <td class='formValue'>
+                    <input id="TestType" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>CreateTime：</th>
+                <td class='formValue'>
+                    <input id="CreateTime" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>UpdateTime：</th>
+                <td class='formValue'>
+                    <input id="UpdateTime" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>Remark：</th>
+                <td class='formValue'>
+                    <input id="Remark" maxlength=-1 type="text" class="txt"   />
+                </td>
+            </tr>
+            <tr>
+            </tr>
+        </table>
+    </form>*@

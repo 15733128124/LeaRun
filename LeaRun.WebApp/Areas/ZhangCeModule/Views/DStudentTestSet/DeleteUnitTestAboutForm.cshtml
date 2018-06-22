@@ -1,0 +1,207 @@
+﻿@{
+    ViewBag.Title = "取消约考";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+@using LeaRun.Business
+@using LeaRun.Entity
+<script src="~/Content/layer/layer.js"></script>
+<script type="text/javascript">
+
+    //保存事件
+    function AcceptClick() {
+        top.frames[tabiframeId()].windowload();
+        closeDialog();
+    }
+    //获取学生单元测试信息
+    function GetTestStudent() {
+        var studentCode = $("#CheckStudentCode").val();
+        var postData = {
+            "studentCode": studentCode,
+            "testType": "单元测试"
+        }
+
+        AjaxJson("/ZhangCeModule/DStudentTestSet/GetDStudentTestModel", postData, function (data) {
+            if (data.StudentCode != "" && data.StudentCode != null) {
+
+                SetWebControls(data);
+            }
+            else {
+                layer.alert("该学生没有在单元测试库中，暂无该学生信息！");
+                $("#CheckStudentCode").val("");
+            }
+        });
+
+    }
+    function DeleteTestStudent() {
+        var studentCode = $("#StudentCode").val();
+        if (studentCode == "暂无" || studentCode == "" || studentCode == null) {
+            layer.alert("请先输入学号-点击查询！");
+            return false;
+        }
+        var testSetID = $("#TestSetID").val();
+        var postData = {
+            "studentCode": studentCode,
+            "testSetID": testSetID
+        }
+        $.ajax({
+            url: "/ZhangCeModule/DStudentTestSet/DeleteTestStudent",
+            type: 'POST',
+            cache: false,
+            //异步
+            async: false,
+            error: function (XMLHttpRequest) {
+                layer.alert("意外错误修改失败！");
+            },
+            data: postData,
+            success: function (data) {
+                if (data.IsOk) {
+                    layer.alert("取消单元测试成功。");
+                } else {
+                    layer.alert("取消单元测试失败。请与管理员联系！");
+                }
+
+
+            }
+        });
+    }
+
+</script>
+<form id="form1" style="margin: 1px">
+    <div id="message" style="display: none"></div>
+    <div class="note-prompt" style="margin: 1px;">
+        温馨提示：(操作流程：输入学号☞点击查询☞点击取消约考)
+    </div>
+    <div style="line-height:30px;color:#808080; margin-top:15px;">
+        <div style="text-align: center;margin-left:150px">
+
+            <b style="float:left">请输入学号：</b>
+            <span style="float:left"><input type='hidden' id='allotMark' value='no' /></span>
+            <span style="float:left"><input id="CheckStudentCode" maxlength=-1 type="text" style="width:200px;height:20px" value="" /></span>
+            <span style="text-align:center;float:left">
+                <p onclick="GetTestStudent()" style="width: 80px; margin-left: 20px; cursor: pointer; border: 1px solid #ccc; border-radius: 3px;
+   line-height: 25px; cursor: pointer; text-align: center; margin-top: 3px; background-color: #4a5b79; color: white; ">查询</p>
+            </span>
+        </div>
+    </div>
+    <div style="clear:both"></div>
+
+    <div style="line-height: 30px; color: #808080; margin-left: 5px;margin-top:20px">
+        <b>该学生约考信息：</b>
+    </div>
+    <table class="form">
+
+        <tr>
+            <th class='formTitle'>学生学号：</th>
+            <td class='formValue'>
+                <input id="StudentCode" maxlength=-1 type="text" value="暂无" class="txt disabled" disabled />
+            </td>
+            <th class='formTitle'>所属年级：</th>
+            <td class='formValue'>
+                <select id="GradeCode" style="height:25px" class="txtArea disabled" disabled>
+                    <option value="0">暂无</option>
+                    <option value="40">不限</option>
+                    <option value="41">大一</option>
+                    <option value="42">大二</option>
+                    <option value="43">大三</option>
+                    <option value="44">大四</option>
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <th class='formTitle'>学院编号：</th>
+            <td class='formValue'>
+                <input id="SchoolCode" maxlength=-1 type="text" value="暂无" class="txt disabled" disabled />
+            </td>
+
+            <th class='formTitle'>学院名称：</th>
+            <td class='formValue'>
+                <input id="SchoolName" maxlength=-1 type="text" value="暂无" class="txt disabled" disabled />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>班级编号：</th>
+            <td class='formValue'>
+                <input id="ClassCode" maxlength=-1 type="text" value="暂无" class="txt disabled" disabled />
+            </td>
+
+            <th class='formTitle'>班级名称：</th>
+            <td class='formValue'>
+                <input id="ClassName" maxlength=-1 type="text" value="暂无" class="txt disabled" disabled />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>测试设置ID：</th>
+            <td class='formValue'>
+                <input id="TestSetID" maxlength=-1 type="text" value="暂无" class="txt disabled" disabled />
+            </td>
+
+            <th class='formTitle'>学生姓名：</th>
+            <td class='formValue'>
+                <input id="StudentName" maxlength=-1 type="text" value="暂无" class="txt disabled" disabled />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>学生性别：</th>
+            <td class='formValue'>
+                <select id="StudentSex" style="height:25px" class="txtArea disabled" disabled>
+                    <option value="0">暂无</option>
+                    <option value="1">男</option>
+                    <option value="2">女</option>
+
+                </select>
+            </td>
+
+            <th class='formTitle'>测试老师：</th>
+            <td class='formValue'>
+                <input id="TestTeacher" maxlength=-1 type="text" value="暂无" class="txt disabled" disabled />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>测试地址：</th>
+            <td class='formValue'>
+                <input id="TestAddress" maxlength=-1 type="text" value="暂无" class="txt disabled" disabled />
+            </td>
+
+            <th class='formTitle'>测试开始日期：</th>
+            <td class='formValue'>
+                <input id="BeginPraDate" maxlength=-1 type="text" value="暂无" class="txt disabled" disabled />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>测试开始日期：</th>
+            <td class='formValue'>
+                <input id="BeginWeek" maxlength=-1 type="text" value="暂无" class="txt disabled" disabled />
+            </td>
+
+            <th class='formTitle'>测试开始时间：</th>
+            <td class='formValue'>
+                <input id="BeginPraTime" maxlength=-1 type="text" value="暂无" class="txt disabled" disabled />
+            </td>
+        </tr>
+
+        <tr>
+            <th class='formTitle'>所属组：</th>
+            <td class='formValue'>
+                <input id="TestGroup" maxlength=-1 type="text" value="暂无" class="txt disabled" disabled />
+            </td>
+
+            <th class='formTitle'>所属序号：</th>
+            <td class='formValue'>
+                <input id="TestGroupCode" maxlength=-1 type="text" value="暂无" class="txt disabled" disabled />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>测试类型：</th>
+            <td class='formValue'>
+                <input id="TestType" maxlength=-1 type="text" value="暂无" class="txt disabled" disabled />
+            </td>
+            <th class='formTitle'></th>
+            <td class='formValue'></td>
+        </tr>
+
+        <tr style="height:20px"></tr>
+    </table>
+    <p onclick="DeleteTestStudent()" style="width: 120px; margin-left: 270px; cursor: pointer; border: 1px solid #ccc; border-radius: 3px;
+   line-height: 25px; cursor: pointer; text-align: center; margin-top: 3px; background-color: #4a5b79; color: white; ">取消约考</p>
+</form>

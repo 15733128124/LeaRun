@@ -1,0 +1,245 @@
+@{
+    ViewBag.Title = "学生测试表（随年份建表）";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+@using LeaRun.Business
+@using LeaRun.Entity
+<script type="text/javascript">
+    $(function () {
+        GetGrid();
+    })
+    //加载表格
+    function GetGrid() {
+        $("#gridTable").jqGrid({
+            url: "@Url.Content("~/ZhangCeModule/DStudentTest/GridPageDStudentTestJson")",
+            datatype: "json",
+            height: $(window).height() - 149,
+            autowidth: true,
+            colModel: [
+                    { label: '', name: 'id', index: 'id', width: 0, align: 'left', sortable: true, hidden: true },
+                    { label: '学生学号', name: 'studentcode', index: 'studentcode', width: 0, align: 'left', sortable: true },
+                    {
+                        label: '所属年级', name: 'gradecode', index: 'gradecode', width: 0, align: 'left', sortable: true,
+                        formatter: function (cellvalue, options, rowobject) {
+                            if (cellvalue == '41') return "大一";
+                            if (cellvalue == '42') return "大二";
+                            if (cellvalue == '43') return "大三";
+                            if (cellvalue == '44') return "大四";
+                        }
+                    },
+                    { label: '学院编号', name: 'schoolcode', index: 'schoolcode', width: 0, align: 'left', sortable: true },
+                    { label: '学院名称', name: 'schoolname', index: 'schoolname', width: 0, align: 'left', sortable: true },
+                    { label: '班级编号', name: 'classcode', index: 'classcode', width: 0, align: 'left', sortable: true },
+                    { label: '班级名称', name: 'classname', index: 'classname', width: 0, align: 'left', sortable: true },
+                    { label: '测试设置ID', name: 'testsetid', index: 'testsetid', width: 0, align: 'left', sortable: true },
+                    { label: '学生名称', name: 'studentname', index: 'studentname', width: 0, align: 'left', sortable: true },
+                    {
+                        label: '学生性别', name: 'studentsex', index: 'studentsex', width: 0, align: 'left', sortable: true,
+                        formatter: function (cellvalue, options, rowobject) {
+                            if (cellvalue == '1') return "男";
+                            if (cellvalue == '2') return "女";
+                        }
+                    },
+                    { label: '测试老师', name: 'testteacher', index: 'testteacher', width: 0, align: 'left', sortable: true },
+                    { label: '测试地址', name: 'testaddress', index: 'testaddress', width: 0, align: 'left', sortable: true },
+                    { label: '开始测试日期', name: 'beginpradate', index: 'beginpradate', width: 0, align: 'left', sortable: true },
+                    { label: '开始测试星期', name: 'beginweek', index: 'beginweek', width: 0, align: 'left', sortable: true },
+                    { label: '开始测试时间', name: 'beginpratime', index: 'beginpratime', width: 0, align: 'left', sortable: true },
+                    {
+                        label: '是否有效', name: 'applyfor', index: 'applyfor', width: 0, align: 'left', sortable: true,
+                        formatter: function (cellvalue, options, rowobject) {
+                            if (cellvalue == '1') return "有效";
+                            if (cellvalue == '2') return "无效";
+                        }
+                    },
+                    { label: '测试组', name: 'testgroup', index: 'testgroup', width: 0, align: 'left', sortable: true },
+                    { label: '测试组号', name: 'testgroupcode', index: 'testgroupcode', width: 0, align: 'left', sortable: true },
+                    { label: '测试类型', name: 'testtype', index: 'testtype', width: 0, align: 'left', sortable: true },
+                    { label: '创建时间', name: 'createtime', index: 'createtime', width: 0, align: 'left', sortable: true },
+                    { label: '更改时间', name: 'updatetime', index: 'updatetime', width: 0, align: 'left', sortable: true },
+                    { label: '备注', name: 'remark', index: 'remark', width: 0, align: 'left', sortable: true },
+            ],
+            pager: "#gridPager",
+            sortname: '',
+            rowNum: 20,
+            rowList: [20, 30, 50, 100, 500, 1000],
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true
+        });
+    }
+
+    //条件
+    function btn_Search() {
+        var schoolName = $("#schoolname").find("option:selected").attr("code");
+        schoolName = schoolName == "0" ? "" : $("#schoolname").val();
+        var className = $("#classname").find("option:selected").attr("code"); 
+        className = className == "0" ? "" : $("#classname").val();
+        var testTeacher = $("#testTeacher").val() == "0" ? "" : $("#testTeacher").val();
+        var studentCode = $("#studentCode").val();
+        var testType = $("#testType").val() == "0" ? "" : $("#testType").val();
+        var testBeginDate = $("#testBeginDate").val() == "0" ? "" : $("#testBeginDate").val();
+        var gradeCode = $("#gradeCode").val() == "0" ? "" : $("#gradeCode").val();
+
+        $("#gridTable").jqGrid('setGridParam', {
+            url: "@Url.Content("~/ZhangCeModule/DStudentTest/GridPageDStudentTestJson")?schoolName=" + schoolName + "&&className=" + className
+            + "&&testTeacher=" + testTeacher + "&&testType=" + testType + "&&testBeginDate=" + testBeginDate + "&&studentCode=" + studentCode + "&&gradeCode=" + gradeCode, page: 1
+        }).trigger('reloadGrid');
+
+    }
+    //刷新
+    function windowload() {
+        $("#gridTable").trigger("reloadGrid"); //重新载入
+
+    }
+
+    //导出Excel
+    function btn_derive() {
+        var schoolName = $("#schoolName").val();
+        var className = $("#className").val();
+        var testTeacher = $("#testTeacher").val() == "0" ? "": $("#testTeacher").val();
+        var studentCode = $("#studentCode").val();
+        var studentSex = $("#studentSex").val() == "0" ? "" : $("#studentSex").val();
+        var testBeginDate = $("#testBeginDate").val() == "0" ? "" : $("#testBeginDate").val();
+        var gradeCode = $("#gradeCode").val() == "0" ? "" : $("#gradeCode").val();
+        SetDeriveExcel("#gridTable", "老师体测记录");
+        openDialog("/ZhangCeModule/DStudentTest/DeriveForm?schoolName=" + schoolName + "&&className=" + className
+            + "&&testTeacher=" + testTeacher + "&&studentSex=" + studentSex + "&&testBeginDate=" + testBeginDate + "&&studentCode=" + studentCode + "&&gradeCode=" + gradeCode + "", "DeriveFrom", "测试信息导出", 610, 300, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+    }
+
+    //更新学院
+    function UpdataXueYuan() {
+        var gradecode = $("#gradeCode").val();
+        $("#classname").empty().append("<option code='0'>--请选择--</option>");
+
+        $.ajax({
+            url: "/ZhangCeModule/DStudentInfos/GetSchoolNameList",
+            type: 'POST',
+            cache: false,
+            //异步
+            async: false,
+            data: { "gradecode": gradecode },
+            error: function (XMLHttpRequest) {
+                layer.alert("意外错误修改失败！");
+            },
+            success: function (data) {
+                var d = eval("(" + data + ")");
+                var xueY = "<option code='0'>--请选择--</option>";
+                $.each(d, function (n, item) {
+                    xueY = xueY + "<option code='" + item.schoolcode + "'>" + item.schoolname + "</option>";
+                });
+                $("#schoolname").empty().append(xueY);
+            }
+
+        });
+
+    }
+
+    //更新班级
+    function UpdateClass() {
+        var schoolCode = $("#schoolname").find("option:selected").attr("code");
+
+        $.ajax({
+            url: "/ZhangCeModule/DStudentInfos/GetClassNameList",
+            type: 'POST',
+            cache: false,
+            //异步
+            async: false,
+            data: { "schoolCode": schoolCode },
+            error: function (XMLHttpRequest) {
+                layer.alert("意外错误修改失败！");
+            },
+            success: function (data) {
+                var d = eval("(" + data + ")");
+                var bj = "<option code='0'>--请选择--</option>";
+                $.each(d, function (n, item) {
+                    bj = bj + "<option code='" + item.classcode + "'>" + item.classname + "</option>";
+                });
+                $("#classname").empty().append(bj);
+            }
+        });
+
+    }
+</script>
+@{
+    DBase_UsersBll uBll = new DBase_UsersBll();
+    List<DBase_Users> listUsers = uBll.GetTeacherName();
+    string teacherName = "";
+    teacherName += "<select id=\"testTeacher\" style=\"height: 25px\" class=\"txtArea\"><option value=\"0\">--请选择--</option>";
+    foreach (DBase_Users entityUser in listUsers)
+    {
+        teacherName += "<option value='" + entityUser.UserName + "'>" + entityUser.UserName + "</option>";
+    }
+    teacherName += "</select>";
+
+}
+<span style="color:red;position:fixed;right:20px;z-index:999;right:10px;top:15px;text-align:center;line-height:100%"><b>当前库年份--@ViewBag.NK--年</b></span>
+<!--工具栏-->
+<div class="tools_bar leftline rightline" style="margin: 1px; margin-bottom: 0px;">
+    <div class="PartialButton">
+        @Html.Partial("_PartialButton")
+    </div>
+</div>
+<div class="leftline rightline QueryArea" style="margin: 1px; margin-top: 0px; margin-bottom: 0px;">
+    <table border="0" class="form-find" style="height: 45px;">
+        <tr>
+            <th>年级：</th>
+            <td>
+                <select id="gradeCode" style="height:25px" class="txtArea" onchange="UpdataXueYuan()">
+                    <option value="0">--请选择--</option>
+                    <option value="41">大一</option>
+                    <option value="42">大二</option>
+                    <option value="43">大三</option>
+                    <option value="44">大四</option>
+                </select>
+            </td>
+            <th>学院：</th>
+            <td>
+                <select id="schoolname" class="txtArea" style="height:25px;width:120px" onchange="UpdateClass()">
+                    <option style="height: 0"></option>
+                </select>
+            </td>
+            <th>行政班：</th>
+            <td>
+                <select id="classname" class="txtArea" style="height:25px;width:120px">
+                    <option style="height: 0"></option>
+                </select>
+            </td>
+
+            <th>测试老师：</th>
+            <td>
+                @Html.Raw(@teacherName)
+            </td>
+
+            <th>学号：</th>
+            <td>
+                <input id="studentCode" type="text" value="" class="txt" />
+            </td>
+            <th>类型：</th>
+            <td>
+                <select id="testType" style="height:25px" class="txtArea">
+                    <option value="0">--请选择--</option>
+                    <option value="单元测试">单元测试</option>
+                    <option value="约考测试">约考测试</option>
+                    <option value="补测约考">补测约考</option>
+                </select>
+            </td>
+            <th>测试日期：</th>
+            <td>
+                <input id="testBeginDate" type="text" onclick="new WdatePicker({ dateFmt: 'yyyy-MM-dd' })" class="txt Wdate" />
+            </td>
+            <td>
+                <input id="btnSearch" type="button" class="btnSearch" value="搜 索" onclick="btn_Search()" />
+            </td>
+
+            <td></td>
+        </tr>
+    </table>
+</div>
+<div class="topline rightline" style="margin: 1px;margin-top:-1px">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>

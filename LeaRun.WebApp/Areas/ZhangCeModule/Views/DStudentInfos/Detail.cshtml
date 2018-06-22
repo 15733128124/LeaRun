@@ -1,0 +1,127 @@
+@{
+    ViewBag.Title = "学生基本信息";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        InitControl();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/CommonModule/DStudent_Infos/SetForm", { KeyValue: GetQuery('KeyValue') }, function (data) {
+                SetWebControls(data);
+            });
+        }
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <table class="form">
+        <tr>
+            <th class='formTitle'>编号,自增列：</th>
+            <td class='formValue'>
+                <label id="ID" />
+            </td>
+            <th class='formTitle'>学生编号：</th>
+            <td class='formValue'>
+                <label id="StudentCode" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>学生姓名：</th>
+            <td class='formValue'>
+                <label id="StudentName" />
+            </td>
+            <th class='formTitle'>学生性别  1:男  2:女：</th>
+            <td class='formValue'>
+                <label id="StudentSex" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>出生日期：</th>
+            <td class='formValue'>
+                <label id="StudentBornDate" />
+            </td>
+            <th class='formTitle'>学生住址：</th>
+            <td class='formValue'>
+                <label id="StudentHomeAddress" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>年级编号：</th>
+            <td class='formValue'>
+                <label id="GradeCode" />
+            </td>
+            <th class='formTitle'>学院名称：</th>
+            <td class='formValue'>
+                <label id="SchoolName" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>学院编号：</th>
+            <td class='formValue'>
+                <label id="SchoolCode" />
+            </td>
+            <th class='formTitle'>班级名称：</th>
+            <td class='formValue'>
+                <label id="ClassName" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>班级编号：</th>
+            <td class='formValue'>
+                <label id="ClassCode" />
+            </td>
+            <th class='formTitle'>民族编号：</th>
+            <td class='formValue'>
+                <label id="NationCode" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>民族名称：</th>
+            <td class='formValue'>
+                <label id="NationName" />
+            </td>
+            <th class='formTitle'>学生籍贯：</th>
+            <td class='formValue'>
+                <label id="StudentNative" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>异动类型：</th>
+            <td class='formValue'>
+                <label id="StudentMoveType" />
+            </td>
+            <th class='formTitle'>身份证号：</th>
+            <td class='formValue'>
+                <label id="StudentIDNumber" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>学生电话：</th>
+            <td class='formValue'>
+                <label id="StudentPhone" />
+            </td>
+            <th class='formTitle'>是否注册：</th>
+            <td class='formValue'>
+                <label id="StudentIsRegister" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>创建时间：</th>
+            <td class='formValue'>
+                <label id="CreateTime" />
+            </td>
+            <th class='formTitle'>修改时间：</th>
+            <td class='formValue'>
+                <label id="UpdateTime" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>Remark：</th>
+            <td class='formValue'>
+                <label id="Remark" />
+            </td>
+        </tr>
+    </table>
+</form>

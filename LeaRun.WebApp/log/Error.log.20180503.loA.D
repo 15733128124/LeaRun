@@ -1,0 +1,7 @@
+2018-05-03 12:17:46,787 [6] ERROR LeaRun.DataAccess.DbHelper - 在将 varchar 值 'select @count=COUNT(*) from dbo.DStudent_Test2017 where ApplyFor=1 and StudentCode='1335050302' and TestSetID='' 转换成数据类型 int 时失败。
+2018-05-03 12:17:47,225 [32] ERROR LeaRun.DataAccess.DbHelper - 在将 varchar 值 'select @count=COUNT(*) from dbo.DStudent_Test2017 where ApplyFor=1 and StudentCode='1335050302' and TestSetID='' 转换成数据类型 int 时失败。
+2018-05-03 12:17:48,332 [6] ERROR LeaRun.DataAccess.DbHelper - 在将 varchar 值 'select @count=COUNT(*) from dbo.DStudent_Test2017 where ApplyFor=1 and StudentCode='1335050302' and TestSetID='' 转换成数据类型 int 时失败。
+2018-05-03 12:17:51,220 [31] ERROR LeaRun.DataAccess.DbHelper - 在将 varchar 值 'select @count=COUNT(*) from dbo.DStudent_Test2017 where ApplyFor=1 and StudentCode='1335050302' and TestSetID='' 转换成数据类型 int 时失败。
+2018-05-03 12:18:11,270 [34] ERROR LeaRun.DataAccess.DbHelper - 在将 varchar 值 'select @count=COUNT(*) from dbo.DStudent_Test2017 where ApplyFor=1 and StudentCode='1335050302' and TestSetID='' 转换成数据类型 int 时失败。
+2018-05-03 12:20:55,953 [25] ERROR LeaRun.DataAccess.DbHelper - 在将 varchar 值 'select @count=COUNT(*) from dbo.DStudent_Test2017 where ApplyFor=1 and StudentCode='1335050302' and TestSetID='' 转换成数据类型 int 时失败。
+2018-05-03 12:21:17,534 [12] ERROR LeaRun.DataAccess.DbHelper - 在将 varchar 值 'select @count=COUNT(*) from dbo.DStudent_Test2017 where ApplyFor=1 and StudentCode='1335050302' and TestSetID='' 转换成数据类型 int 时失败。

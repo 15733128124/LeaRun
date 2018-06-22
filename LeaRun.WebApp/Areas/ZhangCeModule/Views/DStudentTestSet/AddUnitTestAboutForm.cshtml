@@ -1,0 +1,201 @@
+﻿@{
+    ViewBag.Title = "添加约考";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+@using LeaRun.Business
+@using LeaRun.Entity
+<script src="~/Content/layer/layer.js"></script>
+<script type="text/javascript">
+    var KeyValue = GetQuery('KeyValue');//主键
+    $(function () {
+        InitControl();
+    })
+
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/ZhangCeModule/DStudentTestSet/GetDStudentTestSetModel", { Id: KeyValue }, function (data) {
+                SetWebControls(data);
+            });
+        }
+    }
+
+    //添加学生约考
+    function AddTestStudent(obj) {
+        var studentCode = $("#StudentCode").val();
+        if (studentCode == "" || studentCode == null) {
+            layer.alert("学号不能为空！");
+            return false;
+        }
+        var testGroup = "";
+        var groupCount = "";
+        var testTeacher = ""
+
+        var allotMark = $("#allotMark").val();
+        if (allotMark == "ok") {
+            testGroup = $(obj).parent().parent().find("#TestGroup").val();
+            groupCount = $(obj).parent().parent().find("#GroupCount").val();
+            testTeacher = $(obj).parent().parent().find("#TestTeacher").val();
+        }
+
+        var postData = {
+            "studentCode": studentCode,
+            "testSetID": KeyValue,
+            "studentSex": $("#StudentSex").val(),
+            "testBeginDate": $("#TestBeginDate").val(),
+            "testBeginWeek": $("#TestBeginWeek").val(),
+            "testBeginTime": $("#TestBeginTime").val(),
+            "testAddress": $("#TestAddress").val(),
+            "testGroup": testGroup,
+            "groupCount": groupCount,
+            "testTeacher": testTeacher,
+            "testType": "单元测试"
+        };
+        AjaxJson("/ZhangCeModule/DStudentTestSet/AddTestStudent", postData, function (data) {
+            tipDialog(data.Message, 3, data.Code);
+            window.location.reload();
+            //top.frames[tabiframeId()].windowload();
+            //closeDialog();
+        });
+    }
+    //保存事件
+    function AcceptClick() {
+        top.frames[tabiframeId()].windowload();
+        closeDialog();
+    }
+
+    //样式
+    function clickTr(obj) {
+        $(obj).parent().find(".t").css("background-color", "#f7f7f7").css("color", "red");
+        $(obj).parent().find(".s").css("background-color", "white").css("color", "black");
+        $(obj).find(".t").css("background-color", "#4a5b79").css("color", "white");
+        $(obj).find(".s").css("background-color", "#4a5b79").css("color", "white");
+    }
+
+</script>
+<form id="form1" style="margin: 1px">
+    <div id="message" style="display: none"></div>
+    <div style="line-height: 30px; color: #808080; margin-left: 5px">
+        <b>约考测试信息：</b>
+    </div>
+    <table class="form">
+        <tr>
+            <th class='formTitle'>测试日期：</th>
+            <td class='formValue'>
+                <input id="TestBeginDate" maxlength=-1 type="text" class="txt disabled" disabled />
+            </td>
+            <th class='formTitle'>测试星期：</th>
+            <td class='formValue'>
+                <input id="TestBeginWeek" maxlength=-1 type="text" class="txt disabled" disabled />
+            </td>
+
+        </tr>
+
+        <tr>
+            <th class='formTitle'>测试时间：</th>
+            <td class='formValue'>
+                <input id="TestBeginTime" maxlength=-1 type="text" class="txt disabled" disabled />
+            </td>
+            <th class='formTitle'>测试地址：</th>
+            <td class='formValue'>
+                <input id="TestAddress" maxlength=-1 type="text" class="txt disabled" disabled />
+            </td>
+
+        </tr>
+
+        <tr>
+            <th class='formTitle'>学生性别：</th>
+            <td class='formValue'>
+                <select id="StudentSex" style="height:25px" class="txtArea disabled" disabled>
+                    <option value="1">男</option>
+                    <option value="2">女</option>
+                </select>
+            </td>
+
+            <th class='formTitle'>测试人数：</th>
+            <td class='formValue'>
+                <input id="TestStudentCount" maxlength=-1 type="text" class="txt disabled" disabled />
+            </td>
+
+        </tr>
+
+
+        <tr>
+            <th class='formTitle'>已约人数：</th>
+            <td class='formValue'>
+                <input id="TestStudentOkCount" maxlength=-1 type="text" class="txt disabled" disabled />
+            </td>
+            <th class='formTitle'>未约人数：</th>
+            <td class='formValue'>
+                <input id="TestStudentNoCount" maxlength=-1 type="text" class="txt disabled" disabled />
+            </td>
+
+        </tr>
+
+    </table>
+
+
+
+    <div style="line-height:30px;color:#808080;margin-left:5px">
+        <b>添加约考测试：</b>
+    </div>
+
+
+
+    <div style="overflow-y:scroll">
+        <table class="form">
+            <tr>
+                <th class='formTitle' style="text-align:center">组号</th>
+                <th class='formTitle' style="text-align:center">人数</th>
+                <th class='formTitle' style="text-align:center">测试老师</th>
+                <th class='formTitle' style="text-align:center">输入学号</th>
+                <th class='formTitle' style="text-align:center">添加学生</th>
+            </tr>
+        </table>
+    </div>
+    <div style="height: 260px; overflow-y:scroll" id="t">
+        <table class="form">
+            @{
+                DStudent_TestAllotBll taBll = new DStudent_TestAllotBll();
+                DBase_UsersBll uBll = new DBase_UsersBll();
+                List<DStudent_TestAllot> listTestAllot = taBll.GetDStudentTestAllotListByTestSetID(ViewBag.TestSetID, ViewBag.NK);
+                List<DBase_Users> listUsers = uBll.GetTeacherName();
+                var str = "";
+                var nostr = "";
+                if (listTestAllot.Count > 0)
+                {
+                    foreach (DStudent_TestAllot entityTestAllot in listTestAllot)
+                    {
+                        str += "<tr onclick=\"clickTr(this)\" >";
+                        str += "<td class='formValue t' style=\"text-align:center\"><input type='hidden' id='allotMark' value='ok'/><input id=\"TestGroup\" maxlength=-1 type=\"text\" style=\"color:red;text-align:center\" class=\"txt disabled t\" disabled value='" + entityTestAllot.TestGroup + "' />";
+                        str += "</td><td class='formValue t' style=\"text-align:center\"><input id=\"GroupCount\" maxlength=-1 type=\"number\" style=\"color:red;text-align:center\" class=\"txt disabled t\" disabled value='" + entityTestAllot.GroupCount + "' />";
+                        str += "</td><td class='formValue t'><input id=\"TestTeacher\" maxlength=-1 type=\"text\" style=\"color:red;text-align:center\" class=\"txt disabled t\" disabled value='" + entityTestAllot.TestTeacher + "'/></td>";
+                        str += "<td class='formValue s'  style=\"text-align:center;\"><input id=\"StudentCode\" maxlength=-1 type=\"text\" class=\"txt required s\" /></td><td class='formValue t' style=\"text-align:center;\"><img src=\"../../Content/Images/Icon16/add.png\"  onclick=\"AddTestStudent(this)\" style=\"margin-top:5px;cursor:pointer\" class=\"t\" /></td></tr>";
+
+                    }
+                }
+                else
+                {
+                    str += "<div style=\"line-height:30px;color:#808080;margin-left:5px;margin-top:15px;\">";
+                    str += "<b>还未分组：</b><span style=\"color:red\"> (说明：可以直接添加约考测试)</span><br />";
+                    str += "<div style=\"padding-left:100px;padding-top:40px\">";
+                    str += "<b style=\"float:left\">请输入学号：</b>";
+                    str += "<span style=\"float:left\"><input type='hidden' id='allotMark' value='no' /></span>";
+                    str += "<span style=\"float:left\"><input id=\"StudentCode\" maxlength=-1 type=\"text\" style=\"width:200px;height:20px\" value=\"\" /></span>";
+                    str += "<span style=\"text-align:center;float:left\">";
+                    str += "<p onclick=\"AddTestStudent(this)\" style=\"width: 80px; margin-left:20px;cursor: pointer; border: 1px solid #ccc; border-radius: 3px; line-height: 25px; cursor: pointer; text-align: center;margin-top: 3px; background-color: #4a5b79;color:white\">确定</p>";
+                    str += "</span></div></div>";
+                }
+            }
+
+            @Html.Raw(str)
+
+        </table>
+        @Html.Raw(nostr)
+    </div>
+
+
+
+
+
+</form>

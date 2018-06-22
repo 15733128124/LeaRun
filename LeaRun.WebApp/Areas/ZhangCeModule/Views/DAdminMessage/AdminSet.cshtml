@@ -1,0 +1,156 @@
+@{
+    ViewBag.Title = "老师权限设置";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+@using LeaRun.Entity;
+@model DBase_Users
+<script src="~/Content/layer/layer.js"></script>
+<link href="~/Content/Styles/fileinput.css" rel="stylesheet" />
+<script src="~/Content/Scripts/fileinput.js"></script>
+<script src="~/Content/Scripts/jquery.form.js"></script>
+<!--日期组件start-->
+<script src="~/Content/Scripts/datepicker/WdatePicker.js"></script>
+<!--日期组件start-->
+<style>
+    .NKStyle {
+        width: 70px;
+        /*float: left;*/
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        line-height: 25px;
+        cursor: pointer;
+        text-align: center;
+        /*margin-left: 10px;*/
+        background-color: #08587d; /*间春绿*/
+        color: white;
+        font-weight: bold;
+        /*margin-top: 7px;*/
+    }
+
+    .note-prompt-display {
+        height: 300px;
+        overflow: auto;
+        background: none;
+        background-color: #efe6e6;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+</style>
+
+<script type="text/javascript">
+
+    //修改操作口令
+    function updNKKouLing() {
+
+        var updNKMark = $("#updNKMark").val();
+        if (updNKMark == "") {
+            layer.alert("要创建或修改的口令不能为空！");
+            return false;
+        }
+        var updNKRequiredMark = $("#updNKRequiredMark").val();
+        if (updNKRequiredMark == "") {
+            layer.alert("确认创建或修改的口令不能为空！");
+            return false;
+        }
+        if (updNKMark != updNKMark) {
+            layer.alert("两次口令输入不一致，请重新输入！");
+            $("#updNKRequiredMark").val("");
+            return false;
+        }
+
+        $.ajax({
+            type: 'POST', // HTTP请求方式
+            url: '/DAdminMessage/UpdNKKouLing', // 请求的URL地址
+            dataType: 'json', // 服务器返回数据转换成的类型
+            data: { "updNKMark": updNKMark },
+            success: function (data) {
+                if (data.IsOk) {
+                    layer.alert('修改口令成功！');
+                }
+                else {
+                    layer.alert('修改口令失败！服务器错误，与管理员联系！');
+                }
+
+
+            }
+        });
+    }
+ 
+
+
+</script>
+
+<form id="form1" style="margin: 1px">
+    <div id="message" style="display: none"></div>
+    <table style="width: 100%;min-width:1000px">
+        <tr>
+            <td style="width:50%">
+                <div class="note-prompt" style="height:300px;overflow:auto;width:95%">
+                    <div style="padding-right:3%;padding-left:3%;">
+
+                        <h2>现有口令</h2>
+
+                        <table class="form">
+                            <tr>
+                                <th class="formTitle" style="width:50%;text-align:center">
+                                    <b>账号</b>
+                                </th>
+                                <th class="formTitle"  style="width:50%;text-align:center">
+                                    <b>密码</b>
+                                </th>
+
+                            </tr>
+
+                            <tr>
+                                <td class="formValue" style="text-align:center">
+                                    <h2 style="color:red" id="account">@Model.UserCode</h2>
+                                </td>
+                                <td class="formValue" style="text-align:center">
+                                    <h2 style="color:red" id="pwd">@Model.UserPassword</h2>
+                                </td>
+                                
+                            </tr>
+
+                        </table>
+                        <br />                      
+                    </div>
+
+                </div>
+            </td>
+
+            <td style="width:50%">
+                <div class="note-prompt" style="height:300px;overflow:auto;background:none;background-color:#efe6e6;width:100%;margin:0;padding:0">
+                    <div style="padding-right:3%;margin-top:2%;padding-left:3%;">
+                      
+                        <p style="color:red"><b>创建或修改口令</b></p>
+                        <table class="form">                        
+                          
+                            <tr>
+                                <th class="formTitle" style="width:30%">
+                                    请输入要创建或修改的口令：
+                                </th>
+                                <td class="formValue">
+                                    <input id="updNKMark" style="color:red" class="txt required" datacol="yes" placeholder="特殊口令，和登录密码不一样" err="口令" checkexpession="NotNull" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle" style="width:30%">
+                                    确认创建或修改的口令：
+                                </th>
+                                <td class="formValue">
+                                    <input id="updNKRequiredMark" maxlength=-1 style="color:red" type="text" class="txt required" placeholder="特殊口令，和登录密码不一样" err="口令" checkexpession="NotNull" />
+                                </td>
+                            </tr>
+
+                        </table>
+                        <br />
+                        <p onclick="updNKKouLing()" id="btnImport" style="width:200px;margin-left:0px" class="NKStyle">确定创建或修改口令</p>
+
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+</form>

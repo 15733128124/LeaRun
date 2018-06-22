@@ -1,0 +1,196 @@
+@{
+    ViewBag.Title = "加班申请表》表单页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script type="text/javascript">
+    var KeyValue = GetQuery('KeyValue');//主键
+    $(function () {
+        BindCombobox();
+        InitControl();
+        GetTree();
+        GetList();
+        //自定义复选框 全选/反选
+        $("#CheckButton").click(function () {
+            if (!$('.sys_spec_text').find('a').hasClass('disabled')) {
+                if (!!$(this).hasClass("checkAllOff")) {
+                    $(this).attr('title', '反选');
+                    $(this).text('反选');
+                    $(this).attr('class', 'checkAllOn');
+                    $('.sys_spec_text li').addClass('selected');
+                    $('.sys_spec_text li').find('a').removeClass('a_selected');
+                } else {
+                    $(this).attr('title', '全选');
+                    $(this).text('全选');
+                    $(this).attr('class', 'checkAllOff');
+                    $('.sys_spec_text li').removeClass('selected');
+                    $('.sys_spec_text li').find('a').removeClass('a_selected');
+                }
+            }
+        })
+        //模糊查询用户（注：这个方法是理由jquery查询）
+        $("#txt_Search").keyup(function () {
+            if ($(this).val() != "") {
+                var Search = $(this).val();
+                window.setTimeout(function () {
+                    $(".sys_spec_text li")
+                     .hide()
+                     .filter(":contains('" + (Search) + "')")
+                     .show();
+                }, 200);
+            } else {
+                $(".sys_spec_text li").show();
+            }
+        }).keyup();
+    })
+    var CompanyId = "", DepartmentId = "", DepartmentName = "";
+    //加载左边树
+    function GetTree() {
+        var itemtree = {
+            onnodeclick: function (item) {
+                if (item.Type == "Company") {
+                    DepartmentId = "";
+                    CompanyId = item.CompanyId;     //公司ID
+                } else if (item.Type == "Department") {
+                    CompanyId = item.parentnodes;
+                    DepartmentId = item.id;         //部门ID
+                    DepartmentName = item.text;     //部门名称
+                }
+                GetList();
+            },
+            url: "@Url.Content("~/CommonModule/Department/TreeJson")"
+        };
+        $("#ItemsTree").treeview(itemtree);
+    }
+    //加载用户
+    function GetList() {
+        getAjax("/CommonModule/OvertimeRequest/MemberList", { CompanyId: CompanyId, DepartmentId: DepartmentId }, function (data) {
+            $(".sys_spec_text").html(data);
+        });
+        //选中/不选中
+        $(".sys_spec_text li").click(function () {
+            if (!$(this).find('a').hasClass('disabled')) {
+                if (!!$(this).hasClass("selected")) {
+                    $(this).removeClass("selected");
+                    $(this).find('a').removeClass("a_selected");
+                } else {
+                    $(this).addClass("selected").siblings("li");
+                    $(this).find('a').addClass("a_selected");
+                }
+            }
+        });
+    }
+
+    function BindCombobox() {
+        //加班类型
+        BindDropItem("#Type", "Overtime", "==请选择==");
+        //加班时长
+        BindDropItem("#Time", "OvertimeLong", "==请选择==");
+
+    }
+  
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/CommonModule/OvertimeRequest/SetForm", { KeyValue: KeyValue }, function (data) {
+                SetWebControls(data);
+            });
+        }
+    }
+    //保存事件
+    function AcceptClick() {
+        if (!CheckDataValid('#form1')) {
+            return false;
+        }
+        //获取选择的userid
+        var UserId = "";
+        $('.sys_spec_text .selected a').each(function () {
+            UserId += $(this).attr('id') + ",";
+        });
+        if (UserId == "") {
+            tipDialog('请选择人员。', 4, 'warning');
+        } else if (DepartmentId == "") {
+            tipDialog('请选择部门。', 4, 'warning');
+        } else {
+            Loading(true, "正在提交数据...");
+            window.setTimeout(function () {
+                var postData = GetWebControls("#form1");
+                //var postData = { UserId: UserId, DepartmentId: DepartmentId, }
+                AjaxJson("/CommonModule/OvertimeRequest/SubmitOvertimeForm?UserId=" + UserId + "&DepartmentId=" + DepartmentId, postData, function (data) {
+                    Loading(false);
+                    tipDialog(data.Message, 3, data.Code);
+                    top.frames[tabiframeId()].windowload();
+                    closeDialog();
+                });
+            }, 200);
+        }
+        //var postData = GetWebControls("#form1");
+        //AjaxJson("/CommonModule/OvertimeRequest/SubmitOvertimeForm?KeyValue=" + KeyValue, postData, function (data) {
+        //    tipDialog(data.Message, 3, data.Code);
+        //    top.frames[tabiframeId()].windowload();
+        //    closeDialog();
+        //});
+    }
+</script>
+
+<form id="form1" style="margin: 1px">
+    <div id="message" style="display: none"></div>
+    <table class="form">
+        <tr>
+            <th class='formTitle'>加班类型：</th>
+            <td class='formValue'>
+                <select id="Type" class="txtselect"  ></select>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>加班日期：</th>
+            <td class='formValue'>
+                <input id="Date" maxlength=20 type="text" class="txt Wdate" onfocus="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>加班开始时间：</th>
+            <td class='formValue'>
+                <input id="StartTime" maxlength=20 type="text" class="txt Wdate" onfocus="WdatePicker({ dateFmt: 'HH:mm' })" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>加班结束时间：</th>
+            <td class='formValue'>
+                <input id="EndTime" maxlength=20 type="text" class="txt Wdate" onfocus="WdatePicker({ dateFmt: 'HH:mm', minDate: '#F{$dp.$D(\'StartTime\')}' })" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>加班时长：</th>
+            <td class='formValue'>
+                <select id="Time" class="txtselect"  ></select>
+            </td>
+        </tr>
+        <tr>
+        </tr>
+    </table>
+</form>
+<div style="float: left; height: 300px;">
+    <!--左边-->
+    <div style="float:left;width:30%;height:300px;overflow-y:auto">
+        <div class="btnbartitle">
+            <div>
+                归属<span id="ObjectTitle"></span>
+            </div>
+        </div>
+        <div class="ScrollBar" id="ItemsTree" style="overflow: hidden;"></div>
+    </div>
+    <!--中间-->
+    <div style="float:left;width:70%;height:300px;overflow-y:auto">
+        <div class="btnbartitle">
+            <div style="float: left">
+                归属用户；用户查询：<input id="txt_Search" type="text" class="btnbartitleinput" style="width: 120px;" />
+            </div>
+            <div style="float: right">
+                <label id="CheckButton" class="checkAllOff" title="全选">全选</label>
+            </div>
+        </div>
+        <div class="ScrollBar">
+            <ul class="sys_spec_text"></ul>
+        </div>
+    </div>
+</div>

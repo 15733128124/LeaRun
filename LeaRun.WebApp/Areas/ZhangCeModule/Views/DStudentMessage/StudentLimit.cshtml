@@ -1,0 +1,288 @@
+@{
+    ViewBag.Title = "学生权限设置";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<script src="~/Content/layer/layer.js"></script>
+<link href="~/Content/Styles/fileinput.css" rel="stylesheet" />
+<script src="~/Content/Scripts/fileinput.js"></script>
+<script src="~/Content/Scripts/jquery.form.js"></script>
+<!--日期组件start-->
+<script src="~/Content/Scripts/datepicker/WdatePicker.js"></script>
+<!--日期组件start-->
+<style>
+    .NKStyle {
+        width: 70px;
+        /*float: left;*/
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        line-height: 25px;
+        cursor: pointer;
+        text-align: center;
+        /*margin-left: 10px;*/
+        background-color: #08587d; /*间春绿*/
+        color: white;
+        font-weight: bold;
+        /*margin-top: 7px;*/
+    }
+
+    .note-prompt-display {
+        height: 300px;
+        overflow: auto;
+        background: none;
+        background-color: #efe6e6;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+</style>
+
+<script type="text/javascript">
+
+    //开启约考测试
+    function yueKaoOpen() {
+
+        $.ajax({
+            type: 'POST', // HTTP请求方式
+            url: '/DStudentMessage/YueKao', // 请求的URL地址
+            data: { "state": "1", "yueKaoLimit": $("#yueKaoLimit").val() },
+            dataType: 'json', // 服务器返回数据转换成的类型
+            success: function (data) {
+                if (data.IsOk) {
+                    $("#yueKaoMsg").html(data.Msg);
+                }
+            }
+        });
+    }
+    //关闭约考测试
+    function yueKaoClose() {
+
+        $.ajax({
+            type: 'POST', // HTTP请求方式
+            url: '/DStudentMessage/YueKao', // 请求的URL地址
+            data: { "state": "0", "yueKaoLimit": $("#yueKaoLimit").val() },
+            dataType: 'json', // 服务器返回数据转换成的类型
+            success: function (data) {
+                if (data.IsOk) {
+                    $("#yueKaoMsg").html(data.Msg);
+                }
+            }
+        });
+    }
+    //开启补测约考
+    function buCeOpen() {
+
+        $.ajax({
+            type: 'POST', // HTTP请求方式
+            url: '/DStudentMessage/BuCe', // 请求的URL地址
+            data: { "state": "1", "buCeLimit": $("#buCeLimit").val() },
+            dataType: 'json', // 服务器返回数据转换成的类型
+            success: function (data) {
+                if (data.IsOk) {
+                    $("#buCeMsg").html(data.Msg);
+                }
+            }
+        });
+    }
+    //关闭补测约考
+    function buCeClose() {
+
+        $.ajax({
+            type: 'POST', // HTTP请求方式
+            url: '/DStudentMessage/BuCe', // 请求的URL地址
+            data: { "state": "0", "buCeLimit": $("#buCeLimit").val() },
+            dataType: 'json', // 服务器返回数据转换成的类型
+            success: function (data) {
+                if (data.IsOk) {
+                    $("#buCeMsg").html(data.Msg);
+                }
+            }
+        });
+    }
+    //开启单元测试
+    function danYuanOpen() {
+
+        $.ajax({
+            type: 'POST', // HTTP请求方式
+            url: '/DStudentMessage/DanYuan', // 请求的URL地址
+            data: { "state": "1", "danYuanLimit": $("#danYuanLimit").val() },
+            dataType: 'json', // 服务器返回数据转换成的类型
+            success: function (data) {
+                if (data.IsOk) {
+                    $("#danYuanMsg").html(data.Msg);
+                }
+            }
+        });
+    }
+    //关闭单元测试
+    function danYuanClose() {
+
+        $.ajax({
+            type: 'POST', // HTTP请求方式
+            url: '/DStudentMessage/DanYuan', // 请求的URL地址
+            data: { "state": "0", "danYuanLimit": $("#danYuanLimit").val() },
+            dataType: 'json', // 服务器返回数据转换成的类型
+            success: function (data) {
+                if (data.IsOk) {
+                    $("#danYuanMsg").html(data.Msg);
+                }
+            }
+        });
+    }
+
+
+</script>
+
+<form id="form1" style="margin: 1px">
+    <div id="message" style="display: none"></div>
+    <table style="width: 100%;min-width:1000px">
+        <tr>
+            <td style="width:50%">
+                <div class="note-prompt" style="height:300px;overflow:auto;width:95%">
+                    <div style="padding-right:3%;padding-left:3%;">
+
+                        <h2>学生端权限设置(开启)</h2>
+
+                        <table class="form">
+                            <tr>
+                                <th class="formTitle" style="width:25%;text-align:center">
+                                    <b>测试类型</b>
+                                </th>
+                                <th class="formTitle" style="width:25%;text-align:center">
+                                    <b>年级</b>
+                                </th>
+                                <th class="formTitle" colspan="2" style="width:50%;text-align:center">
+                                    <b>  操作</b>
+                                </th>
+                            </tr>
+
+                            <tr>
+                                <td class="formValue" style="text-align:center">
+                                    <h2 style="color:red"> 约考测试</h2>
+                                </td>
+                                <td class="formValue" style="text-align:center">
+                                    <select id="yueKaoLimit" style="height:25px" class="txtArea">
+                                        <option value="40">不限</option>
+                                        <option value="41">大一</option>
+                                        <option value="42">大二</option>
+                                        <option value="43">大三</option>
+                                        <option value="44">大四</option>
+                                    </select>
+
+                                </td>
+                                <td class="formValue" style="text-align:center">
+                                    <p onclick="yueKaoOpen()" id="btnImport" style="width:50%;margin-left:22%" class="NKStyle">开启</p>
+                                </td>
+                                <td class="formValue">
+                                    <p onclick="yueKaoClose()" id="btnImport" style="width:50%;margin-left:22%" class="NKStyle">关闭</p>
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <td class="formValue" style="text-align:center">
+                                    <h2 style="color:red">  补测约考</h2>
+                                </td>
+                                <td class="formValue" style="text-align:center">
+                                    <select id="buCeLimit" style="height:25px" class="txtArea">
+                                        <option value="40">不限</option>
+                                        <option value="41">大一</option>
+                                        <option value="42">大二</option>
+                                        <option value="43">大三</option>
+                                        <option value="44">大四</option>
+                                    </select>
+
+                                </td>
+                                <td class="formValue">
+                                    <p onclick="buCeOpen()" id="btnImport" style="width:50%;margin-left:22%" class="NKStyle">开启</p>
+                                </td>
+                                <td class="formValue">
+                                    <p onclick="buCeClose()" id="btnImport" style="width:50%;margin-left:22%" class="NKStyle">关闭</p>
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <td class="formValue" style="text-align:center">
+                                    <h2 style="color:red"> 单元测试</h2>
+                                </td>
+                                <td class="formValue" style="text-align:center">
+                                    <select id="danYuanLimit" style="height:25px" class="txtArea">
+                                        <option value="40">不限</option>
+                                        <option value="41">大一</option>
+                                        <option value="42">大二</option>
+                                        <option value="43">大三</option>
+                                        <option value="44">大四</option>
+                                    </select>
+
+                                </td>
+                                <td class="formValue">
+                                    <p onclick="danYuanOpen()" id="btnImport" style="width:50%;margin-left:22%" class="NKStyle">开启</p>
+                                </td>
+                                <td class="formValue">
+                                    <p onclick="danYuanClose()" id="btnImport" style="width:50%;margin-left:22%" class="NKStyle">关闭</p>
+                                </td>
+                            </tr>
+
+
+                        </table>
+                        <br />
+                        <h2 style="color:green;text-align:center;font-size:15px;line-height:100%">当前库年份--<span style="color:red;font-size:16px">@ViewBag.NK</span>--年</h2>
+                    </div>
+
+                </div>
+            </td>
+
+            <td style="width:50%">
+                <div class="note-prompt note-prompt-display">
+                    <div style="padding-right:3%;padding-left:3%;">
+                        <h2>目前开启状态:</h2>
+
+                        <table class="form">
+                            <tr>
+                                <th class="formTitle" style="width:160px;text-align:center">
+                                    <b>测试类型</b>
+                                </th>
+                                <th class="formTitle" style="width:66.6%;text-align:center">
+                                    <b>状态描述</b>
+                                </th>
+
+                            </tr>
+                            <tr>
+                                <td class="formValue" style="text-align:center;width:160px">
+                                    <h2 style="color:red"> 约考测试</h2>
+                                </td>
+                                <td class="formValue" style="text-align:center;color:green;font-weight:bold" id="yueKaoMsg">
+                                    @Html.Raw(ViewBag.YueKao)
+                                </td>
+
+                            </tr>
+
+                            <tr>
+                                <td class="formValue" style="text-align:center;width:160px">
+                                    <h2 style="color:red"> 补测约考</h2>
+                                </td>
+                                <td class="formValue" style="text-align:center;color:green;font-weight:bold" id="buCeMsg">
+                                    @Html.Raw(ViewBag.BuCe)
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <td class="formValue" style="text-align:center;width:160px">
+                                    <h2 style="color:red"> 单元测试</h2>
+                                </td>
+                                <td class="formValue" style="text-align:center;color:green;font-weight:bold" id="danYuanMsg">
+                                    @Html.Raw(ViewBag.DanYuan)
+                                </td>
+                            </tr>
+                        </table>
+
+                        <br />
+                        <h2 style="color:green;text-align:center;font-size:15px;line-height:100%">当前库年份--<span style="color:red;font-size:16px">@ViewBag.NK</span>--年</h2>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+</form>

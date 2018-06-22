@@ -1,0 +1,237 @@
+@{
+    ViewBag.Title = "学生成绩测试";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        InitControl();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/CommonModule/DStudent_TestScore/SetForm", { KeyValue: GetQuery('KeyValue') }, function (data) {
+                SetWebControls(data);
+            });
+        }
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <table class="form">
+        <tr>
+            <th class='formTitle'>ID：</th>
+            <td class='formValue'>
+                <label id="ID" />
+            </td>
+            <th class='formTitle'>StudentCode：</th>
+            <td class='formValue'>
+                <label id="StudentCode" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>StudentName：</th>
+            <td class='formValue'>
+                <label id="StudentName" />
+            </td>
+            <th class='formTitle'>StudentSex：</th>
+            <td class='formValue'>
+                <label id="StudentSex" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>Heigh：</th>
+            <td class='formValue'>
+                <label id="Heigh" />
+            </td>
+            <th class='formTitle'>Weight：</th>
+            <td class='formValue'>
+                <label id="Weight" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>BMI：</th>
+            <td class='formValue'>
+                <label id="BMI" />
+            </td>
+            <th class='formTitle'>BMIScore：</th>
+            <td class='formValue'>
+                <label id="BMIScore" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>BMILevel：</th>
+            <td class='formValue'>
+                <label id="BMILevel" />
+            </td>
+            <th class='formTitle'>Pulmonary：</th>
+            <td class='formValue'>
+                <label id="Pulmonary" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>PulmonaryScore：</th>
+            <td class='formValue'>
+                <label id="PulmonaryScore" />
+            </td>
+            <th class='formTitle'>PulmonaryLevel：</th>
+            <td class='formValue'>
+                <label id="PulmonaryLevel" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>FiftyRun：</th>
+            <td class='formValue'>
+                <label id="FiftyRun" />
+            </td>
+            <th class='formTitle'>FiftyRunScore：</th>
+            <td class='formValue'>
+                <label id="FiftyRunScore" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>FiftyRunLevel：</th>
+            <td class='formValue'>
+                <label id="FiftyRunLevel" />
+            </td>
+            <th class='formTitle'>StandJump：</th>
+            <td class='formValue'>
+                <label id="StandJump" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>StandJumpScore：</th>
+            <td class='formValue'>
+                <label id="StandJumpScore" />
+            </td>
+            <th class='formTitle'>StandJumpLevel：</th>
+            <td class='formValue'>
+                <label id="StandJumpLevel" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>SitAndReach：</th>
+            <td class='formValue'>
+                <label id="SitAndReach" />
+            </td>
+            <th class='formTitle'>SitAndReachScore：</th>
+            <td class='formValue'>
+                <label id="SitAndReachScore" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>SitAndReachLevel：</th>
+            <td class='formValue'>
+                <label id="SitAndReachLevel" />
+            </td>
+            <th class='formTitle'>EightHundred：</th>
+            <td class='formValue'>
+                <label id="EightHundred" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>EightHundredScore：</th>
+            <td class='formValue'>
+                <label id="EightHundredScore" />
+            </td>
+            <th class='formTitle'>EightHundredLevel：</th>
+            <td class='formValue'>
+                <label id="EightHundredLevel" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>EightHundredAddScore：</th>
+            <td class='formValue'>
+                <label id="EightHundredAddScore" />
+            </td>
+            <th class='formTitle'>ThousandRun：</th>
+            <td class='formValue'>
+                <label id="ThousandRun" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>ThousandRunScore：</th>
+            <td class='formValue'>
+                <label id="ThousandRunScore" />
+            </td>
+            <th class='formTitle'>ThousandRunLevel：</th>
+            <td class='formValue'>
+                <label id="ThousandRunLevel" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>ThousandRunAddScore：</th>
+            <td class='formValue'>
+                <label id="ThousandRunAddScore" />
+            </td>
+            <th class='formTitle'>MinSupination：</th>
+            <td class='formValue'>
+                <label id="MinSupination" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>MinSupinationScore：</th>
+            <td class='formValue'>
+                <label id="MinSupinationScore" />
+            </td>
+            <th class='formTitle'>MinSupinationLevel：</th>
+            <td class='formValue'>
+                <label id="MinSupinationLevel" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>MinSupinationAddScore：</th>
+            <td class='formValue'>
+                <label id="MinSupinationAddScore" />
+            </td>
+            <th class='formTitle'>PullUp：</th>
+            <td class='formValue'>
+                <label id="PullUp" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>PullUpScore：</th>
+            <td class='formValue'>
+                <label id="PullUpScore" />
+            </td>
+            <th class='formTitle'>PullUpLevel：</th>
+            <td class='formValue'>
+                <label id="PullUpLevel" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>PullUpAddScore：</th>
+            <td class='formValue'>
+                <label id="PullUpAddScore" />
+            </td>
+            <th class='formTitle'>TestResult：</th>
+            <td class='formValue'>
+                <label id="TestResult" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>StudentTrueScore：</th>
+            <td class='formValue'>
+                <label id="StudentTrueScore" />
+            </td>
+            <th class='formTitle'>TestType：</th>
+            <td class='formValue'>
+                <label id="TestType" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>CreateTime：</th>
+            <td class='formValue'>
+                <label id="CreateTime" />
+            </td>
+            <th class='formTitle'>UpdateTime：</th>
+            <td class='formValue'>
+                <label id="UpdateTime" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>Remark：</th>
+            <td class='formValue'>
+                <label id="Remark" />
+            </td>
+        </tr>
+    </table>
+</form>

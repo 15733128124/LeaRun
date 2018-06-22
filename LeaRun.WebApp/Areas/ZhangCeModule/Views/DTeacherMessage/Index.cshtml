@@ -1,0 +1,110 @@
+@{
+    ViewBag.Title = "学生用户表";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+
+<script type="text/javascript">
+    $(function () {
+        GetGrid();
+    })
+    //加载表格
+    function GetGrid() {
+        $("#gridTable").jqGrid({
+            url: "@Url.Content("~/ZhangCeModule/DTeacherMessage/GridTeacherMessagetPageJson")",
+            datatype: "json",
+            height: $(window).height() - 149,
+            autowidth: true,
+            colModel: [
+                    { label: '编号,自增列', name: 'id', index: 'id', width: 0, align: 'left', sortable: true },
+                    { label: '老师姓名', name: 'username', index: 'username', width: 0, align: 'left', sortable: true },
+                    { label: '老师编号', name: 'usercode', index: 'usercode', width: 0, align: 'left', sortable: true },
+                    {
+                        label: '密码', name: 'userpassword', index: 'userpassword', width: 0, align: 'left', sortable: true
+                    },
+                    { label: '用户级别 1:老师', name: 'userleavel', index: 'userleavel', width: 0, align: 'left', sortable: true },
+                    { label: '创建时间', name: 'createtime', index: 'createtime', width: 0, align: 'left', sortable: true },
+                    { label: '更新时间', name: 'updatetime', index: 'updatetime', width: 0, align: 'left', sortable: true },
+                    { label: '备注', name: 'remark', index: 'remark', width: 0, align: 'left', sortable: true },
+                    { label: '登录状态（1:线上，0:线下）', name: 'userstate', index: 'userstate', width: 0, align: 'left', sortable: true },
+            ],
+            pager: "#gridPager",
+            sortname: '',
+            rowNum: 20,
+            rowList: [20, 30, 50, 100, 500, 1000],
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+           
+        });
+    }
+
+       //新增
+    function btn_add() {
+        var url = "/ZhangCeModule/DTeacherMessage/Form"
+        openDialog(url, "Form", "新增老师", 300, 150, function (iframe) {
+            top.frames[iframe].AcceptClick()
+        });
+    }
+
+    //编辑
+    function btn_edit() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "id");
+        if (IsChecked(KeyValue)) {
+            var url = "/ZhangCeModule/DTeacherMessage/Form?KeyValue=" + KeyValue;
+            openDialog(url, "Form", "编辑老师", 300, 150, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+
+    //删除
+    function btn_delete() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "id");
+        if (IsDelData(KeyValue)) {
+            var delparm = 'KeyValue=' + KeyValue;
+            delConfig('/ZhangCeModule/DTeacherMessage/DelTeacherMessage', delparm, KeyValue.split(",").length);
+        }
+    }
+
+    //关键字查找
+    function btn_Search() {
+        var keywords = $("#keywords").val();
+        $("#gridTable").jqGrid('setGridParam', {
+            url: "@Url.Content("~/ZhangCeModule/DTeacherMessage/GridTeacherMessagetPageJson")?KeyValue=" + escape(keywords), page: 1
+        }).trigger('reloadGrid');
+    }
+
+    //刷新
+    function windowload() {
+        $("#gridTable").trigger("reloadGrid"); //重新载入
+    }
+
+
+</script>
+
+<!--工具栏-->
+<span style="color:red;position:fixed;right:20px;z-index:999;right:10px;top:15px;text-align:center;line-height:100%"><b>当前库年份--@ViewBag.NK--年</b></span>
+<div class="tools_bar leftline rightline" style="margin: 1px; margin-bottom: 0px;">
+    <div class="PartialButton">
+        @Html.Partial("_PartialButton")
+    </div>
+</div>
+<div class="leftline rightline QueryArea" style="margin: 1px; margin-top: 0px; margin-bottom: 0px;">
+    <table border="0" class="form-find" style="height: 45px;">
+        <tr>
+            <th>老师编号：</th>
+            <td>
+                <input id="keywords" type="text" class="txt" style="width: 200px" />
+            </td>
+            <td>
+                <input id="btnSearch" type="button" class="btnSearch" value="搜 索" onclick="btn_Search()" />
+            </td>
+
+        </tr>
+    </table>
+</div>
+<div class="topline rightline" style="margin: 1px; margin-top: -1px;">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>

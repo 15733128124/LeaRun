@@ -1,0 +1,159 @@
+﻿@{
+    Layout = null;
+}
+@using LeaRun.Entity;
+@model List<DBase_NK>
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>欢迎使用</title>
+    <!--框架必需start-->
+    <link href="~/Content/Styles/learunui-framework.css" rel="stylesheet" />
+    <link href="~/Content/Styles/learunui-accordion.css" rel="stylesheet" />
+    <script src="~/Content/Scripts/jquery/jquery-2.1.1.min.js"></script>
+    @*<script src="~/Content/Scripts/highcharts/themes/highchars.3d.themes.js"></script>*@
+    <script src="~/Content/Scripts/learunui-framework.js"></script>
+    <script src="~/Content/layer/layer.js"></script>
+    <script src="~/Content/Scripts/cookie/jquery.cookie.js"></script>
+    <!--框架必需end-->
+    <!--第三方统计图start-->
+    @*<script src="~/Content/Scripts/highcharts/highcharts.6.0.3.js"></script>
+        <script src="~/Content/Scripts/highcharts/highcharts-3d-6.0.3.js"></script>
+        <script src="~/Content/Scripts/highcharts/exporting-6.0.3.js"></script>
+        <script src="~/Content/Scripts/highcharts/themes/highchars.3d.themes.js"></script>*@
+    <!--第三方统计图end-->
+    <script>
+        $(function () {
+            var NK = $.cookie("NK");
+            if (NK != null) {
+                if (NK.toString() != "")
+                    $("#NKMsg").html("已选择-<b style='color: #08587d;font-size:35px'>" + NK + "</b>-年库");
+            }
+        });
+        //初始化测试老师名单
+        function GotoTeacher() {
+            window.location.href = '@Url.Content("~/ZhangCeUnit/TeacherInfoImport")';
+        }
+        //创建与删除年库
+        function GotoCreateAndDelNK() {
+            window.location.href = '@Url.Content("~/ZhangCeUnit/CreateNKAndDelFrom")';
+        }
+        //数据备份与恢复
+        function GotoBackUpAndRecover() {
+            window.location.href = '@Url.Content("~/ZhangCeUnit/ZhangCeBackUpFrom")';
+        }
+        //选择年库
+        function SelectNK(obj) {
+            $.ajax({
+                type: 'POST', // HTTP请求方式
+                url: '/Home/SelectNK', // 请求的URL地址
+                dataType: 'json', // 服务器返回数据转换成的类型
+                data: { "NK": obj },
+                success: function (data) {
+                    if (data.IsOk)
+                        $("#NKMsg").html("已选择-<b style='color: #08587d;font-size:35px'>" + obj + "</b>-年库");
+                    else
+                        layer.alert("选择年库失败！与管理员联系！");
+                }
+            });
+        }
+
+    </script>
+    <style>
+        .NKStyle {
+            width: 70px;
+            float: left;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            line-height: 25px;
+            cursor: pointer;
+            text-align: center;
+            margin-left: 10px;
+            background-color: #08587d; /* #62b600; /*间春绿*/
+            color: white;
+            font-weight: bold;
+            margin-top: 7px;
+        }
+    </style>
+</head>
+<body>
+    <div style="margin: 10px;">
+        <table style="width: 100%">
+            <tr>
+                <td>
+                    <div class="Task" onclick="GotoCreateAndDelNK()" style="background-color: #28B779">
+                        <i></i>
+                        <div class="centre">
+                            <div><b style="color:white;font-size:25px !important;">年库创建与删除</b></div>
+                        </div>
+                    </div>
+                </td>
+
+                <td>
+                    <div class="Task" onclick="GotoTeacher()" style="background-color: #E7191B">
+                        <i></i>
+                        <div class="centre">
+                            <div><b style="color:white;font-size:25px !important">初始化测试老师名单</b></div>
+                        </div>
+
+                    </div>
+                </td>
+                <td>
+                    <div class="Task" onclick="GotoBackUpAndRecover()" style="background-color: #EEAE44">
+                        <i></i>
+                        <div class="centre">
+                            <div><b style="color:white;font-size:25px !important">数据库备份与恢复</b></div>
+                        </div>
+                    </div>
+                </td>
+
+                <td>
+                    <div class="Task" style="background-color: #2BA9E3">
+                        <i></i>
+                        <div class="centre">
+                            <div><b style="color:white;font-size:25px !important">学生成绩跨年库调整</b></div>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="Task" style="background-color: #C07FE7">
+                        <i></i>
+                        <div class="centre">
+                            <div><b style="color:white;font-size:25px !important">学生毕业登记卡导出</b></div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <div style="clear:both"></div>
+        <table style="width: 100%;min-width:1000px">
+            <tr>
+                <td style="width:50%">
+                    <div class="note-prompt" style="height:300px;overflow:auto;width:95%;">
+                        提示：如果年库不存在，请先创建年库，初始化系统时使用！
+                        <div><b style="color:red;font-size:16px">请选择年库：</b></div>
+                        @{
+                            foreach (DBase_NK entity in Model)
+                            {
+                                <p onclick="SelectNK('@entity.NK')" id="selectNK" style="font-size:30px;width:130px;height:40px;line-height:40px; background-color: #0a692c;" class="NKStyle">@entity.NK</p>
+                            }
+                        }
+                    </div>
+                </td>
+                <td style="width:50%">
+                    <div class="note-prompt" style="margin:0;padding:0;height:300px;overflow:auto;text-align:center;background:none;background-color:#efe6e6;width:100%">
+
+                        <div style="margin-top:15%"><span id="NKMsg" style="font-size:35px;text-align:center;color:red;line-height:70px">暂无选择年库</span></b></div>
+
+
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

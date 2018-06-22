@@ -1,0 +1,96 @@
+@{
+    ViewBag.Title = "学生用户表》表单页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script src="~/Content/layer/layer.js"></script>
+<script type="text/javascript">
+    var KeyValue = GetQuery('KeyValue');//主键
+    $(function () {
+        InitControl();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/ZhangCeModule/DTeacherMessage/GetTeacherMessageModel", { KeyValue: KeyValue }, function (data) {
+                SetWebControls(data);
+            });
+        }
+        else {
+            $("#msgState").css("display","none");
+        }
+    }
+    //保存事件
+    function AcceptClick() {
+
+        var userName = $("#UserName").val();
+        if (userName == "")
+        {
+            layer.alert("老师姓名不能为空！");
+            return false;
+        }
+        var userCode = $("#UserCode").val();
+        if (userCode == "") {
+            layer.alert("老师编号不能为空！");
+            return false;
+        }
+
+        var userPassword = $("#UserPassword").val();
+        if (userPassword == "") {
+            layer.alert("老师密码不能为空！");
+            return false;
+        }
+
+        if (!!GetQuery('KeyValue')) {
+            var userState = $("#UserState").val();
+            var postData = { "userName": userName, "userCode": userCode, "userPassword": userPassword,"userState":userState, "KeyValue": KeyValue };
+            AjaxJson("/ZhangCeModule/DTeacherMessage/UpdTeacherMessage", postData, function (data) {
+                tipDialog(data.Message, 3, data.Code);
+                top.frames[tabiframeId()].windowload();
+                closeDialog();
+            });
+        }
+        else {
+            var postData = { "userName": userName, "userCode": userCode, "userPassword": userPassword };
+            AjaxJson("/ZhangCeModule/DTeacherMessage/AddTeacherMessage", postData, function (data) {
+                tipDialog(data.Message, 3, data.Code);
+                top.frames[tabiframeId()].windowload();
+                closeDialog();
+            });
+        }
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <div id="message" style="display: none"></div>
+    <table class="form">     
+        <tr>
+            <th class='formTitle'>老师姓名：</th>
+            <td class='formValue'>
+                <input id="UserName" maxlength=-1 type="text" class="txt"  />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>老师编号：</th>
+            <td class='formValue'>
+                <input id="UserCode" maxlength=-1 type="text" class="txt"   />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>密码：</th>
+            <td class='formValue'>
+                <input id="UserPassword" maxlength=-1 type="text" class="txt"   />
+            </td>
+        </tr>
+    
+         <tr id="msgState">
+            <th class='formTitle'>登录状态：</th>
+            <td class='formValue'>
+               <select id="UserState" style="height:25px" class="txtArea">
+                    <option value="1">上线</option>
+                    <option value="0">下线</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+        </tr>
+    </table>
+</form>

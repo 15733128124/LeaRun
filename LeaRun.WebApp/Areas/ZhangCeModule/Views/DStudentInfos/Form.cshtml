@@ -1,0 +1,364 @@
+@{
+    ViewBag.Title = "学生基本信息";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script src="~/Content/layer/layer.js"></script>
+<script type="text/javascript">
+    var KeyValue = GetQuery('KeyValue');//主键
+    $(function () {
+        InitControl();
+        if (!GetQuery('KeyValue')) {
+            GetNationName();
+        }
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/ZhangCeModule/DStudentInfos/GetDStudentInfosModel", { studentcode: KeyValue }, function (data) {
+                //alert(data.GradeCode);
+                if (data.GradeCode == "41")
+                    $("#gradecode").val("大一");
+                if (data.GradeCode == "42")
+                    $("#gradecode").val("大二");
+                if (data.GradeCode == "43")
+                    $("#gradecode").val("大三");
+                if (data.GradeCode == "44")
+                    $("#gradecode").val("大四");
+                var schoolcode = "<option code='" + data.SchoolCode + "'>" + data.SchoolName + "</option>";
+                $("#schoolname").empty().append(schoolcode);
+                var classcode = "<option code='" + data.ClassCode + "'>" + data.ClassName + "</option>";
+                $("#classname").empty().append(classcode);
+                $("#studentcode").val(data.StudentCode);
+                $("#studentname").val(data.StudentName);
+                $("#studentsex").val(data.StudentSex);
+                $("#studentborndate").val(data.StudentBornDate);
+                $("#studenthomeaddress").val(data.StudentHomeAddress);
+                $("#nationname").val(data.NationCode);
+                $("#studentnative").val(data.StudentNative);
+                $("#studentmovetype").val(data.StudentMoveType);
+                $("#studentidnumber").val(data.StudentIDNumber);
+                $("#studentphone").val(data.StudentPhone);
+                $("#studentisregister").val(data.StudentIsRegister);
+                $.ajax({
+                    url: "/ZhangCeModule/DStudentInfos/GetNationName",
+                    type: 'POST',
+                    cache: false,
+                    //异步
+                    async: false,
+                    error: function (XMLHttpRequest) {
+                        layer.alert("意外错误修改失败！");
+                    },
+                    success: function (dataList) {
+                        var d = eval("(" + dataList + ")");
+                        var nationList = "<option code='0'>--请选择--</option>";
+                        $.each(d, function (n, item) {
+                            if (data.NationCode == item.nationcode) {
+                               nationList = nationList + "<option selected code='" + item.nationcode + "'>" + item.nationname + "</option>";
+                            }
+                            else {
+                                nationList = nationList + "<option  code='" + item.nationcode + "'>" + item.nationname + "</option>";
+                            }
+                        });
+                        $("#nationname").empty().append(nationList);
+                    }
+                });
+            });
+        }
+    }
+    //保存事件
+    function AcceptClick() {
+        var gradecode = $("#gradecode").find("option:selected").attr("code");
+        if (gradecode == "1") {
+            layer.alert("请选择年级，学院不能为空！");
+            return false;
+        }
+        var schoolcode = $("#schoolname").find("option:selected").attr("code");
+        if (schoolcode == "1") {
+            layer.alert("请选择学院，学院不能为空！");
+            return false;
+        }
+        var schoolname = $("#schoolname").val();
+        var classcode = $("#classname").find("option:selected").attr("code");
+        if (classcode == "1") {
+            layer.alert("请选择班级，班级不能为空！");
+            return false;
+        }
+        var classname = $("#classname").val();
+
+        var studentcode = $("#studentcode").val();
+        if (studentcode.trim() == "") {
+            layer.alert("学生学号不能空！");
+            return false;
+        }
+        var studentname = $("#studentname").val();
+        if (studentname.trim() == "") {
+            layer.alert("学生姓名不能空！");
+            return false;
+        }
+        var studentsex = $("#studentsex").find("option:selected").html() == "男" ? "1" : "2";
+        var studentborndate = $("#studentborndate").val();
+        var studenthomeaddress = $("#studenthomeaddress").val();
+        var nationname = $("#nationname").val();
+        var nationcode = $("#nationname").find("option:selected").attr("code");
+
+        if (nationcode == "0") {
+            layer.alert("请选择民族,民族不能空！");
+            return false;
+        }
+
+        var studentnative = $("#studentnative").val();
+        var studentmovetype = $("#studentmovetype").find("option:selected").html();
+        var studentidnumber = $("#studentidnumber").val();
+        var idreg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+        if (studentidnumber != "" && !idreg.test(studentidnumber)) {
+            layer.alert("身份证号格式不正确！");
+            return false;
+        }
+        var studentphone = $("#studentphone").val();
+        var phreg = /(^13\d{9}$)|(^14)[5,7]\d{8}$|(^15[0,1,2,3,5,6,7,8,9]\d{8}$)|(^17)[6,7,8]\d{8}$|(^18\d{9}$)/g;
+        var preg = /^((0\d{2,3})-)(\d{7,8})(-(\d{3,}))?$/;
+        if ((studentphone != "" && !phreg.test(studentphone)) || (studentphone != "" && preg.test(studentphone))) {
+            layer.alert("手机号或电话格式不正确！");
+            return false;
+        }
+        var studentisregister = $("#studentisregister").val();
+
+        if (!!GetQuery('KeyValue')) {
+            var postData = {
+                "gradecode": gradecode,
+                "schoolcode": schoolcode,
+                "schoolname": schoolname,
+                "classcode": classcode,
+                "classname": classname,
+                "studentcode": studentcode,
+                "studentname": studentname,
+                "studentsex": studentsex,
+                "studentborndate": studentborndate,
+                "studenthomeaddress": studenthomeaddress,
+                "nationname": nationname,
+                "nationcode": nationcode,
+                "studentnative": studentnative,
+                "studentmovetype": studentmovetype,
+                "studentidnumber": studentidnumber,
+                "studentphone": studentphone,
+                "studentisregister": studentisregister,
+                "keyvalue":KeyValue
+            };
+            AjaxJson("/ZhangCeModule/DStudentInfos/UpdDStudentInfo", postData, function (data) {
+                tipDialog(data.Message, 3, data.Code);
+                top.frames[tabiframeId()].windowload();
+                closeDialog();
+            });
+        } else {
+            var postData = {
+                "gradecode": gradecode,
+                "schoolcode": schoolcode,
+                "schoolname": schoolname,
+                "classcode": classcode,
+                "classname": classname,
+                "studentcode": studentcode,
+                "studentname": studentname,
+                "studentsex": studentsex,
+                "studentborndate": studentborndate,
+                "studenthomeaddress": studenthomeaddress,
+                "nationname": nationname,
+                "nationcode": nationcode,
+                "studentnative": studentnative,
+                "studentmovetype": studentmovetype,
+                "studentidnumber": studentidnumber,
+                "studentphone": studentphone,
+                "studentisregister": studentisregister
+            };
+            AjaxJson("/ZhangCeModule/DStudentInfos/AddDStudentInfo", postData, function (data) {
+                tipDialog(data.Message, 3, data.Code);
+                window.location.reload();
+                //top.frames[tabiframeId()].windowload();
+                //closeDialog();
+            });
+        }
+    }
+    //更新学院
+    function UpdataXueYuan() {
+        var gradecode = $("#gradecode").find("option:selected").attr("code");
+        $("#classname").empty().append("<option code='1'>--请选择--</option>");
+
+        $.ajax({
+            url: "/ZhangCeModule/DStudentInfos/GetSchoolNameList",
+            type: 'POST',
+            cache: false,
+            //异步
+            async: false,
+            data: { "gradecode": gradecode },
+            error: function (XMLHttpRequest) {
+                layer.alert("意外错误修改失败！");
+            },
+            success: function (data) {
+                var d = eval("(" + data + ")");
+                var xueY = "<option code='1'>--请选择--</option>";
+                $.each(d, function (n, item) {
+                    xueY = xueY + "<option code='" + item.schoolcode + "'>" + item.schoolname + "</option>";
+                });
+                $("#schoolname").empty().append(xueY);
+            }
+
+        });
+
+    }
+
+    //更新班级
+    function UpdateClass() {
+        var schoolCode = $("#schoolname").find("option:selected").attr("code");
+
+        $.ajax({
+            url: "/ZhangCeModule/DStudentInfos/GetClassNameList",
+            type: 'POST',
+            cache: false,
+            //异步
+            async: false,
+            data: { "schoolCode": schoolCode },
+            error: function (XMLHttpRequest) {
+                layer.alert("意外错误修改失败！");
+            },
+            success: function (data) {
+                var d = eval("(" + data + ")");
+                var bj = "<option code='1'>--请选择--</option>";
+                $.each(d, function (n, item) {
+                    bj = bj + "<option code='" + item.classcode + "'>" + item.classname + "</option>";
+                });
+                $("#classname").empty().append(bj);
+            }
+        });
+
+    }
+
+    //获取民族名称
+    function GetNationName() {
+        $.ajax({
+            url: "/ZhangCeModule/DStudentInfos/GetNationName",
+            type: 'POST',
+            cache: false,
+            //异步
+            async: false,
+            error: function (XMLHttpRequest) {
+                layer.alert("意外错误修改失败！");
+            },
+            success: function (data) {
+                var d = eval("(" + data + ")");
+                var nationList = "<option code='0'>--请选择--</option>";
+                $.each(d, function (n, item) {
+                    nationList = nationList + "<option code='" + item.nationcode + "'>" + item.nationname + "</option>";
+                });
+                $("#nationname").empty().append(nationList);
+            }
+        });
+
+    }
+
+
+</script>
+<form id="form1" style="margin: 1px;>
+    <div id="message" style="display: none"></div>
+    <table class="form">
+
+        <tr>
+            <th class='formTitle'> 年级：</th>
+            <td class='formValue'>
+                <select id="gradecode" class="txtArea" style="height:25px" onchange="UpdataXueYuan()">
+                    <option code="1">--请选择--</option>
+                    <option code="41">大一</option>
+                    <option code="42">大二</option>
+                    <option code="43">大三</option>
+                    <option code="44">大四</option>
+                </select>
+            </td>
+            <th class='formTitle'> 学院名称：</th>
+            <td class='formValue'>
+                <select id="schoolname" class="txtArea" style="height:25px" onchange="UpdateClass()">
+                    <option style="height: 0"></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'> 班级名称：</th>
+            <td class='formValue'>
+                <select id="classname" class="txtArea" style="height:25px">
+                    <option style="height: 0"></option>
+                </select>
+            </td>
+            <th class='formTitle'> 学号：</th>
+            <td class='formValue'>
+                <input id="studentcode" style="height:25px" type="text" value="" class="txt required" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'> 姓名：</th>
+            <td class='formValue'>
+                <input id="studentname" type="text" style="height:25px" class="txt required" />
+            </td>
+
+            <th class='formTitle'>性别：</th>
+            <td class='formValue'>
+                <select id="studentsex" style="height:25px" class="txtArea">
+                    <option value="1">男</option>
+                    <option value="2">女</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>出生日期：</th>
+            <td class='formValue'>
+                <input id="studentborndate" style="height:25px" type="text" value="" onclick="new WdatePicker({ dateFmt: 'yyyy-MM-dd' })" class="txt Wdate" />
+            </td>
+            <th class='formTitle'>联系电话：</th>
+            <td class='formValue'>
+                <input id="studentphone" type="text" style="height:25px" value="" class="txt required" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'> 民族名称：</th>
+            <td class='formValue'>
+                <select id="nationname" class="multiSelect txtArea" onchange="updateNationCode()" style="background-image: url();height:25px">
+                    <option code="0">--请选择--</option>
+
+                </select>
+            </td>
+            <th class='formTitle'> 是否注册：</th>
+            <td class='formValue'>
+                <select class="txtArea" id="studentisregister" style="height:25px">
+                    <option value="是">是</option>
+                    <option value="否">否</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'> 籍贯：</th>
+            <td class='formValue'>
+                <input id="studentnative" type="text" value="" style="height:25px" class="txt required" />
+            </td>
+            <th class='formTitle'> 异动类型：</th>
+            <td class='formValue'>
+                <select id="studentmovetype" class="txtArea" style="height:25px">
+                    <option value="正常">正常</option>
+                    <option value="休学">休学</option>
+                    <option value="复学">复学</option>
+                    <option value="转专业">转专业</option>
+                    <option value="退学">退学</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'> 身份证号：</th>
+            <td class='formValue' colspan="3">
+                <input id="studentidnumber" type="text" value="" class="txt required" style="height:25px" />
+            </td>
+
+        </tr>
+        <tr>
+            <th class='formTitle'>家庭住址：</th>
+            <td class='formValue' colspan="3">
+                <textarea id="studenthomeaddress" class="txtArea" rows="5"></textarea>
+            </td>
+        </tr>
+
+    </table>
+</form>
